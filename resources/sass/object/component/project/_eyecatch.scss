@@ -1,0 +1,46 @@
+.p-eyecatch {
+  height: 100vh;
+  background-image: url(../img/eyecatch.png);
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  position: relative;
+  // display: flex;
+  // justify-content: center;
+  // align-items: center;
+  &__wrap {
+    top: 30%;
+    left: 10%;
+    position: absolute;
+  }
+  &__title {
+    font-size: 48px;
+    animation: c-fadein 0.9s ease forwards;
+  }
+  &__content {
+    display: flex;
+    justify-content: space-around;
+    animation: c-fadein 0.9s ease forwards;
+
+    &--text {
+      line-height: 50px;
+    }
+    &--link {
+      color: $link-color;
+    }
+  }
+  &__footer {
+    background-image: url(../img/eyecatch_footer.png);
+
+    &--title {
+      text-align: center;
+      font-size: 48px;
+      padding-top: 16px;
+    }
+
+    &--signup {
+      margin-top: 24px;
+      text-align: center;
+    }
+  }
+}

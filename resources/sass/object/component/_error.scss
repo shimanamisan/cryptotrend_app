@@ -1,0 +1,13 @@
+.c-error {
+  color: red;
+  font-size: 12px;
+
+  &__input {
+    background: #ffe1df;
+    border-color: #ff6366;
+
+    &:focus {
+      border-color: #ff6366;
+    }
+  }
+}

@@ -1,0 +1,44 @@
+.p-trend {
+  //   &__tab {
+  //     width: 1200px;
+  //     margin: 0 auto;
+  //     width: 100%;
+
+  //     /*選択されているタブのスタイルを変える*/
+  //     & > input:checked + .p-trend__tabitem {
+  //       background-color: #5ab4bd;
+  //       color: #fff;
+  //     }
+  //   }
+
+  //   &__tabitem {
+  //     @include custumRadius(4px 4px 0 0);
+  //     bottom: -2px;
+  //     border-bottom: solid 1px transparent;
+  //     width: 25%;
+  //     height: 50px;
+  //     background-color: #d9d9d9;
+  //     line-height: 50px;
+  //     color: #565656;
+  //     text-align: center;
+  //     color: #565656;
+  //     display: block;
+  //     float: left;
+  //     text-align: center;
+  //     font-weight: bold;
+  //     transition: all 0.2s ease;
+  //     @include mq() {
+  //       width: 50%;
+  //       font-size: 12px;
+  //     }
+  //     &:hover {
+  //       cursor: pointer;
+  //       opacity: 0.75;
+  //     }
+  //   }
+}
+
+// /*ラジオボタンを全て消す*/
+// input[name="tab_item"] {
+//   display: none;
+// }

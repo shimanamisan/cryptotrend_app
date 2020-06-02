@@ -1,0 +1,16 @@
+.c-form {
+  &__input {
+    @include custumRadius(3px);
+    display: block;
+    border: 2px solid #dfd8d8;
+    padding: 10px;
+    font-size: 18px;
+    width: 100%;
+    box-sizing: border-box;
+
+    &:focus {
+      border: 2px solid $border-color;
+      outline: none;
+    }
+  }
+}
