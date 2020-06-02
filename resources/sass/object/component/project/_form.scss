@@ -1,0 +1,32 @@
+.p-form {
+  &__title {
+    text-align: center;
+  }
+
+  &__info {
+    margin-bottom: 5px;
+    margin-top: 15px;
+    display: inline-block;
+    &--reminder {
+      font-size: 15px;
+    }
+  }
+
+  &__inquiry {
+    margin-top: 20px;
+    display: block;
+    text-align: right;
+    font-size: 14px;
+    color: $link-color;
+  }
+
+  &__unit {
+    margin: 15px auto;
+    width: 450px;
+  }
+
+  &__signup--explanation {
+    margin-top: 32px;
+    font-size: 12px;
+  }
+}
