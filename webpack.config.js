@@ -2,12 +2,12 @@ const { VueLoaderPlugin } = require("vue-loader");
 const LiveReloadPlugin = require("webpack-livereload-plugin");
 // app.jsとapp.cssファイルに分割するためのプラグイン
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-// ベンダープレフィックス
-const autoprefixer = require("autoprefixer");
 
 // [定数] webpack の出力オプションを指定します
 // 'production' か 'development' を指定
 const MODE = "development";
+
+console.log(`${__dirname}/public/css`);
 
 // ソースマップの利用有無(productionのときはソースマップを利用しない)
 const enabledSourceMap = MODE === "development";
@@ -33,8 +33,9 @@ module.exports = {
         new VueLoaderPlugin(),
         new LiveReloadPlugin(),
         new MiniCssExtractPlugin({
-            filename: "style.css",
-            path: `${__dirname}/public/css`
+            filename: "../css/style.css"
+            // この記述は必要ないのか
+            // path: `${__dirname}/public/css`
         })
     ],
     module: {
@@ -66,10 +67,10 @@ module.exports = {
                 // 対象ファイルは .css .scss .scss
                 // test: /\.(sa|sc|c)ss$/,
                 use: [
-                    // linkタグに出力する機能
-                    "style-loader",
+                    // CSSファイル生成
+                    MiniCssExtractPlugin.loader,
+                    // CSSコンパイル
                     {
-                        // CSSをバンドルするための機能
                         loader: "css-loader",
                         options: {
                             // オプションでCSS内のurl()メソッドの取り込みを禁止 or 許可する
@@ -78,7 +79,8 @@ module.exports = {
                             sourceMap: enabledSourceMap
                         }
                     },
-
+                    // // linkタグに出力する機能
+                    // "style-loader",
                     {
                         loader: "sass-loader",
                         options: {
@@ -93,7 +95,20 @@ module.exports = {
                         // ベンダープレフィックス
                         loader: "postcss-loader",
                         options: {
-                            plugins: [autoprefixer]
+                            plugins: [
+                                require("cssnano")({
+                                    // cssを圧縮
+                                    preset: "default"
+                                })
+                                // require("autoprefixer")({
+                                //     grid: true,
+                                //     browsers: [
+                                //         "last 1 version",
+                                //         "> 1%",
+                                //         "IE 10"
+                                //     ]
+                                // })
+                            ]
                         }
                     }
                 ]

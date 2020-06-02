@@ -1,22 +1,16 @@
 <template>
-  <div>
-    <h1>Hello HOME!!</h1>
-
-    <br />
-
-    <Index />
-  </div>
+    <div>
+        <Index />
+    </div>
 </template>
 
 <script>
-import Index from "./components/index";
-
+import Index from "./page/Index";
 export default {
-  components: {
-    Index
-  }
+    components: {
+        Index
+    }
 };
 </script>
 
-<style>
-</style>
+<style></style>
