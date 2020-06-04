@@ -1,77 +1,94 @@
 @extends('layouts.app')
 
+@section('title', 'CryptoTrend | 新規登録')
+@section('description', '仮想通貨トレンド検索サービス')
+@include('layouts.head')
+
 @section('content')
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">{{ __('Register') }}</div>
-
-                <div class="card-body">
-                    <form method="POST" action="{{ route('register') }}">
-                        @csrf
-
-                        <div class="form-group row">
-                            <label for="name" class="col-md-4 col-form-label text-md-right">{{ __('Name') }}</label>
-
-                            <div class="col-md-6">
-                                <input id="name" type="text" class="form-control @error('name') is-invalid @enderror" name="name" value="{{ old('name') }}" required autocomplete="name" autofocus>
-
-                                @error('name')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div>
-                        </div>
-
-                        <div class="form-group row">
-                            <label for="email" class="col-md-4 col-form-label text-md-right">{{ __('E-Mail Address') }}</label>
-
-                            <div class="col-md-6">
-                                <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email">
-
-                                @error('email')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div>
-                        </div>
-
-                        <div class="form-group row">
-                            <label for="password" class="col-md-4 col-form-label text-md-right">{{ __('Password') }}</label>
-
-                            <div class="col-md-6">
-                                <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="new-password">
-
-                                @error('password')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div>
-                        </div>
-
-                        <div class="form-group row">
-                            <label for="password-confirm" class="col-md-4 col-form-label text-md-right">{{ __('Confirm Password') }}</label>
-
-                            <div class="col-md-6">
-                                <input id="password-confirm" type="password" class="form-control" name="password_confirmation" required autocomplete="new-password">
-                            </div>
-                        </div>
-
-                        <div class="form-group row mb-0">
-                            <div class="col-md-6 offset-md-4">
-                                <button type="submit" class="btn btn-primary">
-                                    {{ __('Register') }}
-                                </button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
+<main class="l-main l-main__auth">
+      <div class="c-container__auth">
+        <div class="p-form__title">
+          新規登録する
         </div>
-    </div>
-</div>
+        <hr class="u-line" />
+        <div class="p-form__body">
+          <form method="POST" action="">
+          @csrf
+            <label class="p-form__info" for="name">ニックネーム</label>
+            <input
+              class="c-form__input c-from__input--login @error('name') c-error__input @enderror"
+              type="text"
+              name="name"
+              value="{{ old('name') }}"
+            />
+            @error('name')
+            <div class="c-error">
+              {{ $message }}
+            </div>
+            @enderror
+            <label class="p-form__info" for="email">メールアドレス</label>
+            <input
+              class="c-form__input c-from__input--signup @error('email') c-error__input @enderror"
+              type="text"
+              name="email"
+              value="{{ old('email') }}"
+            />
+            @error('email')
+            <div class="c-error">
+              {{ $message }}
+            </div>
+            @enderror
+            <label class="p-form__info" for="password">パスワード</label>
+            <input
+              class="c-form__input c-from__input--signup @error('password') c-error__input @enderror"
+              type="password"
+              name="password"
+              value="{{ old('password') }}"
+            />
+            @error('password')
+            <div class="c-error">
+              {{ $message }}
+            </div>
+            @enderror
+            <label class="p-form__info" for="password_confirm">パスワード再入力</label>
+            <input
+              class="c-form__input c-from__input--signup @error('password_confirm') c-error__input @enderror"
+              type="password"
+              name="password_confirm"
+              value="{{ old('password_confirm') }}"
+            />
+            @error('password_confirm')
+            <div class="c-error">
+              {{ $message }}
+            </div>
+            @enderror
+            <div class="u-wrapp">
+              <input
+                class="c-btn c-btn__signup"
+                type="submit"
+                value="メールアドレスで新規登録"
+              />
+            </div>
+          </form>
+          <hr class="u-line" />
+          <span class="u-line--or">または</span>
+          <div class="u-wrapp">
+            <button class="c-btn c-btn__twitter">
+              Twitterで新規登録
+            </button>
+          </div>
+          <div class="p-form__signup--explanation">
+            本サービスを登録することにより、<a href="" class="c-link--global"
+              >利用規約</a
+            >と<a href="" class="c-link--global">プライバシーポリシー</a
+            >に同意したとみなされます。
+          </div>
+        </div>
+      </div>
+      <div class="p-form__unit">
+        <a class="c-link--global" href="login.html"
+          >＜既に登録済みの方はこちら</a
+        >
+      </div>
+    </main>
 @endsection

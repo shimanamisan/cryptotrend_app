@@ -24,11 +24,12 @@ require("./bootstrap");
 //     require("./components/ExampleComponent.vue").default
 // );
 
+Vue.component("profile-component", require("./components/Profile.vue").default);
+
 // sass ファイル読み込み
 import "../sass/style.scss";
 
 import Vue from "vue";
-import App from "./App.vue";
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -36,14 +37,12 @@ import App from "./App.vue";
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
-new Vue({
-    // h(App)の引数にApp.vueコンポーネントのオブジェクトが入ってくる
-    // renderではコンポーネントのオブジェクト（テンプレートやメソッドなど）を突っ込んで描画することができる
-    render: h => h(App)
-}).$mount("#app");
+// new Vue({
+//     // h(App)の引数にApp.vueコンポーネントのオブジェクトが入ってくる
+//     // renderではコンポーネントのオブジェクト（テンプレートやメソッドなど）を突っ込んで描画することができる
+//     render: h => h(App)
+// }).$mount("#app");
 
-// const app = new Vue({
-//     el: "#app",
-//     components: { App },
-//     template: "<App />"
-// });
+const app = new Vue({
+    el: "#profire-component",
+});

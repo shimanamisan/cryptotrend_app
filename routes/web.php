@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Support\Facades\Auth;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -13,10 +15,19 @@
 
 Route::get('/', function () {
     return view('home');
-});
+})->name('home');
 
+// 認証系のルーティングそれに対応するコントローラがまとまっている
+// Illuminate\Routing\Routerクラスのauth()メソッドにルーティングが記述されている
 Auth::routes();
 
-// Route::get('/home', 'HomeController@index')->name('home');
+// プロフィール画面
+Route::get('/profile', function () {
+    return view('profile');
+})->name('profile');
 
-// Route::get('/home/test', 'HomeController@showtest')->name('test');
+// ログイン後の画面
+Route::get('/coins', 'CoinsController@index')->name('conins.index');
+
+// ログアウト
+Route::post('/logout', 'Auth\LoginController@logout')->name('logout');

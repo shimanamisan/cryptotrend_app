@@ -7,7 +7,7 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 // 'production' か 'development' を指定
 const MODE = "development";
 
-console.log(`${__dirname}/public/css`);
+console.log("ファイルパスを確認しています：" + `${__dirname}`);
 
 // ソースマップの利用有無(productionのときはソースマップを利用しない)
 const enabledSourceMap = MODE === "development";
@@ -25,30 +25,32 @@ module.exports = {
         // 出力ファイル名
         filename: "app.js",
         // 出力先フォルダを指定
-        path: `${__dirname}/public/js`
+        path: `${__dirname}/public/js`,
     },
     // 各種プラグインを読み込む
     plugins: [
         // Vueを読み込めるようにするため
         new VueLoaderPlugin(),
         new LiveReloadPlugin(),
+        // jsファイルとcssファイルを分割するためのプラグイン
         new MiniCssExtractPlugin({
-            filename: "../css/style.css"
+            // ファイルの出力先
+            filename: "../css/style.css",
             // この記述は必要ないのか
             // path: `${__dirname}/public/css`
-        })
+        }),
     ],
     module: {
         rules: [
             {
                 test: /\.css$/,
                 // use: "vue-style-loader"
-                use: ["vue-style-loader", "css-loader"]
+                use: ["vue-style-loader", "css-loader"],
             },
 
             {
                 test: /\.vue$/,
-                loader: "vue-loader"
+                loader: "vue-loader",
             },
             {
                 test: /\.js$/,
@@ -57,9 +59,9 @@ module.exports = {
                 options: {
                     presets: [
                         // プリセットを指定することで、ES2020 を ES5 に変換
-                        "@babel/preset-env"
-                    ]
-                }
+                        "@babel/preset-env",
+                    ],
+                },
             },
             {
                 // 対象ファイルは style.scss
@@ -76,8 +78,8 @@ module.exports = {
                             // オプションでCSS内のurl()メソッドの取り込みを禁止 or 許可する
                             url: false,
                             // ソースマップを有効にする
-                            sourceMap: enabledSourceMap
-                        }
+                            sourceMap: enabledSourceMap,
+                        },
                     },
                     // // linkタグに出力する機能
                     // "style-loader",
@@ -85,11 +87,11 @@ module.exports = {
                         loader: "sass-loader",
                         options: {
                             // ソースマップの利用有無
-                            sourceMap: enabledSourceMap
-                        }
+                            sourceMap: enabledSourceMap,
+                        },
                     },
                     {
-                        loader: "import-glob-loader"
+                        loader: "import-glob-loader",
                     },
                     {
                         // ベンダープレフィックス
@@ -98,8 +100,8 @@ module.exports = {
                             plugins: [
                                 require("cssnano")({
                                     // cssを圧縮
-                                    preset: "default"
-                                })
+                                    preset: "default",
+                                }),
                                 // require("autoprefixer")({
                                 //     grid: true,
                                 //     browsers: [
@@ -108,25 +110,25 @@ module.exports = {
                                 //         "IE 10"
                                 //     ]
                                 // })
-                            ]
-                        }
-                    }
-                ]
+                            ],
+                        },
+                    },
+                ],
             },
             {
                 // 対象となるファイルの拡張子
                 test: /\.(gif|png|jpg|eot|wof|woff|woff2|ttf|svg)$/,
                 // 画像をBase64として取り込む
-                loader: "url-loader"
-            }
-        ]
+                loader: "url-loader",
+            },
+        ],
     },
     // import 文で .ts ファイルを解決するため
     resolve: {
         // Webpackで利用するときの設定
         alias: {
-            vue$: "vue/dist/vue.esm.js"
+            vue$: "vue/dist/vue.esm.js",
         },
-        extensions: ["*", ".js", ".vue", ".json"]
-    }
+        extensions: ["*", ".js", ".vue", ".json"],
+    },
 };
