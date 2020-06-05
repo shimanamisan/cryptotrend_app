@@ -40,9 +40,7 @@ class LoginController extends Controller
 
     public function redirectPath()
     {
-        return 'index';
+        return 'profile';
         //例）return 'costs/index';
     }
-
-    
 }

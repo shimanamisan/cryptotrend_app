@@ -1,7 +1,6 @@
 <?php
 
 return [
-
     /*
     |--------------------------------------------------------------------------
     | Authentication Defaults
@@ -96,7 +95,8 @@ return [
         'users' => [
             'provider' => 'users',
             'table' => 'password_resets',
-            'expire' => 60,
+            'expire' => 30, // トークンの有効期限を30分に変更
+            // 'expire' => 60, // パスワードリセットトークンの有効期限（デフォルトは1時間）
             'throttle' => 60,
         ],
     ],
@@ -113,5 +113,4 @@ return [
     */
 
     'password_timeout' => 10800,
-
 ];

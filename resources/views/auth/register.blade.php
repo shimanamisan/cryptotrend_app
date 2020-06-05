@@ -50,24 +50,20 @@
               {{ $message }}
             </div>
             @enderror
-            <label class="p-form__info" for="password_confirm">パスワード再入力</label>
+            <label class="p-form__info" for="password-confirm">パスワード再入力</label>
             <input
-              class="c-form__input c-from__input--signup @error('password_confirm') c-error__input @enderror"
+              id="password-confirm"
+              class="c-form__input c-from__input--signup @error('password_confirmation') c-error__input @enderror"
               type="password"
-              name="password_confirm"
-              value="{{ old('password_confirm') }}"
+              name="password_confirmation"
+             
             />
-            @error('password_confirm')
-            <div class="c-error">
-              {{ $message }}
-            </div>
-            @enderror
             <div class="u-wrapp">
-              <input
+              <button
                 class="c-btn c-btn__signup"
                 type="submit"
-                value="メールアドレスで新規登録"
-              />
+                >メールアドレスで新規登録
+            </button>
             </div>
           </form>
           <hr class="u-line" />

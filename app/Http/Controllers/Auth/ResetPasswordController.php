@@ -26,5 +26,13 @@ class ResetPasswordController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = RouteServiceProvider::HOME;
+    // リダイレクト先をログイン画面に変更する
+    // protected $redirectTo = RouteServiceProvider::HOME;
+
+    // パスワードリセット後にログイン画面へリダイレクトさせるためにオーバーライドする
+    public function redirectPath()
+    {
+        return '/login';
+        //例）return 'costs/index';
+    }
 }
