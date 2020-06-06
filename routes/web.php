@@ -22,9 +22,20 @@ Route::get('/', function () {
 Auth::routes();
 
 // プロフィール画面
-Route::get('/profile', function () {
-    return view('profile');
-})->name('profile');
+Route::get('/profile', 'ProfileController@showProfileForm')->name(
+    'profile.showProfileForm'
+);
+
+// Twitter経由でのログインを行う為のURI
+Route::get(
+    'login/twitter',
+    'Auth\LoginController@redirectToTwitterProvider'
+)->name('twitter.auth');
+// アプリ側から情報が返ってくるURL
+Route::get(
+    'login/twitter/callback',
+    'Auth\LoginController@handleTwitterCallback'
+)->name('twitter.callback');
 
 // ログイン後の画面
 Route::get('/coins', 'CoinsController@index')->name('conins.index');
