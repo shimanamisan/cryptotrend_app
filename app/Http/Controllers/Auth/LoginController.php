@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\User; // 追加
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth; // 追加
 use App\Providers\RouteServiceProvider;
 use Laravel\Socialite\Facades\Socialite; // 追加
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
@@ -51,7 +53,9 @@ class LoginController extends Controller
     {
         try {
             $user = Socialite::driver('twitter')->user();
+            \Log::debug('認証に成功しました');
         } catch (\Exception $e) {
+            \Log::debug('ログインに失敗しました');
             // エラーならログイン画面へリダイレクト
             return redirect('/login')->with(
                 'auth_error',
@@ -59,11 +63,16 @@ class LoginController extends Controller
             );
         }
 
-        $userInfo = User::firstObCreate(
-            // usersテーブルのtokenカラムに同じ値を持つレコードがあるかチェック
+        $userInfo = User::firstOrCreate(
+            // usersテーブルのtwitter_tokenカラムに同じ値を持つレコードがあるかチェック
             // emailで判断するとTwitter側でユーザーがメールアドレスを変更した時に対応できない
             ['twitter_token' => $user->token],
-            ['name' => $user->nickname, 'email' => $user->getEmail()]
+            // twitter_tokenカラムに同じ値がなかった場合は、下記の項目をINSERTする
+            [
+                'name' => $user->nickname,
+                'email' => $user->getEmail(),
+                'avatar' => $user->getAvatar(),
+            ]
         );
 
         Auth::login($userInfo);

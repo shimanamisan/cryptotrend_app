@@ -70,7 +70,7 @@
           <span class="u-line--or">または</span>
           <div class="u-wrapp">
             <button class="c-btn c-btn__twitter">
-              Twitterで新規登録
+              <a href="{{ route('twitter.auth') }}">Twitterで新規登録</a>
             </button>
           </div>
           <div class="p-form__signup--explanation">

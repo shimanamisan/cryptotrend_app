@@ -8,6 +8,7 @@
     <profile-component 
     endpoint="{{ route('home') }}" 
     user="{{ $user->name }}"
-    email="{{ $user->email }}"/>
+    email="{{ $user->email }}"
+    avatar="{{ $user->avatar }}"/>
 </div>
 @endsection

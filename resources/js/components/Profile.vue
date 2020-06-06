@@ -22,7 +22,7 @@
               <label class="p-profile__pic--ImgWrap" for>
                 <input class="p-profile__pic--drop" type="file" />
                 <output class>
-                  <img class="p-profile__pic--output" src="https://placehold.jp/150x150.png" alt />
+                  <img class="p-profile__pic--output" :src="this.avatar" alt />
                 </output>
               </label>
               <div class="p-profile__submitWrap">
@@ -123,6 +123,7 @@ export default {
             userDataForm: {
                 nicname: this.user,
                 email: this.email,
+                avatar: this.avatar,
             },
             passwordEditForm: {
                 password: "",
@@ -141,7 +142,11 @@ export default {
         },
         email: {
           type: String
+        },
+        avatar: {
+          type: String
         }
+
     },
     computed: {},
 };
