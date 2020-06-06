@@ -6,6 +6,8 @@
 @section('content')
 <div id="profire-component">
     <profile-component 
-    endpoint="{{ route('home') }}" />
+    endpoint="{{ route('home') }}" 
+    user="{{ $user->name }}"
+    email="{{ $user->email }}"/>
 </div>
 @endsection

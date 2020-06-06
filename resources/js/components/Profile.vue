@@ -4,12 +4,12 @@
       <ul class="c-tabs__container c-tabs__container--md">
         <li
           class="c-tabs__item c-tabs__item--full"
-          :class="{'c-tabs__item--active': tab === 1}"
+          :class="{ 'c-tabs__item--active': tab === 1 }"
           @click="tab = 1"
         >プロフィール編集</li>
         <li
           class="c-tabs__item c-tabs__item--full"
-          :class="{'c-tabs__item--active': tab === 2}"
+          :class="{ 'c-tabs__item--active': tab === 2 }"
           @click="tab = 2"
         >パスワード変更</li>
       </ul>
@@ -113,35 +113,38 @@
 
 <script>
 export default {
-  data(){
-    return{
-      // ボタン表示フラグ
-      editImage_flg: false,
-      editName_flg: false,
-      editEmail_flg: false,
-      tab:1,
-      userDataForm:{
-        nicname:"",
-        email:"",
-      },
-      passwordEditForm: {
-        password:"",
-        password_confirm:""
-      },
-      isDisabled: true
-    }
-  },
-  props: {
-    endpoint: {
-      type: String,
-      default: ''
-    }
-  },
-  computed:{
-    
-  }
-}
+    data() {
+        return {
+            // ボタン表示フラグ
+            editImage_flg: false,
+            editName_flg: false,
+            editEmail_flg: false,
+            tab: 1,
+            userDataForm: {
+                nicname: this.user,
+                email: this.email,
+            },
+            passwordEditForm: {
+                password: "",
+                password_confirm: "",
+            },
+            isDisabled: true,
+        };
+    },
+    props: {
+        endpoint: {
+            type: String,
+            default: "",
+        },
+        user: {
+          type:String,
+        },
+        email: {
+          type: String
+        }
+    },
+    computed: {},
+};
 </script>
 
-<style>
-</style>
+<style></style>

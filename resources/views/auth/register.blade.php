@@ -82,7 +82,7 @@
         </div>
       </div>
       <div class="p-form__unit">
-        <a class="c-link--global" href="login.html"
+        <a class="c-link--global" href="{{ route('login') }}"
           >＜既に登録済みの方はこちら</a
         >
       </div>

@@ -26,7 +26,7 @@
           </li>
           @else
           <li class="p-header__item">
-            <a class="p-header__item--link" href="{{ route('profile') }}">プロフィール編集</a>
+            <a class="p-header__item--link" href="{{ route('profile.showProfileForm') }}">プロフィール編集</a>
           </li>
           <li class="p-header__item">
             <a class="p-header__item--link" 
