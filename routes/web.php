@@ -37,6 +37,9 @@ Route::get(
     'Auth\LoginController@handleTwitterCallback'
 )->name('twitter.callback');
 
+// タイムラインの取得
+Route::get('/get-timeline', 'TwitterController@getTweet')->name('getTweet');
+
 // ログイン後の画面
 Route::get('/coins', 'CoinsController@index')->name('conins.index');
 
