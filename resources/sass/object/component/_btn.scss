@@ -1,32 +1,36 @@
 .c-btn {
-  height: 50px;
-  cursor: pointer;
-  outline: none;
-  @include custumRadius(3px);
-  transition: 0.3s;
-  padding: 15px 20px;
-  &:hover {
-    transition: 0.3s;
+    height: 50px;
     cursor: pointer;
-    opacity: 0.7;
-  }
-  &--radius {
-    @include custumRadius(32px);
-  }
-
-  &__login {
-    background-color: $btn_color;
-    color: $font-color_primary;
+    outline: none;
+    @include custumRadius(3px);
     transition: 0.3s;
-  }
-  &__signup {
-    background-color: $btn_color;
-    color: $font-color_primary;
-    transition: 0.3s;
-  }
+    padding: 15px 20px;
+    &:hover {
+        transition: 0.3s;
+        cursor: pointer;
+        opacity: 0.7;
+    }
+    &--radius {
+        @include custumRadius(32px);
+    }
 
-  &__twitter {
-    color: $font-color_primary;
-    background-color: #1da1f2;
-  }
+    &__login {
+        background-color: $btn_color;
+        color: $font-color_primary;
+        transition: 0.3s;
+    }
+    &__signup {
+        background-color: $btn_color;
+        color: $font-color_primary;
+        transition: 0.3s;
+    }
+
+    &__twitter {
+        background-color: #1da1f2;
+        & > a {
+            color: $font-color_primary;
+            display: block;
+            line-height: normal;
+        }
+    }
 }

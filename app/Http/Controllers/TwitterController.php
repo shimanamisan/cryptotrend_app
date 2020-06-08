@@ -8,9 +8,12 @@ class TwitterController extends Controller
 {
     public function getTweet()
     {
-        //ツイートを5件取得
-        $result = \Twitter::get('statuses/home_timeline', ["count" => 5]);
+        $query = 'ビットコイン';
 
-        dd($result);
+        // 仮想通貨に関するツイートを検索
+        $result = \Twitter::get('search/tweets', ['q' => $query, 'count' => 10])
+            ->statuses;
+
+        return view('twitter', ['result' => $result]);
     }
 }
