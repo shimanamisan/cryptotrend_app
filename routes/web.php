@@ -37,6 +37,12 @@ Route::get(
     'Auth\LoginController@handleTwitterCallback'
 )->name('twitter.callback');
 
+// 仮想通貨関連のニュースの取得
+Route::get('/news', 'NewsController@index')->name('getNews');
+
+// タイムラインの取得
+Route::get('/get-timeline', 'TwitterController@getTweet')->name('getTweet');
+
 // ログイン後の画面
 Route::get('/coins', 'CoinsController@index')->name('conins.index');
 

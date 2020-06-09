@@ -66,7 +66,9 @@ class LoginController extends Controller
         $userInfo = User::firstOrCreate(
             // usersテーブルのtwitter_tokenカラムに同じ値を持つレコードがあるかチェック
             // emailで判断するとTwitter側でユーザーがメールアドレスを変更した時に対応できない
-            ['twitter_token' => $user->token],
+            // ['twitter_token' => $user->token],
+            // tokenからidに変更
+            ['twitter_id' => $user->id],
             // twitter_tokenカラムに同じ値がなかった場合は、下記の項目をINSERTする
             [
                 'name' => $user->nickname,
