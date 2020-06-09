@@ -7,13 +7,13 @@ use Illuminate\Support\Facades\Log; // ★追加
 
 class NewsController extends Controller
 {
-    public function getNews()
+    public function index()
     {
         Log::debug('====== Google APIからニュースを取得しています ======');
         // $keyword:キーワード検索の文言
         $keyword = '仮想通貨';
         // $mux_num:取得する記事の上限
-        $max_num = 10;
+        $max_num = 50;
 
         // この処理の最大実行時間を指定する。デフォルトは30秒。
         set_time_limit(90);
@@ -53,18 +53,14 @@ class NewsController extends Controller
                 "UTF-8",
                 "auto"
             );
-            $list[$i]['description'] = mb_convert_encoding(
-                $items[$i]->description,
-                "UTF-8",
-                "auto"
-            );
-
-            // print_r('<pre>');
-            // print_r($list);
-            // print_r('</pre>');
+            // $list[$i]['description'] = mb_convert_encoding(
+            //     $items[$i]->description,
+            //     "UTF-8",
+            //     "auto"
+            // );
         }
 
-        // //$max_num以上の記事数の場合は切り捨て
+        // $max_num以上の記事数の場合は切り捨て
         if (count($list) > $max_num) {
             for ($i = 0; $i < $max_num; $i++) {
                 $list_gn[$i] = $list[$i];
@@ -73,9 +69,8 @@ class NewsController extends Controller
         } else {
             $list_gn = $list;
         }
+        Log::debug('取得した情報：' . print_r($list_gn, true));
 
-        print_r('<pre>');
-        print_r($list_gn);
-        print_r('</pre>');
+        return view('news', compact('list_gn'));
     }
 }

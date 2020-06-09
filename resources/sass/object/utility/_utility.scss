@@ -1,44 +1,32 @@
 .u-line {
-    margin-top: 32px;
-    margin-bottom: 32px;
-    border: 0;
-    height: 0;
-    border-top: 1px solid rgba(0, 0, 0, 0.1);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+  margin-top: 32px;
+  margin-bottom: 32px;
+  border-top: 5px #707070;
 
-    &--or {
-        display: block;
-        margin-left: auto;
-        margin-right: auto;
-        margin-top: -44px;
-        width: 70px;
-        text-align: center;
-        background-color: $font-color_primary;
-    }
+  &--or {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: -44px;
+    width: 70px;
+    text-align: center;
+    background-color: $font-color_primary;
+  }
 }
 
 .u-wrapp {
-    text-align: center;
-    margin-top: 30px;
+  text-align: center;
+  margin-top: 30px;
 }
 
 .u-margin {
-    &__bottom--s {
-        margin-bottom: 8px;
-    }
-    &__bottom--sd {
-        margin-bottom: 16px;
-    }
-    &__bottom--md {
-        margin-bottom: 24px;
-    }
-    &--bottom {
-        margin-bottom: 48px;
-    }
+  &--bottom {
+    margin-bottom: 48px;
+  }
 }
 
 .u-padding {
-    &--top {
-        padding-top: 80px;
-    }
+  &--top {
+    padding-top: 80px;
+  }
 }

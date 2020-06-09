@@ -1,69 +1,71 @@
 .c-container {
-    height: 100%;
-    // 各画面で共通化できるスタイリング（後にリファクタしていく）
-    &--common {
-        @include custumShadow();
-        @include custumRadius(5px);
-        margin: 0 auto;
-        box-sizing: border-box;
+  height: 100%;
+  // 各画面で共通化できるスタイリング（後にリファクタしていく）
+  &--common {
+    @include custumShadow();
+    @include custumRadius(5px);
+    margin: 0 auto;
+    box-sizing: border-box;
+  }
+  // 認証系画面のスタイル
+  &__auth {
+    @include custumShadow();
+    @include custumRadius(5px);
+    width: 450px;
+    margin: 0 auto;
+    box-sizing: border-box;
+    background-color: $background-auth;
+    padding: 32px 42px;
+    @include mq() {
+      width: 100%;
+      padding: 32px 16px;
     }
-    // 認証系画面のスタイル
-    &__auth {
-        @include custumShadow();
-        @include custumRadius(5px);
-        width: 450px;
-        margin: 0 auto;
-        box-sizing: border-box;
-        background-color: $background-auth;
-        padding: 32px 42px;
-        @include mq() {
-            width: 100%;
-            padding: 32px 16px;
-        }
+  }
+  // トップページ用のスタイル
+  &__index {
+    width: 80%;
+    padding-top: 80px;
+    padding-bottom: 120px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  &__bg {
+    &:nth-child(odd) {
+      background-color: #fff;
     }
-    // トップページ用のスタイル
-    &__index {
-        width: 80%;
-        padding-top: 80px;
-        padding-bottom: 120px;
-        margin-left: auto;
-        margin-right: auto;
-    }
-    &__bg {
-        &:nth-child(odd) {
-            background-color: #fff;
-        }
-    }
+  }
 
-    // プロフィール用レイアウト
-    &__profile {
-        position: relative;
-        width: 744px;
-        min-height: 390px;
-        margin: 0 auto;
-        padding: 32px 8px 32px;
-        box-sizing: border-box;
-        background-color: #fff;
-        @include custumShadow();
-        @include custumRadius(0 0 5px 5px);
-        clear: both;
-        @include mq() {
-            width: 100%;
-        }
-    }
+  // プロフィール用レイアウト
+  &__profile {
+    width: 744px;
+    margin: 0 auto;
+    padding: 32px 8px 32px;
+    box-sizing: border-box;
+    background-color: #fff;
+    @include custumShadow();
+    @include custumRadius(0 0 5px 5px);
+    clear: both;
+  }
 
-    // トレンド表示画面用レイアウト
-    &__trend {
-        width: 1200px;
-        margin: 0 auto;
-        padding: 32px 8px 32px;
-        box-sizing: border-box;
-        background-color: #fff;
-        @include custumShadow();
-        @include custumRadius(5px);
-        clear: both;
-        @include mq() {
-            width: 100%;
-        }
+  // トレンド表示画面用レイアウト
+  &__trend {
+    width: 1200px;
+    margin: 0 auto;
+    padding: 32px 8px 32px;
+    box-sizing: border-box;
+    background-color: #fff;
+    @include custumShadow();
+    @include custumRadius(5px);
+    clear: both;
+    @include mq() {
+      width: 100%;
     }
+  }
+
+  &__news {
+    width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    flex-wrap: wrap;
+  }
 }

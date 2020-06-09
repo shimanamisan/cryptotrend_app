@@ -25,6 +25,7 @@ require("./bootstrap");
 // );
 
 Vue.component("profile-component", require("./components/Profile.vue").default);
+Vue.component("news-component", require("./components/News.vue").default);
 
 // sass ファイル読み込み
 import "../sass/style.scss";
@@ -43,6 +44,9 @@ import Vue from "vue";
 //     render: h => h(App)
 // }).$mount("#app");
 
-const app = new Vue({
+const app1 = new Vue({
     el: "#profire-component",
+});
+const app2 = new Vue({
+    el: "#news-component",
 });
