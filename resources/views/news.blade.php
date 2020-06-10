@@ -5,6 +5,6 @@
 
 @section('content')
 <div id="news-component">
-    <news-component :news_data="{{ json_encode($list_gn) }}"/>
+    <news-component :news_data="{{ json_encode($list) }}"/>
 </div>
 @endsection

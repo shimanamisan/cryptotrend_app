@@ -23,14 +23,13 @@ require("./bootstrap");
 //     "example-component",
 //     require("./components/ExampleComponent.vue").default
 // );
-
-Vue.component("profile-component", require("./components/Profile.vue").default);
-Vue.component("news-component", require("./components/News.vue").default);
-
 // sass ファイル読み込み
 import "../sass/style.scss";
 
 import Vue from "vue";
+
+Vue.component("profile-component", require("./components/Profile.vue").default);
+Vue.component("news-component", require("./components/News.vue").default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
