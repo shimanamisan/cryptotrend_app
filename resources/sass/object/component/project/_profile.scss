@@ -1,99 +1,104 @@
 .p-profile {
-  &__submitWrap {
-    margin-top: 12px;
-    display: flex;
-    justify-content: flex-end;
-  }
-  &__btn {
-    font-size: 12px;
-    padding: 5px 10px;
-    height: auto;
-    margin-left: 8px;
-    &--cancel {
-      background-color: #000;
-      color: #fff;
+    &__submitWrap {
+        margin-top: 12px;
+        display: flex;
+        justify-content: flex-end;
     }
-    &--submit {
-      background-color: $btn_color-submit;
-      color: #fff;
+    &__btn {
+        font-size: 12px;
+        padding: 5px 10px;
+        height: auto;
+        margin-left: 8px;
+        &--cancel {
+            background-color: #000;
+            color: #fff;
+        }
+        &--submit {
+            background-color: $btn_color-submit;
+            color: #fff;
+        }
     }
-  }
-  &__title {
-    text-align: center;
-  }
-  &__body {
-    display: flex;
-    justify-content: space-evenly;
-  }
-  &__content {
-    padding: 24px;
-    position: relative;
-    & > p {
-      text-align: center;
-      margin-bottom: 8px;
+    &__title {
+        text-align: center;
     }
-    &--inwrap {
-      margin-top: 5px;
-      display: flex;
-      justify-content: flex-end;
+    &__body {
+        display: flex;
+        justify-content: space-evenly;
     }
-    &--body:nth-last-child(1) {
-      margin-top: 16px;
-    }
-  }
-
-  &__pic {
-    width: 100%;
-    height: 200px;
-    position: absolute;
-    top: 0;
-    left: 0;
-    opacity: 0;
-
-    &--ImgWrap {
-      display: block;
-      position: relative;
-      width: 200px;
-      height: 200px;
-      @include custumRadius(50%);
-      box-sizing: border-box;
-      text-align: center;
+    &__content {
+        padding: 24px;
+        position: relative;
+        & > p {
+            text-align: center;
+            margin-bottom: 8px;
+        }
+        &--inwrap {
+            margin-top: 5px;
+            display: flex;
+            justify-content: flex-end;
+        }
+        &--body:nth-last-child(1) {
+            margin-top: 16px;
+        }
     }
 
-    &--drop {
-      border: none;
-      width: 100%;
-      height: 200px;
-      line-height: 200px;
-      position: absolute;
-      top: 0;
-      left: 0;
-      opacity: 0;
+    &__pic {
+        width: 100%;
+        height: 200px;
+        position: absolute;
+        top: 0;
+        left: 0;
+        opacity: 0;
+
+        &--ImgWrap {
+            display: block;
+            position: relative;
+            width: 200px;
+            height: 200px;
+            @include custumRadius(50%);
+            box-sizing: border-box;
+            text-align: center;
+        }
+
+        &--drop {
+            border: none;
+            width: 100%;
+            height: 200px;
+            line-height: 200px;
+            position: absolute;
+            top: 0;
+            left: 0;
+            opacity: 0;
+        }
+
+        &--output {
+            width: 100%;
+            height: 100%;
+            @include custumRadius(50%);
+        }
+    }
+    &__dltitle {
+        text-align: center;
+        margin-bottom: 15px;
+        font-weight: 600;
     }
 
-    &--output {
-      width: 100%;
-      height: 100%;
-      @include custumRadius(50%);
+    &__dlbody {
+        text-align: center;
+        padding-left: 32px;
+        padding-right: 32px;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 80%;
     }
-  }
-  &__dltitle {
-    text-align: center;
-    margin-bottom: 15px;
-    font-weight: 600;
-  }
 
-  &__dlbody {
-    text-align: center;
-    padding-left: 32px;
-    padding-right: 32px;
-  }
-
-  &__dlbtn {
-    margin: 24px 0;
-    font-weight: 600;
-    background-color: red;
-    color: #fff;
-    @include custumRadius(24px);
-  }
+    &__dlbtn {
+        margin: 24px 0;
+        font-weight: 600;
+        background-color: red;
+        color: #fff;
+        @include custumRadius(24px);
+    }
 }

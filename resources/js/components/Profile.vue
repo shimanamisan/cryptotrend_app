@@ -56,7 +56,7 @@
               <div class="p-profile__content--body">
                 <label for>メールアドレス</label>
                 <input class="c-form__input" type="text" v-model="userDataForm.email" />
-                <div class="p-profile__content--inwrap">
+                <div class="p-profile__content--inwrap" v-show="this.editEmail_flg">
                   <div class="p-profile__content--cancel">
                     <button class="c-btn p-profile__btn p-profile__btn--cancel">キャンセル</button>
                   </div>
@@ -149,6 +149,9 @@ export default {
 
     },
     computed: {},
+    methods:{
+      
+    }
 };
 </script>
 

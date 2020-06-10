@@ -13,7 +13,7 @@ class NewsController extends Controller
         // $keyword:キーワード検索の文言
         $keyword = '仮想通貨';
         // $mux_num:取得する記事の上限
-        $max_num = 50;
+        // $max_num = 100;
 
         // この処理の最大実行時間を指定する。デフォルトは30秒。
         set_time_limit(90);
@@ -35,6 +35,8 @@ class NewsController extends Controller
 
         $items = simplexml_load_file($API_BASE_URL)->channel->item;
 
+        Log::debug("取得した記事の数：" . count($items));
+
         //記事のタイトルとURLを取り出して配列に格納
         for ($i = 0; $i < count($items); $i++) {
             $list[$i]['title'] = mb_convert_encoding(
@@ -53,24 +55,25 @@ class NewsController extends Controller
                 "UTF-8",
                 "auto"
             );
-            // $list[$i]['description'] = mb_convert_encoding(
-            //     $items[$i]->description,
-            //     "UTF-8",
-            //     "auto"
-            // );
         }
+
+        Log::debug('取得した情報：' . print_r($list, true));
 
         // $max_num以上の記事数の場合は切り捨て
-        if (count($list) > $max_num) {
-            for ($i = 0; $i < $max_num; $i++) {
-                $list_gn[$i] = $list[$i];
-                $i++;
-            }
-        } else {
-            $list_gn = $list;
-        }
-        Log::debug('取得した情報：' . print_r($list_gn, true));
+        // if (count($list) >= $max_num) {
+        //     for ($i = 0; $i < $max_num; $i++) {
+        //         $list_gn[$i] = $list[$i];
+        //         Log::debug('$i：' . print_r($i, true));
 
-        return view('news', compact('list_gn'));
+        //         Log::debug(
+        //             '$max_num以上の記事数の場合は切り捨て：' .
+        //                 print_r($list_gn, true)
+        //         );
+        //     }
+        // } else {
+        //     $list_gn = $list;
+        // }
+
+        return view('news', compact('list'));
     }
 }
