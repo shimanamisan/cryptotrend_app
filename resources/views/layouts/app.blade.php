@@ -26,6 +26,9 @@
           </li>
           @else
           <li class="p-header__item">
+            <a class="p-header__item--link" href="{{ route('getUsers') }}">ユーザー一覧</a>
+          </li>
+          <li class="p-header__item">
             <a class="p-header__item--link" href="{{ route('getNews') }}">仮想通貨ニュース一覧</a>
           </li>
           <li class="p-header__item">

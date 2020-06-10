@@ -40,6 +40,9 @@ Route::get(
 // 仮想通貨関連のニュースの取得
 Route::get('/news', 'NewsController@index')->name('getNews');
 
+// 仮想通貨関連のTwitterユーザーを取得
+Route::get('/tweet-users', 'TwitterUserController@index')->name('getUsers');
+
 // タイムラインの取得
 Route::get('/get-timeline', 'TwitterController@getTweet')->name('getTweet');
 
