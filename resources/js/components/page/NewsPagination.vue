@@ -1,34 +1,29 @@
 <template>
-    <div>
-        <paginate
-            v-model="currentPage"
-            :page-count="getPageCount"
-            :page-range="10"
-            :margin-pages="2"
-            :click-handler="clickCallback"
-            :prev-text="'Prev'"
-            :next-text="'Next'"
-            :containerClass="'pagination'"
-            :page-class="'page-item'"
-            :page-link-class="'page-link'"
-            :prev-class="'page-item'"
-            :prev-link-class="'page-link'"
-            :next-class="'page-item'"
-            :next-link-class="'page-link'"
-        >
-        </paginate>
-        <section class="c-container c-container__news">
-            <div
-                class="p-news__card"
-                v-for="(news, index) in getnewsItems"
-                :key="index"
-            >
-                <p>{{ news.title }}</p>
-                <br />
-                <p>投稿日：{{ news.pubDate }}</p>
-            </div>
-        </section>
-    </div>
+  <div>
+    <paginate
+      v-model="currentPage"
+      :page-count="getPageCount"
+      :page-range="10"
+      :margin-pages="2"
+      :click-handler="clickCallback"
+      :prev-text="'Prev'"
+      :next-text="'Next'"
+      :containerClass="'pagination'"
+      :page-class="'page-item'"
+      :page-link-class="'page-link'"
+      :prev-class="'page-item'"
+      :prev-link-class="'page-link'"
+      :next-class="'page-item'"
+      :next-link-class="'page-link'"
+    ></paginate>
+    <section class="c-container c-container__news">
+      <div class="p-news__card" v-for="(news, index) in getnewsItems" :key="index">
+        <p>{{ news.title }}</p>
+        <br />
+        <p>投稿日：{{ news.pubDate }}</p>
+      </div>
+    </section>
+  </div>
 </template>
 
 <script>
@@ -59,7 +54,7 @@ export default {
             let current = this.currentPage * this.parPage;
             let start = current - this.parPage;
             console.log(
-                "カレントページ：" + current + "　スタートページ：" + start
+                "カレントページ：" + current + "スタートページ：" + start
             );
 
             return this.newsItems.slice(start, current);
@@ -74,4 +69,5 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+</style>

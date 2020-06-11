@@ -25,6 +25,9 @@ Auth::routes();
 Route::get('/profile', 'ProfileController@showProfileForm')->name(
     'profile.showProfileForm'
 );
+Route::patch('/profile/{id}', 'ProfileController@editProfile')->name(
+    'profile.editProfile'
+);
 
 // Twitter経由でのログインを行う為のURI
 Route::get(
@@ -41,10 +44,12 @@ Route::get(
 Route::get('/news', 'NewsController@index')->name('getNews');
 
 // 仮想通貨関連のTwitterユーザーを取得
-Route::get('/tweet-users', 'TwitterUserController@index')->name('getUsers');
+Route::get('/tweet-users', 'TwitterController@userList')->name('userList');
 
 // タイムラインの取得
-Route::get('/get-timeline', 'TwitterController@getTweet')->name('getTweet');
+Route::get('/get-timeline', 'TwitterController@searchTweet')->name(
+    'searchTweet'
+);
 
 // ログイン後の画面
 Route::get('/coins', 'CoinsController@index')->name('conins.index');

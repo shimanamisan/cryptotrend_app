@@ -57,23 +57,13 @@ class NewsController extends Controller
             );
         }
 
-        Log::debug('取得した情報：' . print_r($list, true));
+        // json形式へ変換
+        $newsList = json_encode($list);
 
-        // $max_num以上の記事数の場合は切り捨て
-        // if (count($list) >= $max_num) {
-        //     for ($i = 0; $i < $max_num; $i++) {
-        //         $list_gn[$i] = $list[$i];
-        //         Log::debug('$i：' . print_r($i, true));
+        Log::debug('JSON形式へ変換後の形：' . print_r($list, true));
 
-        //         Log::debug(
-        //             '$max_num以上の記事数の場合は切り捨て：' .
-        //                 print_r($list_gn, true)
-        //         );
-        //     }
-        // } else {
-        //     $list_gn = $list;
-        // }
-
-        return view('news', compact('list'));
+        // return view('news')->with('newsList', $newsList);
+        return view('news', ['newsList' => $newsList]);
+        // return view('news', compact('list'));
     }
 }

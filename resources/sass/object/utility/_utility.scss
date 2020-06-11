@@ -1,32 +1,32 @@
 .u-line {
-  margin-top: 32px;
-  margin-bottom: 32px;
-  border-top: 5px #707070;
+    margin-top: 32px;
+    margin-bottom: 32px;
+    border-top: 1px solid #707070;
 
-  &--or {
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-    margin-top: -44px;
-    width: 70px;
-    text-align: center;
-    background-color: $font-color_primary;
-  }
+    &--or {
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        margin-top: -44px;
+        width: 70px;
+        text-align: center;
+        background-color: $font-color_primary;
+    }
 }
 
 .u-wrapp {
-  text-align: center;
-  margin-top: 30px;
+    text-align: center;
+    margin-top: 30px;
 }
 
 .u-margin {
-  &--bottom {
-    margin-bottom: 48px;
-  }
+    &--bottom {
+        margin-bottom: 48px;
+    }
 }
 
 .u-padding {
-  &--top {
-    padding-top: 80px;
-  }
+    &--top {
+        padding-top: 80px;
+    }
 }
