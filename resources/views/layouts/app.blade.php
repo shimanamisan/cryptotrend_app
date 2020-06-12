@@ -54,6 +54,9 @@
         </ul>
       </nav>
     </header>
+    @if(Session::has('message'))
+      <p>{{ session('message') }}</p>
+    @endif
 
     
 @yield('content')

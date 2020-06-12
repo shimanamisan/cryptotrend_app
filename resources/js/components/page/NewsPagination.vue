@@ -70,4 +70,22 @@ export default {
 </script>
 
 <style>
+.pagination {
+  display: flex;
+  margin: 0 auto;
+  width: 80%;
+  justify-content: center;
+}
+.page-item {
+  background-color: aqua;
+  padding: 10px 15px;
+  margin-left: 12px;
+  position: relative;
+  overflow: hidden;
+}
+.active {
+  background-color: brown;
+}
+.page-link {
+}
 </style>

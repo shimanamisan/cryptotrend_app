@@ -60,7 +60,7 @@ class NewsController extends Controller
         // json形式へ変換
         $newsList = json_encode($list);
 
-        Log::debug('JSON形式へ変換後の形：' . print_r($list, true));
+        Log::debug('JSON形式へ変換後の形：' . print_r($newsList, true));
 
         // return view('news')->with('newsList', $newsList);
         return view('news', ['newsList' => $newsList]);
