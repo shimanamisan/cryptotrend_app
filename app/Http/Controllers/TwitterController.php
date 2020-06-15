@@ -34,14 +34,14 @@ class TwitterController extends Controller
     }
 
     // 関連キーワードをつぶやいているユーザーを取得
-    public function userList()
+    public static function userList()
     {
         // 新規登録カウント
         $newCounter = 0;
         // 既存登録数のカウント
         $alreadyCounter = 0;
 
-        $this->debug(
+        \Log::debug(
             '===== ツイート取得バッチを開始します：' .
                 date('Y年m月d日') .
                 '====='
@@ -64,7 +64,7 @@ class TwitterController extends Controller
 
         // DBから返却されたコレクションが空だったら初期処理として新規登録します
         if ($dbresult->isEmpty()) {
-            $this->debug(
+            \Log::debug(
                 "twitter_usersテーブルが空なので初期登録処理を実行します。："
             );
             foreach ($search_result as $search_result_item) {
@@ -82,14 +82,14 @@ class TwitterController extends Controller
                 ];
             }
             $TwitterUser->insert($twitter_user);
-            $this->debug('登録が完了しました。');
+            \Log::debug('登録が完了しました。');
         } else {
-            $this->debug('2回目以降の処理です。');
+            \Log::debug('2回目以降の処理です。');
             // DBから取得したCollectionを分解する
             foreach ($search_result as $search_result_item) {
                 // 検索してきた結果からTwitterUserIDを取り出しています
                 $search_user_id = $search_result_item->user->id;
-                $this->debug(
+                \Log::debug(
                     'TwitterユーザーのIDを取り出しています：' . $search_user_id
                 );
 
@@ -102,7 +102,7 @@ class TwitterController extends Controller
                 if ($result->isNotEmpty()) {
                     // idで検索できていればDBに存在している
                     ++$alreadyCounter;
-                    $this->debug(
+                    \Log::debug(
                         "DBに存在していたユーザーです。既存ユーザーカウンター：{$alreadyCounter}"
                     );
                     $twitter_user = [
@@ -123,15 +123,15 @@ class TwitterController extends Controller
                     $TwitterUser
                         ->where('twitter_id', $search_user_id)
                         ->update($twitter_user);
-                    $this->debug(
+                    \Log::debug(
                         '更新しました。更新したID：' . $search_user_id
                     );
-                    $this->debug(
+                    \Log::debug(
                         '更新した内容：' . print_r($twitter_user, true)
                     );
                 } else {
                     ++$newCounter;
-                    $this->debug(
+                    \Log::debug(
                         "DBに存在していなかったユーザーです。新規ユーザーカウンター：{$newCounter}"
                     );
 
@@ -151,7 +151,7 @@ class TwitterController extends Controller
                     ];
 
                     $TwitterUser->insert($twitter_user);
-                    $this->debug('新規登録しました。');
+                    \Log::debug('新規登録しました。');
                 }
             }
         }
@@ -159,10 +159,11 @@ class TwitterController extends Controller
 
     public function index()
     {
-        $user_list = TwitterUser::all();
+        $result = TwitterUser::all();
+        
+        // 取得した情報をJSON形式へ変換
+        $tw_user = json_encode($result);
 
-        $tw_user = json_decode($user_list);
-
-        return view('userList', ['user_list' => $user_list]);
+        return view('userList', ['tw_user' => $tw_user]);
     }
 }

@@ -2,7 +2,7 @@
   <div>
     <paginate
       v-model="currentPage"
-      :page-count="getPageCount"
+      :page-count="getTwitterUserItems"
       :page-range="10"
       :margin-pages="2"
       :click-handler="clickCallback"
@@ -17,10 +17,13 @@
       :next-link-class="'page-link'"
     ></paginate>
     <section class="c-container c-container__news">
-      <div class="p-news__card" v-for="(news, index) in getnewsItems" :key="index">
-        <p>{{ news.title }}</p>
+      <div class="p-news__card" v-for="(tw_userItems, index) in getTwitterUserItems" :key="index">
+        <p>{{ tw_userItems.account_name }}</p>
+        <p>{{ tw_userItems.description }}</p>
+        <p>{{ tw_userItems.new_tweet }}</p>
+        <p>{{ tw_userItems.account_name }}</p>
         <br />
-        <p>投稿日：{{ news.pubDate }}</p>
+        <p>投稿日：{{ tw_userItems.created_at }}</p>
       </div>
     </section>
   </div>
@@ -33,34 +36,34 @@ Vue.component("paginate", Paginate);
 export default {
     data() {
         return {
-            newsItems: this.news_data,
+            tw_userItems: this.tw_user,
             totalPage: this.total_page,
             parPage: "",
             currentPage: 1,
         };
     },
-    props: ["news_data", "total_page"],
+    props: ["tw_user", "total_page"],
     methods: {
         clickCallback(pageNum) {
             this.currentPage = pageNum;
         },
         paginationNumber() {
             // 表示するページネーションの数を割り出すために、ニュースの総数を表示させる数で割っている
-            this.parPage = this.totalPage / 10;
+            this.parPage = Math.ceil(this.totalPage / 40);
         },
     },
     computed: {
-        getnewsItems() {
+        getTwitterUserItems() {
             let current = this.currentPage * this.parPage;
             let start = current - this.parPage;
             console.log(
                 "カレントページ：" + current + "スタートページ：" + start
             );
 
-            return this.newsItems.slice(start, current);
+            return this.tw_userItems.slice(start, current);
         },
         getPageCount() {
-            return Math.ceil(this.newsItems.length / this.parPage);
+            return Math.ceil(this.tw_userItems.length / this.parPage);
         },
     },
     created() {
@@ -83,7 +86,7 @@ export default {
   position: relative;
   overflow: hidden;
 }
-.active {
+/* .active {
   background-color: brown;
-}
+} */
 </style>
