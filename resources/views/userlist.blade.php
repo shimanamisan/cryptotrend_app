@@ -6,12 +6,7 @@
 @include('layouts.head')
 
 @section('content')
-
-<main class="l-main l-main__common">
-        <h1 class="p-news__title">ユーザー一覧</h1>
-
-        <h1>test</h1>
-</main>
+<div id="twitteruser-component">
+    <twitteruser-component  :tw_user="{{ ($tw_user) }}"/>
+</div>
 @endsection
-        
-        

@@ -43,7 +43,7 @@
             >
             <div class="u-wrapp">
               <input
-                class="c-btn c-btn__login"
+                class="c-btn c-btn__auth"
                 type="submit"
                 value="ログイン"
               />

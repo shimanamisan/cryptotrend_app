@@ -1,5 +1,4 @@
 @import url("https://fonts.googleapis.com/css?family=Nunito");
-@import "~bootstrap/scss/bootstrap";
 
 /*****************************
  foundation
@@ -26,6 +25,7 @@
 @import "object/component/btn";
 @import "object/component/link";
 @import "object/component/tabs";
+@import "object/component/pagination";
 @import "object/component/error";
 
 /*****************************
@@ -40,6 +40,7 @@
 @import "object/component/project/sitepolicy";
 @import "object/component/project/coin";
 @import "object/component/project/ranking";
+@import "object/component/project/twuser";
 @import "object/component/project/profile";
 @import "object/component/project/trend";
 

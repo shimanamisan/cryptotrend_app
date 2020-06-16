@@ -60,7 +60,7 @@
             />
             <div class="u-wrapp">
               <button
-                class="c-btn c-btn__signup"
+                class="c-btn c-btn__auth"
                 type="submit"
                 >メールアドレスで新規登録
             </button>

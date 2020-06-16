@@ -1,5 +1,12 @@
 <template>
   <div>
+    <section class="c-container c-container__news">
+      <div class="p-news__card" v-for="(news, index) in getnewsItems" :key="index">
+        <p>{{ news.title }}</p>
+        <br />
+        <p>投稿日：{{ news.pubDate }}</p>
+      </div>
+    </section>
     <paginate
       v-model="currentPage"
       :page-count="getPageCount"
@@ -16,13 +23,6 @@
       :next-class="'page-item'"
       :next-link-class="'page-link'"
     ></paginate>
-    <section class="c-container c-container__news">
-      <div class="p-news__card" v-for="(news, index) in getnewsItems" :key="index">
-        <p>{{ news.title }}</p>
-        <br />
-        <p>投稿日：{{ news.pubDate }}</p>
-      </div>
-    </section>
   </div>
 </template>
 

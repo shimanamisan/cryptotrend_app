@@ -30,6 +30,10 @@ import Vue from "vue";
 
 Vue.component("profile-component", require("./components/Profile.vue").default);
 Vue.component("news-component", require("./components/News.vue").default);
+Vue.component(
+    "twitteruser-component",
+    require("./components/UserList.vue").default
+);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -48,4 +52,7 @@ const app1 = new Vue({
 });
 const app2 = new Vue({
     el: "#news-component",
+});
+const app3 = new Vue({
+    el: "#twitteruser-component",
 });
