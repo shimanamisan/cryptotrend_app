@@ -14,15 +14,40 @@
     @include custumRadius(32px);
   }
 
-  &__login {
+  &__auth {
     background-color: $btn_color;
     color: $font-color_primary;
     transition: 0.3s;
   }
-  &__signup {
+
+  &__common {
+    height: auto;
     background-color: $btn_color;
     color: $font-color_primary;
     transition: 0.3s;
+    padding: 10px 20px;
+    &--follow {
+      background-color: #2d8bf0;
+      position: absolute;
+      float: left;
+      right: 5%;
+      &:hover {
+        transition: 0.3s;
+        cursor: pointer;
+        background-color: #62abf8;
+        opacity: 1;
+        right: 3%;
+      }
+    }
+    &--autofollow {
+      display: block;
+      position: absolute;
+      top: 2%;
+      @include mq() {
+        position: unset;
+        margin: 16px auto;
+      }
+    }
   }
 
   &__twitter {

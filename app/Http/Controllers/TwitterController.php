@@ -28,8 +28,6 @@ class TwitterController extends Controller
             'count' => 10,
         ])->statuses;
 
-        $this->debug('取得したツイートです：' . print_r($result, true));
-
         return view('twitter', ['result' => $result]);
     }
 

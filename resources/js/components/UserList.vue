@@ -1,6 +1,6 @@
 <template>
   <main class="l-main l-main__common">
-    <h1 class="p-news__title">仮想通貨関連ツイート</h1>
+    <h1 class="p-news__title">Twitterユーザー</h1>
 
     <Pagination :tw_user="this.tw_user" :total_page="this.totalPageNum" />
   </main>

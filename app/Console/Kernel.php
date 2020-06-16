@@ -38,7 +38,7 @@ class Kernel extends ConsoleKernel
             })
             // 夜中の12に時に処理が走るメソッド
             ->daily();
-        // // 5分後に処理が走るメソッド
+        // 5分後に処理が走るメソッド
             // ->everyFiveMinutes();
     }
 
