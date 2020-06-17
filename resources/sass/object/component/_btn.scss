@@ -52,5 +52,10 @@
   &__twitter {
     color: $font-color_primary;
     background-color: #1da1f2;
+    & > a {
+      display: block;
+      text-decoration: none;
+      color: #fff;
+    }
   }
 }

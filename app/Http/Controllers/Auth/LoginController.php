@@ -11,7 +11,7 @@ use Illuminate\Foundation\Auth\AuthenticatesUsers;
 
 class LoginController extends Controller
 {
-    /*
+  /*
     |--------------------------------------------------------------------------
     | Login Controller
     |--------------------------------------------------------------------------
@@ -22,82 +22,77 @@ class LoginController extends Controller
     |
     */
 
-    use AuthenticatesUsers;
+  use AuthenticatesUsers;
 
-    /**
-     * Where to redirect users after login.
-     *
-     * @var string
-     */
-    // protected $redirectTo = RouteServiceProvider::HOME;
+  /**
+   * Where to redirect users after login.
+   *
+   * @var string
+   */
+  // protected $redirectTo = RouteServiceProvider::HOME;
 
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        $this->middleware('guest')->except('logout');
+  /**
+   * Create a new controller instance.
+   *
+   * @return void
+   */
+  public function __construct()
+  {
+    $this->middleware('guest')->except('logout');
+  }
+
+  /*********************************************************
+   * Twitterログイン・新規登録
+   *********************************************************/
+  // Twitterアプリ側へリダイレクト
+  public function redirectToTwitterProvider()
+  {
+    // Twitterアプリ側に認証を求めていく処理
+    return Socialite::driver('twitter')->redirect();
+  }
+
+  // Twitter認証ページからリダイレクトを受け取り、レスポンスデータを元に新規登録するか否か決定する
+  public function handleTwitterCallback()
+  {
+    try {
+      // ユーザーデータの取得とアクセストークンの取得
+      $user = Socialite::driver('twitter')->user();
+      // twitter_idをセッションに保存
+      session(['twitterUser_id' => $user->id]);
+      \Log::debug('認証に成功しました');
+      \Log::debug('セッション情報を取得します：' . print_r(session()->all(), true));
+    } catch (\Exception $e) {
+      \Log::debug('ログインに失敗しました');
+      // エラーならログイン画面へリダイレクト
+      return redirect('/login')->with('message', 'ログインに失敗しました。');
     }
 
-    /*********************************************************
-     * Twitterログイン・新規登録
-     *********************************************************/
-    // Twitterアプリ側へリダイレクト
-    public function redirectToTwitterProvider()
-    {
-        // Twitterアプリ側に認証を求めていく処理
-        return Socialite::driver('twitter')->redirect();
-    }
+    // 既にTwitterユーザーで登録されているか検索、登録されていなければ新規登録する
+    $userInfo = User::firstOrCreate(
+      // usersテーブルのtwitter_tokenカラムに同じ値を持つレコードがあるかチェック
+      // emailで判断すると本アプリ側や、Twitter側でユーザーがメールアドレスを変更した時に新たに作成されてしまう
+      ['twitter_token' => $user->token],
+      // twitter_tokenカラムに同じ値がなかった場合は、下記の項目をINSERTする
+      [
+        'name' => $user->getNickname(),
+        'email' => $user->getEmail(),
+        'avatar' => $user->getAvatar(),
+        'twitter_token' => $user->token,
+        'twitter_token_secret' => $user->tokenSecret,
+      ]
+    );
 
-    // Twitter認証ページからリダイレクトを受け取り、レスポンスデータを元に新規登録するか否か決定する
-    public function handleTwitterCallback()
-    {
-        try {
-            // ユーザーデータの取得とアクセストークンの取得
-            $user = Socialite::driver('twitter')->user();
-            // twitter_idをセッションに保存
-            session(['twitterUser_id' => $user->id]);
-            \Log::debug('認証に成功しました');
-            \Log::debug(
-                'セッション情報を取得します：' . print_r(session()->all(), true)
-            );
-        } catch (\Exception $e) {
-            \Log::debug('ログインに失敗しました');
-            // エラーならログイン画面へリダイレクト
-            return redirect('/login')->with(
-                'message',
-                'ログインに失敗しました。'
-            );
-        }
+    Auth::login($userInfo);
 
-        // 既にTwitterユーザーで登録されているか検索、登録されていなければ新規登録する
-        $userInfo = User::firstOrCreate(
-            // usersテーブルのtwitter_tokenカラムに同じ値を持つレコードがあるかチェック
-            // emailで判断すると本アプリ側や、Twitter側でユーザーがメールアドレスを変更した時に新たに作成されてしまう
-            ['twitter_token' => $user->token],
-            // twitter_tokenカラムに同じ値がなかった場合は、下記の項目をINSERTする
-            [
-                'name' => $user->getNickname(),
-                'email' => $user->getEmail(),
-                'avatar' => $user->getAvatar(),
-                'twitter_token' => $user->token,
-                'twitter_token_secret' => $user->tokenSecret,
-            ]
-        );
+    // プロフィール編集画面へリダイレクト
+    return redirect()->to('/profile');
+  }
 
-        Auth::login($userInfo);
-
-        // プロフィール編集画面へリダイレクト
-        return redirect()->to('/profile');
-    }
-
-    // ログイン後のリダイレクト先をオーバーライド
-    // デフォルトだとリダイレクト先が/homeになっている
-    public function redirectPath()
-    {
-        return '/profile';
-        //例）return 'costs/index';
-    }
+  // ログイン後のリダイレクト先をオーバーライド
+  // デフォルトだとリダイレクト先が/homeになっている
+  public function redirectPath()
+  {
+    return '/profile';
+    //例）return 'costs/index';
+  }
 }

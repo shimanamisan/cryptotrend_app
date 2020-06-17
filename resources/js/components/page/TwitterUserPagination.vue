@@ -68,7 +68,7 @@ export default {
     },
     paginationNumber() {
       // 表示するページネーションの数を割り出すために、総数を表示させる数で割っている
-      this.parPage = Math.ceil(this.totalPage / 90);
+      this.parPage = Math.ceil(this.totalPage / 5);
     },
     scrollTop() {
       window.scrollTo({

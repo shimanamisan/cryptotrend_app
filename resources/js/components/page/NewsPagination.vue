@@ -13,15 +13,17 @@
       :page-range="10"
       :margin-pages="2"
       :click-handler="clickCallback"
-      :prev-text="'Prev'"
-      :next-text="'Next'"
-      :containerClass="'pagination'"
-      :page-class="'page-item'"
+      :prev-text="'＜'"
+      :next-text="'＞'"
+      :containerClass="'c-pagination'"
+      :page-class="'c-pagination__item'"
       :page-link-class="'page-link'"
-      :prev-class="'page-item'"
+      :prev-class="'c-pagination__item'"
       :prev-link-class="'page-link'"
-      :next-class="'page-item'"
+      :next-class="'c-pagination__item'"
       :next-link-class="'page-link'"
+      :active-class="'c-pagination__item--active'"
+      :hide-prev-next="true"
     ></paginate>
   </div>
 </template>
