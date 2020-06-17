@@ -6,14 +6,18 @@ use Illuminate\Http\Request;
 
 class TwitterFollowController extends Controller
 {
-  public function follow($id)
+  public function follow(Request $request)
   {
-    // リクエストを送るURL
-    $request_url = 'https://api.twitter.com/1.1/friendships/create.json';
+    $id = $request->id;
+    // // リクエストを送るURL
+    // $request_url = 'https://api.twitter.com/1.1/friendships/create.json';
     // パラメータ
-    $param = [
+    return response()->json(['success'], 200);
+    // $param = [
+    //   'user_id' => $id,
+    // ];
+    $result = \Twitter::post('friendships/create', [
       'user_id' => $id,
-    ];
-    $result = \Twitter::post();
+    ]);
   }
 }

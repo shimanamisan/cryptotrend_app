@@ -4,7 +4,7 @@
  * building robust, powerful web applications using Vue and Laravel.
  */
 
-require("./bootstrap");
+require('./bootstrap');
 
 // window.Vue = require("vue");
 
@@ -24,16 +24,14 @@ require("./bootstrap");
 //     require("./components/ExampleComponent.vue").default
 // );
 // sass ファイル読み込み
-import "../sass/style.scss";
+import '../sass/style.scss';
+import _ from 'lodash';
 
-import Vue from "vue";
+import Vue from 'vue';
 
-Vue.component("profile-component", require("./components/Profile.vue").default);
-Vue.component("news-component", require("./components/News.vue").default);
-Vue.component(
-    "twitteruser-component",
-    require("./components/UserList.vue").default
-);
+Vue.component('profile-component', require('./components/Profile.vue').default);
+Vue.component('news-component', require('./components/News.vue').default);
+Vue.component('twitteruser-component', require('./components/UserList.vue').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -48,11 +46,11 @@ Vue.component(
 // }).$mount("#app");
 
 const app1 = new Vue({
-    el: "#profire-component",
+  el: '#profire-component',
 });
 const app2 = new Vue({
-    el: "#news-component",
+  el: '#news-component',
 });
 const app3 = new Vue({
-    el: "#twitteruser-component",
+  el: '#twitteruser-component',
 });

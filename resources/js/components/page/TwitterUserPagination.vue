@@ -3,11 +3,16 @@
     <section class="c-container c-container__twusr">
       <div class="p-twuser__header">
         <button class="c-btn c-btn__common c-btn__common--autofollow">自動フォロー機能</button>
-        <p class="p-twuser__header__text">{{ this.totalPage }}件中 {{ pageStart }} - {{ endPage }}件まで表示</p>
+        <p
+          class="p-twuser__header__text"
+        >{{ this.totalPage }}件中 {{ pageStart }} - {{ endPage }}件まで表示</p>
         <p class="p-twuser__header__text">○○人フォロー済</p>
       </div>
       <div class="p-twuser__card" v-for="(tw_userItems, index) in getTwitterUserItems" :key="index">
-        <button class="c-btn c-btn__common c-btn__common--follow" @click="sendFollowRequest(tw_userItems.twitter_id)">フォローする</button>
+        <button
+          class="c-btn c-btn__common c-btn__common--follow"
+          @click="sendFollowRequest(tw_userItems.twitter_id, index)"
+        >フォローする</button>
         <div class="p-twuser__detail__name">{{ tw_userItems.user_name }}</div>
         <div class="p-twuser__detail__account">＠{{ tw_userItems.account_name }}</div>
         <div class="p-twuser__detail__description">{{ tw_userItems.description }}</div>
@@ -17,9 +22,7 @@
         </div>
         <div class="p-twuser__detail">
           <p class="p-twuser__detail__tweet__title">最新ツイート</p>
-          <div class="p-twuser__detail__tweet">
-            {{ tw_userItems.new_tweet }}
-          </div>
+          <div class="p-twuser__detail__tweet">{{ tw_userItems.new_tweet }}</div>
         </div>
       </div>
     </section>
@@ -73,8 +76,21 @@ export default {
         behavior: 'auto',
       });
     },
-    sendFollowRequest(id) {
-      console.log('TwitterIDです：' + id);
+    async sendFollowRequest(id, index) {
+      console.log('twitter_id：' +id + '、 インデックス番号：' + index)
+      
+      const response = await axios.post('/follow', { id : id }).catch(error => error.response || error);
+
+      if(response.status == 200){
+        console.table(response.data)
+        this.tw_userItems.splice(index, 1);
+      }else{
+        console.log(error)
+      }
+
+
+      // const i = tw_userItems.splice();
+
     },
   },
   computed: {

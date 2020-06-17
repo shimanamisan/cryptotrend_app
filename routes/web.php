@@ -14,45 +14,39 @@ use Illuminate\Support\Facades\Auth;
 */
 
 Route::get('/', function () {
-    return view('home');
+  return view('home');
 })->name('home');
 
 // 認証系のルーティングそれに対応するコントローラがまとまっている
 // Illuminate\Routing\Routerクラスのauth()メソッドにルーティングが記述されている
 Auth::routes();
 
-// プロフィール画面
-Route::get('/profile', 'ProfileController@showProfileForm')->name(
-    'profile.showProfileForm'
-);
-Route::patch('/profile/{id}', 'ProfileController@editProfile')->name(
-    'profile.editProfile'
-);
-
 // Twitter経由でのログインを行う為のURI
-Route::get(
-    'login/twitter',
-    'Auth\LoginController@redirectToTwitterProvider'
-)->name('twitter.auth');
+Route::get('login/twitter', 'Auth\LoginController@redirectToTwitterProvider')->name('twitter.auth');
 // アプリ側から情報が返ってくるURL
-Route::get(
-    'login/twitter/callback',
-    'Auth\LoginController@handleTwitterCallback'
-)->name('twitter.callback');
+Route::get('login/twitter/callback', 'Auth\LoginController@handleTwitterCallback')->name('twitter.callback');
 
 // 仮想通貨関連のニュースの取得
 Route::get('/news', 'NewsController@index')->name('getNews.index');
-
-// 仮想通貨関連のTwitterユーザーを取得
-Route::get('/tweet-users', 'TwitterController@index')->name('userList.index');
-
-// タイムラインの取得
-Route::get('/get-timeline', 'TwitterController@searchTweet')->name(
-    'searchTweet'
-);
-
-// ログイン後の画面
-Route::get('/coins', 'CoinsController@index')->name('conins.index');
+// プロフィール画面
+Route::patch('/profile/{id}', 'ProfileController@editProfile')->name('profile.editProfile');
+Route::get('/profile', 'ProfileController@showProfileForm')->name('profile.showProfileForm');
 
 // ログアウト
 Route::post('/logout', 'Auth\LoginController@logout')->name('logout');
+
+Route::group(['middleware' => 'auth'], function () {
+  // 認証後の画面
+  // 仮想通貨関連のTwitterユーザーを取得
+  Route::get('/tweet-users', 'TwitterController@index')->name('userList.index');
+
+  // タイムラインの取得
+  Route::get('/get-timeline', 'TwitterController@searchTweet')->name('searchTweet');
+  // ユーザーをフォローする
+  Route::post('/follow', 'TwitterFollowController@follow');
+  // ログイン後の画面
+  Route::get('/coins', 'CoinsController@index')->name('conins.index');
+});
+
+// 開発時テスト用ルーティング
+Route::get('/test', 'TwitterController@userList');
