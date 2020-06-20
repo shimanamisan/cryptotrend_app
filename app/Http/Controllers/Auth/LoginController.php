@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\User; // ★追加
+use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Support\Facades\Auth; // ★追加
@@ -42,6 +43,28 @@ class LoginController extends Controller
   }
 
   /*********************************************************
+   * トレイトのauthenticatedメソッドをオーバーライド
+   *********************************************************/
+  // 引数の$userに$this->guard()->user()の認証済みユーザーの情報が入ってくる
+  // この関数はトレイト側では空になっているので、常にredirectPathメソッドでリダイレクトされる
+  // このメソッドに認証後の処理を挟んでログイン後の画面へ遷移させるようにしている
+  protected function authenticated(Request $request, $user)
+  {
+    // twitter認証済みのユーザーであればtokenを格納する
+    $access_token = $user->twitter_token;
+    $access_token_secret = $user->twitter_token_secret;
+    if (!empty($access_token) && !empty($access_token_secret)) {
+      session(['access_token' => $access_token]);
+      session(['access_token_secret' => $access_token_secret]);
+      \Log::debug('twitter_token及びtwitter_token_secretが空でない場合はセッションに格納します：' . print_r(session()->all(), true));
+      return redirect()->intended($this->redirectPath());
+    }
+
+    \Log::debug('twitter未登録のユーザーです：' . print_r(session()->all(), true));
+    return redirect()->intended($this->redirectPath());
+  }
+
+  /*********************************************************
    * Twitterログイン・新規登録
    *********************************************************/
   // Twitterアプリ側へリダイレクト
@@ -59,8 +82,10 @@ class LoginController extends Controller
       $user = Socialite::driver('twitter')->user();
       // twitter_idをセッションに保存
       session(['twitterUser_id' => $user->id]);
+      session(['access_token' => $user->token]);
+      session(['access_token_secret' => $user->tokenSecret]);
       \Log::debug('認証に成功しました');
-      \Log::debug('セッション情報を取得します：' . print_r(session()->all(), true));
+      \Log::debug('セッション情報を取得します' . print_r(session()->all(), true));
     } catch (\Exception $e) {
       \Log::debug('ログインに失敗しました');
       // エラーならログイン画面へリダイレクト

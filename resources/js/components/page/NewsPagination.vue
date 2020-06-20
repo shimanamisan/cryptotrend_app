@@ -17,11 +17,11 @@
       :next-text="'＞'"
       :containerClass="'c-pagination'"
       :page-class="'c-pagination__item'"
-      :page-link-class="'page-link'"
+      :page-link-class="'c-pagination__link'"
       :prev-class="'c-pagination__item'"
-      :prev-link-class="'page-link'"
+      :prev-link-class="'c-pagination__link'"
       :next-class="'c-pagination__item'"
-      :next-link-class="'page-link'"
+      :next-link-class="'c-pagination__link'"
       :active-class="'c-pagination__item--active'"
       :hide-prev-next="true"
     ></paginate>
@@ -71,5 +71,5 @@ export default {
 };
 </script>
 
-<style>
+<style scope>
 </style>

@@ -42,16 +42,19 @@ class TwitterController extends Controller
     // 検索ワード
     $search_key = '仮想通貨';
     $search_limit_count = 20;
+    $page_random = rand(1, 10);
 
     $options = [
       'q' => $search_key,
       'count' => $search_limit_count,
+      'page' => $page_random,
+      'lang' => 'ja',
     ];
 
-    // 仮想通貨に関するツイートを検索
+    // 仮想通貨に関するユーザーを検索
     $search_result = \Twitter::get('users/search', $options);
 
-    // dd($search_result);
+    // dd(print_r($search_result, true));
 
     // DBから返却されたコレクションが空だったら初期処理として新規登録します
     if ($dbresult->isEmpty()) {
@@ -101,7 +104,6 @@ class TwitterController extends Controller
           // 存在していたユーザーの情報を更新します
           $TwitterUser->where('twitter_id', $search_user_id)->update($twitter_user);
           \Log::debug('更新しました。更新したID：' . $search_user_id);
-          \Log::debug('更新した内容：' . print_r($twitter_user, true));
         } else {
           ++$newCounter;
           \Log::debug("DBに存在していなかったユーザーです。新規ユーザーカウンター：{$newCounter}");
@@ -119,7 +121,7 @@ class TwitterController extends Controller
           ];
 
           $TwitterUser->insert($twitter_user);
-          \Log::debug('新規登録しました。');
+          \Log::debug('新規登録しました。' . print_r($twitter_user, true));
         }
       }
     }

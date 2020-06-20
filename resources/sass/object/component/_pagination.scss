@@ -1,18 +1,18 @@
 .c-pagination {
-    display: flex;
-    margin: 0 auto;
-    width: 80%;
-    justify-content: center;
+  display: flex;
+  margin: 0 auto;
+  width: 80%;
+  justify-content: center;
 
-    &__item {
-        background-color: #ffff;
-        @include custumRadius();
-        padding: 10px 15px;
-        margin-left: 12px;
-        position: relative;
-        overflow: hidden;
-        &--active {
-            background-color: #e4e4e4;
-        }
+  &__item {
+    background-color: #ffff;
+    @include custumRadius();
+    padding: 10px 15px;
+    margin-left: 12px;
+    position: relative;
+    overflow: hidden;
+    &--active {
+      background-color: #e4e4e4;
     }
+  }
 }

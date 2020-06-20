@@ -1,6 +1,16 @@
 <template>
   <div>
     <section class="c-container c-container__twusr">
+      <transition name="flash">
+        <div v-show="flash_message">
+          <div class="u-flashmsg" v-if="already_follow">
+            <p>既にフォロー済みです</p>
+          </div>
+          <div class="u-flashmsg" v-else>
+            <p>フォローしました！</p>
+          </div>
+        </div>
+      </transition>
       <div class="p-twuser__header">
         <button class="c-btn c-btn__common c-btn__common--autofollow">自動フォロー機能</button>
         <p
@@ -36,11 +46,11 @@
       :next-text="'＞'"
       :containerClass="'c-pagination'"
       :page-class="'c-pagination__item'"
-      :page-link-class="'page-link'"
+      :page-link-class="'c-pagination__link'"
       :prev-class="'c-pagination__item'"
-      :prev-link-class="'page-link'"
+      :prev-link-class="'c-pagination__link'"
       :next-class="'c-pagination__item'"
-      :next-link-class="'page-link'"
+      :next-link-class="'c-pagination__link'"
       :active-class="'c-pagination__item--active'"
       :hide-prev-next="true"
     ></paginate>
@@ -59,6 +69,9 @@ export default {
       totalPage: this.total_page,
       parPage: '',
       currentPage: 1,
+      // 登録後のメッセージ表示フラグ
+      flash_message: false,
+      already_follow: false,
     };
   },
   methods: {
@@ -79,14 +92,17 @@ export default {
     async sendFollowRequest(id, index) {
       console.log('twitter_id：' +id + '、 インデックス番号：' + index)
       
-      const response = await axios.post('/follow', { id : id }).catch(error => error.response || error);
-
-      if(response.status == 200){
-        console.table(response.data)
+      await axios.post('/follow', { id : id }).then(response => {
+        // 通信が成功した時の処理
         this.tw_userItems.splice(index, 1);
-      }else{
+        this.flash_message = true
+      }).catch(error => {
         console.log(error)
-      }
+        this.flash_message = true
+        this.already_follow = true;
+      })
+
+    
 
 
       // const i = tw_userItems.splice();
@@ -124,4 +140,14 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+.flash-enter-active,
+.flash-leave-active {
+  transition: all 0.6s ease;
+}
+.flash-enter,
+.flash-leave-to {
+  opacity: 0;
+  transform: translateX(50px);
+}
+</style>

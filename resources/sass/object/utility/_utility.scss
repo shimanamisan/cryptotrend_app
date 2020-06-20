@@ -36,6 +36,8 @@
   //   position: absolute;
   background-color: #777777;
   color: #fff;
-  top: 0;
-  left: 50%;
+  position: absolute;
+  top: 20%;
+  right: 5%;
+  transition: all 0.7s ease;
 }

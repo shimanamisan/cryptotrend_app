@@ -40,6 +40,8 @@ class Kernel extends ConsoleKernel
       // ->daily();
       // 5分後に処理が走るメソッド
       ->everyFiveMinutes();
+    // // 毎分に処理が走るメソッド
+    // ->everyMinute();
   }
 
   /**
