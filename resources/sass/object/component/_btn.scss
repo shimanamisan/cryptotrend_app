@@ -20,6 +20,13 @@
     transition: 0.3s;
   }
 
+  &__disabled {
+    opacity: 0.4;
+    &:hover {
+      opacity: 0.4;
+    }
+  }
+
   &__common {
     height: auto;
     background-color: $btn_color;
