@@ -14,7 +14,7 @@
         >パスワード変更</li>
       </ul>
 
-      <div class="c-container__profile u-margin--bottom">
+      <div class="c-container__profile u-margin__bottom--md">
         <div class="p-profile__container">
           <div class="p-profile__body" v-show="tab === 1">
             <div class="p-profile__content">
@@ -71,7 +71,7 @@
             <div class="p-profile__content--body">
               <label for>新しいパスワード</label>
               <input
-                class="c-form__input u-margin__bottom--md"
+                class="c-form__input u-margin__bottom--sd"
                 type="password"
                 v-model="passwordEditForm.password"
               />

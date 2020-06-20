@@ -36,7 +36,6 @@
         cursor: pointer;
         background-color: #62abf8;
         opacity: 1;
-        right: 3%;
       }
     }
     &--autofollow {
@@ -53,5 +52,10 @@
   &__twitter {
     color: $font-color_primary;
     background-color: #1da1f2;
+    & > a {
+      display: block;
+      text-decoration: none;
+      color: #fff;
+    }
   }
 }

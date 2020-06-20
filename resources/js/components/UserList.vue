@@ -2,7 +2,7 @@
   <main class="l-main l-main__common">
     <h1 class="p-news__title">Twitterユーザー</h1>
 
-    <Pagination :tw_user="this.tw_user" :total_page="this.totalPageNum" />
+    <Pagination :tw_user="this.tw_user" :user="this.user" :total_page="this.totalPageNum" />
   </main>
 </template>
 
@@ -12,10 +12,9 @@ export default {
     data(){
         return{
            totalPageNum:''
-
         }
     },
-    props:['tw_user'],
+    props:['tw_user', 'user'],
     components:{
         Pagination
     },

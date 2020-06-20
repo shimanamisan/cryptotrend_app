@@ -1,13 +1,34 @@
 <template>
   <div>
+    <transition name="flash">
+      <div class="u-flashmsg" v-show="flash_message_flg">
+        <div v-if="already_follow">
+          <p>既にフォロー済みです</p>
+        </div>
+        <div v-else>
+          <p>フォローしました！</p>
+        </div>
+      </div>
+    </transition>
     <section class="c-container c-container__twusr">
       <div class="p-twuser__header">
-        <button class="c-btn c-btn__common c-btn__common--autofollow">自動フォロー機能</button>
-        <p class="p-twuser__header__text">{{ this.totalPage }}件中 {{ pageStart }} - {{ endPage }}件まで表示</p>
+        <button
+          class="c-btn c-btn__common c-btn__common--autofollow"
+          @click="sendAutoFollowRequest"
+        >
+          <p v-if="this.autoFollow_flg === 0">自動フォロー機能OFF</p>
+          <p v-else>自動フォロー機能ON</p>
+        </button>
+        <p
+          class="p-twuser__header__text"
+        >{{ this.totalPage }}件中 {{ pageStart }} - {{ endPage }}件まで表示</p>
         <p class="p-twuser__header__text">○○人フォロー済</p>
       </div>
       <div class="p-twuser__card" v-for="(tw_userItems, index) in getTwitterUserItems" :key="index">
-        <button class="c-btn c-btn__common c-btn__common--follow" @click="sendFollowRequest(tw_userItems.twitter_id)">フォローする</button>
+        <button
+          class="c-btn c-btn__common c-btn__common--follow"
+          @click="sendFollowRequest(tw_userItems.twitter_id, index)"
+        >フォローする</button>
         <div class="p-twuser__detail__name">{{ tw_userItems.user_name }}</div>
         <div class="p-twuser__detail__account">＠{{ tw_userItems.account_name }}</div>
         <div class="p-twuser__detail__description">{{ tw_userItems.description }}</div>
@@ -17,9 +38,7 @@
         </div>
         <div class="p-twuser__detail">
           <p class="p-twuser__detail__tweet__title">最新ツイート</p>
-          <div class="p-twuser__detail__tweet">
-            {{ tw_userItems.new_tweet }}
-          </div>
+          <div class="p-twuser__detail__tweet">{{ tw_userItems.new_tweet }}</div>
         </div>
       </div>
     </section>
@@ -33,11 +52,11 @@
       :next-text="'＞'"
       :containerClass="'c-pagination'"
       :page-class="'c-pagination__item'"
-      :page-link-class="'page-link'"
+      :page-link-class="'c-pagination__link'"
       :prev-class="'c-pagination__item'"
-      :prev-link-class="'page-link'"
+      :prev-link-class="'c-pagination__link'"
       :next-class="'c-pagination__item'"
-      :next-link-class="'page-link'"
+      :next-link-class="'c-pagination__link'"
       :active-class="'c-pagination__item--active'"
       :hide-prev-next="true"
     ></paginate>
@@ -49,13 +68,18 @@ import Vue from 'vue';
 import Paginate from 'vuejs-paginate';
 Vue.component('paginate', Paginate);
 export default {
-  props: ['tw_user', 'total_page'],
+  props: ['tw_user', 'total_page', 'user'],
   data() {
     return {
       tw_userItems: this.tw_user,
       totalPage: this.total_page,
       parPage: '',
       currentPage: 1,
+      // 登録後のメッセージ表示フラグ
+      flash_message_flg: false,
+      already_follow: false,
+      // 自動フォロー中のフラグ
+      autoFollow_flg: this.user.autofollow
     };
   },
   methods: {
@@ -65,7 +89,7 @@ export default {
     },
     paginationNumber() {
       // 表示するページネーションの数を割り出すために、総数を表示させる数で割っている
-      this.parPage = Math.ceil(this.totalPage / 90);
+      this.parPage = Math.ceil(this.totalPage / 5);
     },
     scrollTop() {
       window.scrollTo({
@@ -73,9 +97,33 @@ export default {
         behavior: 'auto',
       });
     },
-    sendFollowRequest(id) {
-      console.log('TwitterIDです：' + id);
+    showMessage(){
+        this.flash_message_flg = !this.flash_message_flg
     },
+    async sendAutoFollowRequest(){
+      // catch(error => error.response || error)で非同期通信が成功しても失敗してもresponseに結果を代入する
+      const response = await axios.post('/autofollow', { status : this.autoFollow_flg }).catch(error => error.response || error)
+
+      console.log(response)
+    },
+    async sendFollowRequest(id, index) {
+      console.log('twitter_id：' +id + '、 インデックス番号：' + index)
+      
+      // catch(error => error.response || error)で非同期通信が成功しても失敗してもresponseに結果を代入する
+      const response = await axios.post('/follow', { id : id }).catch(error => error.response || error)
+
+      if(response.status === 200){
+          // 通信が成功した時の処理
+          this.tw_userItems.splice(index, 1);
+          this.showMessage()
+          setTimeout(this.showMessage, 2000)
+      }else if(response.status === 403){
+          this.showMessage()
+          setTimeout(this.showMessage, 2000)
+          this.already_follow = true;
+      }
+    },
+ 
   },
   computed: {
     // 表示させる要素を切り出す
@@ -108,4 +156,14 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+.flash-enter-active,
+.flash-leave-active {
+  transition: all 0.6s ease;
+}
+.flash-enter,
+.flash-leave-to {
+  opacity: 0;
+  transform: translateX(50px);
+}
+</style>
