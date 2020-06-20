@@ -15,7 +15,7 @@
           </h1>
           <div class="p-eyecatch__content">
             <a href="{{ route('login') }}">
-              <button class="c-btn c-btn__login c-btn--radius u-btn">ログイン</button>
+              <button class="c-btn c-btn__auth c-btn--radius u-btn">ログイン</button>
             </a>
             <div class="p-eyecatch__content--text">
               <p>既にアカウントをお持ちの方</p>

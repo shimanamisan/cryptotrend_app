@@ -1,18 +1,24 @@
 <template>
   <div>
-    <section class="c-container c-container__twusr">
-      <transition name="flash">
-        <div v-show="flash_message">
-          <div class="u-flashmsg" v-if="already_follow">
-            <p>既にフォロー済みです</p>
-          </div>
-          <div class="u-flashmsg" v-else>
-            <p>フォローしました！</p>
-          </div>
+    <transition name="flash">
+      <div class="u-flashmsg" v-show="flash_message_flg">
+        <div v-if="already_follow">
+          <p>既にフォロー済みです</p>
         </div>
-      </transition>
+        <div v-else>
+          <p>フォローしました！</p>
+        </div>
+      </div>
+    </transition>
+    <section class="c-container c-container__twusr">
       <div class="p-twuser__header">
-        <button class="c-btn c-btn__common c-btn__common--autofollow">自動フォロー機能</button>
+        <button
+          class="c-btn c-btn__common c-btn__common--autofollow"
+          @click="sendAutoFollowRequest"
+        >
+          <p v-if="this.autoFollow_flg === 0">自動フォロー機能OFF</p>
+          <p v-else>自動フォロー機能ON</p>
+        </button>
         <p
           class="p-twuser__header__text"
         >{{ this.totalPage }}件中 {{ pageStart }} - {{ endPage }}件まで表示</p>
@@ -62,7 +68,7 @@ import Vue from 'vue';
 import Paginate from 'vuejs-paginate';
 Vue.component('paginate', Paginate);
 export default {
-  props: ['tw_user', 'total_page'],
+  props: ['tw_user', 'total_page', 'user'],
   data() {
     return {
       tw_userItems: this.tw_user,
@@ -70,8 +76,10 @@ export default {
       parPage: '',
       currentPage: 1,
       // 登録後のメッセージ表示フラグ
-      flash_message: false,
+      flash_message_flg: false,
       already_follow: false,
+      // 自動フォロー中のフラグ
+      autoFollow_flg: this.user.autofollow
     };
   },
   methods: {
@@ -89,25 +97,33 @@ export default {
         behavior: 'auto',
       });
     },
+    showMessage(){
+        this.flash_message_flg = !this.flash_message_flg
+    },
+    async sendAutoFollowRequest(){
+      // catch(error => error.response || error)で非同期通信が成功しても失敗してもresponseに結果を代入する
+      const response = await axios.post('/autofollow', { status : this.autoFollow_flg }).catch(error => error.response || error)
+
+      console.log(response)
+    },
     async sendFollowRequest(id, index) {
       console.log('twitter_id：' +id + '、 インデックス番号：' + index)
       
-      await axios.post('/follow', { id : id }).then(response => {
-        // 通信が成功した時の処理
-        this.tw_userItems.splice(index, 1);
-        this.flash_message = true
-      }).catch(error => {
-        console.log(error)
-        this.flash_message = true
-        this.already_follow = true;
-      })
+      // catch(error => error.response || error)で非同期通信が成功しても失敗してもresponseに結果を代入する
+      const response = await axios.post('/follow', { id : id }).catch(error => error.response || error)
 
-    
-
-
-      // const i = tw_userItems.splice();
-
+      if(response.status === 200){
+          // 通信が成功した時の処理
+          this.tw_userItems.splice(index, 1);
+          this.showMessage()
+          setTimeout(this.showMessage, 2000)
+      }else if(response.status === 403){
+          this.showMessage()
+          setTimeout(this.showMessage, 2000)
+          this.already_follow = true;
+      }
     },
+ 
   },
   computed: {
     // 表示させる要素を切り出す

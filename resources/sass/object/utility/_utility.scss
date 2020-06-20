@@ -20,8 +20,16 @@
 }
 
 .u-margin {
-  &--bottom {
-    margin-bottom: 48px;
+  &__bottom {
+    &--s {
+      margin-bottom: 8px;
+    }
+    &--sd {
+      margin-bottom: 16px;
+    }
+    &--md {
+      margin-bottom: 48px;
+    }
   }
 }
 
@@ -33,11 +41,10 @@
 
 .u-flashmsg {
   padding: 30px;
-  //   position: absolute;
   background-color: #777777;
   color: #fff;
-  position: absolute;
+  position: fixed;
+  z-index: 5;
   top: 20%;
   right: 5%;
-  transition: all 0.7s ease;
 }
