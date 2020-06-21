@@ -14,7 +14,7 @@ class AddFollowCountToUsers extends Migration
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
-             $table->string('follow_count');
+             $table->integer('follow_count')->default(0);
         });
     }
 
