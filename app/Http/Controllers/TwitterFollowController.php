@@ -14,6 +14,8 @@ class TwitterFollowController extends Controller
     // 自動フォローのステータス
     const AUTO_FOLLOW_STATUS_RUN = 1;
     const AUTO_FOLLOW_STATUS_STOP = 0;
+    // 1日のフォロー上限の400を超えない異様にする
+    const DAY_FOLLOW_LIMIT = 400;
 
     // 各ユーザーのtokenを元に、API接続前の認証処理を行うメソッド
     public function twitterAuth()
@@ -94,12 +96,13 @@ class TwitterFollowController extends Controller
             exit;
         }
         foreach ($auto_follow_run_user_list as $auto_follow_run_user_item) {
-            $twitter_id = $auto_follow_run_user_item->twitter_id;
+            $twitter_id = $auto_follow_run_user_item->my_twitter_id;
             $twitter_user_token = $auto_follow_run_user_item->twitter_token;
             $twitter_user_token_secret = $auto_follow_run_user_item->twitter_token_secret;
             Log::debug('=== 自動フォローステータスがONのユーザーを取得しています:handlメソッド ===');
 
             // ステータスがONのユーザーの数だけ下記のオートフォローが実行される
+            
             $this->autoFollow($twitter_id, $twitter_user_token, $twitter_user_token_secret);
         }
     }
@@ -116,39 +119,28 @@ class TwitterFollowController extends Controller
 
         // DBに登録されているユーザを取得
         $twitterUserList = $this->getTwitterUser();
+        
         Log::debug('=== フォローターゲットが格納されています:autoFollowメソッド ===');
 
-        // フォローしていないユーザーのみ取得する
-        $follow_target = $this->fetchFollowTarget($twitterUserList, $connect);
+        // フォローしているユーザーを取得
+        $follow_target = $this->fetchFollowTarget($twitter_id, $twitterUserList, $connect);
+        // フォローしていないユーザーを抽出する
+        $follow_target_list = array_diff($twitterUserList, $follow_target);
 
-
-        
+    
 
     }
     
-    // インスタンスを生成
-    public function twitterOAuth($twitter_user_token, $twitter_user_token_secret)
-    {
-        Log::debug('=== インスタンスを生成します === ');
+    // 自分のフォローしているユーザーを取得する
+    public function fetchFollowTarget($twitter_id, $twitterUserList, $connect)
+    {       
+        // 15分毎15リクエストが上限です
+        $result = $connect->get('friends/ids', [
+            'user_id' => $twitter_id
+            ])->ids;
 
-          // ヘルパー関数のconfigメソッドを通じて、config/services.phpのtwitterの登録した中身を参照
-          $config = config('services.twitter');
-          // APIキーを格納
-          $api_key = $config['client_id'];
-          $api_key_secret = $config['client_secret'];
-          // アクセストークンを格納
-          $access_token = $twitter_user_token;
-          $access_token_secret = $twitter_user_token_secret;
-  
-          $OAuth = new TwitterOAuth($api_key, $api_key_secret, $access_token, $access_token_secret);
-  
-          return $OAuth;
-    }
-
-    // 未フォローのユーザーを取得する
-    public function fetchFollowTarget($twitterUserList, $connect)
-    {
-        $result = $connect->get();
+            Log::debug('取得結果 : ' .print_r($result, true));
+        return $result;
     }
 
     // DBからフォローするためのユーザー情報を取得する
@@ -158,11 +150,28 @@ class TwitterFollowController extends Controller
         $dbresult = TwitterUser::all();
 
         foreach ($dbresult as $item) {
-            $twitterUserList[] = [
-            'twitter_user_id' => $item->twitter_id
-          ];
+            $twitterUserList[] = $item->twitter_id;
         }
         
         return $twitterUserList;
+    }
+
+    // インスタンスを生成
+    public function twitterOAuth($twitter_user_token, $twitter_user_token_secret)
+    {
+        Log::debug('=== インスタンスを生成します === ');
+
+            // ヘルパー関数のconfigメソッドを通じて、config/services.phpのtwitterの登録した中身を参照
+            $config = config('services.twitter');
+            // APIキーを格納
+            $api_key = $config['client_id'];
+            $api_key_secret = $config['client_secret'];
+            // アクセストークンを格納
+            $access_token = $twitter_user_token;
+            $access_token_secret = $twitter_user_token_secret;
+    
+            $OAuth = new TwitterOAuth($api_key, $api_key_secret, $access_token, $access_token_secret);
+    
+            return $OAuth;
     }
 }

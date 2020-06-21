@@ -81,7 +81,7 @@ class LoginController extends Controller
       // ユーザーデータの取得とアクセストークンの取得
       $user = Socialite::driver('twitter')->user();
       // twitter_idをセッションに保存
-      session(['twitterUser_id' => $user->id]);
+      session(['twitter_id' => $user->id]);
       session(['access_token' => $user->token]);
       session(['access_token_secret' => $user->tokenSecret]);
       \Log::debug('認証に成功しました');
@@ -92,6 +92,8 @@ class LoginController extends Controller
       return redirect('/login')->with('message', 'ログインに失敗しました。');
     }
 
+    // dd($user->getId());
+
     // 既にTwitterユーザーで登録されているか検索、登録されていなければ新規登録する
     $userInfo = User::firstOrCreate(
       // usersテーブルのtwitter_tokenカラムに同じ値を持つレコードがあるかチェック
@@ -99,13 +101,14 @@ class LoginController extends Controller
       ['twitter_token' => $user->token],
       // twitter_tokenカラムに同じ値がなかった場合は、下記の項目をINSERTする
       [
+        // Userモデルで$fillableに設定していないカラムにはINSERTされないので注意
         'name' => $user->getNickname(),
         'email' => $user->getEmail(),
+        'my_twitter_id' => $user->getId(),
         'avatar' => $user->getAvatar(),
         'twitter_token' => $user->token,
         'twitter_token_secret' => $user->tokenSecret,
-      ]
-    );
+      ]);
 
     Auth::login($userInfo);
 

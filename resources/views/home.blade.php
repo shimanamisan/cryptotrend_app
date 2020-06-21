@@ -99,7 +99,7 @@
         </h1>
         <div class="p-eyecatch__footer--signup">
           <a href="{{ route('register') }}">
-            <button class="c-btn c-btn__login c-btn--radius u-btn">新規登録</button>
+            <button class="c-btn c-btn__auth c-btn--radius u-btn">新規登録</button>
           </a>
         </div>
       </section>

@@ -45,12 +45,12 @@ class TwitterController extends Controller
         $search_limit_count = 20;
         $page_random = rand(1, 100);
 
-        $options = [
-      'q' => $search_key,
-      'count' => $search_limit_count,
-      'page' => $page_random,
-      'lang' => 'ja',
-    ];
+                $options = [
+            'q' => $search_key,
+            'count' => $search_limit_count,
+            'page' => $page_random,
+            'lang' => 'ja',
+            ];
 
         // 仮想通貨に関するユーザーを検索
         $search_result = \Twitter::get('users/search', $options);
@@ -62,16 +62,16 @@ class TwitterController extends Controller
             \Log::debug('twitter_usersテーブルが空なので初期登録処理を実行します。：');
             foreach ($search_result as $search_result_item) {
                 $twitter_user[] = [
-          'twitter_id' => $search_result_item->id,
-          'user_name' => $search_result_item->name,
-          'account_name' => $search_result_item->screen_name,
-          'new_tweet' => $search_result_item->status->text,
-          'description' => $search_result_item->description,
-          'friends_count' => $search_result_item->friends_count,
-          'followers_count' => $search_result_item->followers_count,
-          'created_at' => Carbon::now(),
-          'updated_at' => Carbon::now(),
-        ];
+                'twitter_id' => $search_result_item->id,
+                'user_name' => $search_result_item->name,
+                'account_name' => $search_result_item->screen_name,
+                'new_tweet' => $search_result_item->status->text,
+                'description' => $search_result_item->description,
+                'friends_count' => $search_result_item->friends_count,
+                'followers_count' => $search_result_item->followers_count,
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
+                ];
             }
             $TwitterUser->insert($twitter_user);
             \Log::debug('登録が完了しました。');
