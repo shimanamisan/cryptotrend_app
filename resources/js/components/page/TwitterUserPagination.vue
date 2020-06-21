@@ -20,11 +20,16 @@
           <p v-if="!parseBoolean">自動フォロー機能OFF</p>
           <p v-else>自動フォロー機能ON</p>
         </button>
-        <p class="p-twuser__header__text">{{ this.totalPage }}件中 {{ pageStart }} - {{ endPage }}件まで表示</p>
+        <p
+          class="p-twuser__header__text"
+        >{{ this.totalPage }}件中 {{ pageStart }} - {{ endPage }}件まで表示</p>
         <p class="p-twuser__header__text">○○人フォロー済</p>
       </div>
       <div class="p-twuser__card" v-for="(tw_userItems, index) in getTwitterUserItems" :key="index">
-        <button class="c-btn c-btn__common c-btn__common--follow" @click="sendFollowRequest(tw_userItems.twitter_id, index)">フォローする</button>
+        <button
+          class="c-btn c-btn__common c-btn__common--follow"
+          @click="sendFollowRequest(tw_userItems.twitter_id, index)"
+        >フォローする</button>
         <div class="p-twuser__detail__name">{{ tw_userItems.user_name }}</div>
         <div class="p-twuser__detail__account">＠{{ tw_userItems.account_name }}</div>
         <div class="p-twuser__detail__description">{{ tw_userItems.description }}</div>
@@ -93,8 +98,11 @@ export default {
         behavior: 'auto',
       });
     },
-    showMessage() {
+    isShowMessage() {
       this.flash_message_flg = !this.flash_message_flg;
+    },
+    isAlreadyUserMessage() {
+      this.already_follow_user = !this.already_follow_user;
     },
     async sendAutoFollowRequest() {
       // catch(error => error.response || error)で非同期通信が成功しても失敗してもresponseに結果を代入する
@@ -117,12 +125,15 @@ export default {
       if (response.status === 200) {
         // 通信が成功した時の処理
         this.tw_userItems.splice(index, 1);
-        this.showMessage();
-        setTimeout(this.showMessage, 2000);
+        this.isShowMessage();
+        setTimeout(this.isShowMessage, 2000);
       } else if (response.status === 403) {
-        this.showMessage();
-        setTimeout(this.showMessage, 2000);
+        this.isAlreadyUserMessage()
+        this.isShowMessage();
+        setTimeout(this.isShowMessage, 2000);
       }
+
+      // this.already_follow_user = false;
     },
   },
   computed: {

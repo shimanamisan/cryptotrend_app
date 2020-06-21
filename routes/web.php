@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Auth;
 */
 
 Route::get('/', function () {
-  return view('home');
+    return view('home');
 })->name('home');
 
 // 認証系のルーティングそれに対応するコントローラがまとまっている
@@ -36,20 +36,20 @@ Route::get('/profile', 'ProfileController@showProfileForm')->name('profile.showP
 Route::post('/logout', 'Auth\LoginController@logout')->name('logout');
 
 Route::group(['middleware' => 'auth'], function () {
-  // 認証後の画面
-  // 仮想通貨関連のTwitterユーザーを取得
-  Route::get('/tweet-users', 'TwitterController@index')->name('userList.index');
+    // 認証後の画面
+    // 仮想通貨関連のTwitterユーザーを取得
+    Route::get('/tweet-users', 'TwitterController@index')->name('userList.index');
 
-  // タイムラインの取得
-  Route::get('/get-timeline', 'TwitterController@searchTweet')->name('searchTweet');
-  // ユーザーをフォローする
-  Route::post('/follow', 'TwitterFollowController@follow');
-  // 自動フォロー機能をONにする
-  Route::post('/autofollow', 'TwitterFollowController@autoFollowFlg');
-  // ログイン後の画面
-  Route::get('/coins', 'CoinsController@index')->name('conins.index');
+    // タイムラインの取得
+    Route::get('/get-timeline', 'TwitterController@searchTweet')->name('searchTweet');
+    // ユーザーをフォローする
+    Route::post('/follow', 'TwitterFollowController@follow');
+    // 自動フォロー機能をONにする
+    Route::post('/autofollow', 'TwitterFollowController@autoFollowFlg');
+    // ログイン後の画面
+    Route::get('/coins', 'CoinsController@index')->name('conins.index');
 });
 
 // 開発時テスト用ルーティング
 Route::get('/userList', 'TwitterController@userList');
-Route::get('/autoFollow', 'TwitterFollowController@autoFollow');
+Route::get('/autoFollow', 'TwitterFollowController@handl');

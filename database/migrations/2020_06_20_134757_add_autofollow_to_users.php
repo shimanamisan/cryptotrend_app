@@ -26,7 +26,7 @@ class AddAutofollowToUsers extends Migration
   public function down()
   {
     Schema::table('users', function (Blueprint $table) {
-      $table->boolean('autofollow');
+      $table->dropColumn('autofollow');
     });
   }
 }

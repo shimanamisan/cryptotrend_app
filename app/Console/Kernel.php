@@ -37,11 +37,13 @@ class Kernel extends ConsoleKernel
         TwitterController::userList();
       })
       // 夜中の12に時に処理が走るメソッド
-      ->daily();
-    // 5分後に処理が走るメソッド
-    // ->everyFiveMinutes();
-    // // 毎分に処理が走るメソッド
-    // ->everyMinute();
+      // ->daily();
+      // 5分後に処理が走るメソッド
+      // ->everyFiveMinutes();
+      // 毎分に処理が走るメソッド
+      // ->everyMinute();
+      // 15分毎に処理が走るメソッド
+      ->everyThirtyMinutes();
   }
 
   /**
