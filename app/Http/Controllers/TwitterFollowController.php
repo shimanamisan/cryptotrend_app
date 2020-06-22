@@ -49,26 +49,41 @@ class TwitterFollowController extends Controller
         // 1日のフォロー上限を超えないように、現在のフォローした数を取得
         $follow_limit_count = Auth::user()->follow_limit_count;
 
-        $result = $connection->post('friendships/create', [
-          'user_id' => $follow_target_id,
-         ]);
-         
-        if ($connection->getLastHttpCode() == 200) {
-            // 通信成功時の処理
-            if ($result->following) {
-                Log::debug('既にフォローしています；'. print_r($result, true));
-                return response()->json(['forbidden' => '既にフォローしているユーザーです'], 403);
-            }
+        // 本日のリクエスト上限の範囲内か判定、超えていたらフォローの処理を行わずメッセージを返す
+        if($follow_limit_count < self::DAY_FOLLOW_LIMIT){
             
-            ++$follow_limit_count;
-            Auth::user()->follow_limit_count = $follow_limit_count;
-            Auth::user()->update();
+            // APIのエンドポイントを叩きフォローする
+            $result = $connection->post('friendships/create', [
+              'user_id' => $follow_target_id,
+             ]);
+            // Errorハンドリング
+            if ($connection->getLastHttpCode() == 200) {
+                // 通信成功時の処理
+                if ($result->following) {
+                    // 既にフォローしているユーザーだった時の処理
+                    Log::debug('既にフォローしています；'. print_r($result, true));
+                    // APIへのリクエストは通っているので、リミット数をカウントする。
+                    ++$follow_limit_count;
+                    Auth::user()->follow_limit_count = $follow_limit_count;
+                    Auth::user()->update();
+                    return response()->json(['forbidden' => '既にフォローしているユーザーです'], 403);
+                }
+                // APIへのリクエスト後、リミット数をカウント
+                ++$follow_limit_count;
+                Auth::user()->follow_limit_count = $follow_limit_count;
+                Auth::user()->update();
+    
+                return response()->json(['success' => 'フォローしました！'], 200);
+            } else {
+                // 通信失敗時の処理
+                return response()->json(['error' => 'Errorが発生しています。'], 400);
+            }
 
-            return response()->json(['success' => 'フォローしました！'], 200);
-        } else {
-            // 通信失敗時の処理
-            return response()->json(['error' => 'Errorが発生しています。']);
+        }else{
+            Log::debug('本日のフォロー上限に到達しました。'. $follow_limit_count. '/400回');
+            return response()->json(['error' => '本日のリクエスト上限に到達しました。'], 403);
         }
+
     }
 
     // 自動フォローのON/OFFを切り替える
@@ -101,8 +116,6 @@ class TwitterFollowController extends Controller
     // 自動フォロー機能呼び出し
     public function handl()
     {
-        $now_time = time(); // 現在の時刻
-
         /**
          * 後にシステム全体での上限、1000フォローを超えていたら実施しない処理を追記する
          */
@@ -121,7 +134,7 @@ class TwitterFollowController extends Controller
     
             if($auto_follow_run_user_list->isEmpty()){
                 Log::debug('自動フォローのユーザーが存在していないため処理を終了します');
-                exit;
+                exit();
             }
             foreach ($auto_follow_run_user_list as $auto_follow_run_user_item) {
                 $user = $auto_follow_run_user_item; // 各ユーザーのUserモデル
@@ -142,11 +155,11 @@ class TwitterFollowController extends Controller
                 }
             }
 
+        }else{
+            Log::debug('1日のアプリ全体としてのフォロー上限を上回っているので処理を停止します '. $one_day_system_counter_limit.'/1000回');
+            exit();
         }
-
-        Log::debug('1日のアプリ全体としてのフォロー上限を上回っているので処理を停止します '. $one_day_system_counter_limit.'/1000回');
-        exit();
-
+        Log::debug('処理を終了します');
     }
 
     // 自動フォロー機能
@@ -175,7 +188,7 @@ class TwitterFollowController extends Controller
             // 15分毎に15フォローを超えないようにするカウンター
             ++$system_follow_counter_quarter_minutes;
 
-            if($system_follow_counter_quarter_minutes < 15 || $one_day_system_counter_limit < self::SYSTEM_FOLLOW_LIMIT){
+            if($system_follow_counter_quarter_minutes < 15 && $one_day_system_counter_limit < self::SYSTEM_FOLLOW_LIMIT){
                 Log::debug('まだ '. $system_follow_counter_quarter_minutes . ' 回目のループなのでフォローを継続します');
                 Log::debug('1日のアプリ全体としてのフォロー回数です '. $one_day_system_counter_limit.'/1000回');
                 // $result = $connect->post('friendships/create', [
@@ -196,11 +209,18 @@ class TwitterFollowController extends Controller
 
             }else{
                 Log::debug($system_follow_counter_quarter_minutes . ' 回目、フォローの上限を超えました。処理を停止します。');
+                
                 $system_follow_counter_quarter_minutes = 0;
-                Log::debug('カウンターをリセットして、単位ユーザ当たりのカウンターをリセットします。$system_follow_counter_quarter_minutes：'. $system_follow_counter_quarter_minutes);
+                Log::debug('単位ユーザ当たりのカウンターをリセットします。$system_follow_counter_quarter_minutes：'. $system_follow_counter_quarter_minutes);
+                $release_limit_time = time() + self::QUARTER_MINUTES;
+                Log::debug('単位ユーザー当たりのAPI制限解除時間をDBへ保存します UNIX_TIME_STAMP: '.$release_limit_time);
+                $user->follow_limit_time = $release_limit_time;
+                $user->update();
+                Log::debug('次のユーザーへの処理へ以降、若しくは処理を停止します');  
                 break;
             }
-
+            Log::debug('連続でフォローしすぎてアカウント凍結されないように3秒間隔をあける');
+            sleep(3);
         }
 
     }

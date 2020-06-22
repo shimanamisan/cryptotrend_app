@@ -85,9 +85,9 @@ class LoginController extends Controller
       session(['access_token' => $user->token]);
       session(['access_token_secret' => $user->tokenSecret]);
       \Log::debug('認証に成功しました');
-      \Log::debug('セッション情報を取得します' . print_r(session()->all(), true));
     } catch (\Exception $e) {
       \Log::debug('ログインに失敗しました');
+      dd(print_r($user, true));
       // エラーならログイン画面へリダイレクト
       return redirect('/login')->with('message', 'ログインに失敗しました。');
     }
@@ -109,6 +109,8 @@ class LoginController extends Controller
         'twitter_token_secret' => $user->tokenSecret,
       ]);
 
+    session(['follow_limit_time' => $userInfo->follow_limit_time]);
+    \Log::debug('セッション情報を取得します' . print_r(session()->all(), true));
     Auth::login($userInfo);
 
     // プロフィール編集画面へリダイレクト
