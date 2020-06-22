@@ -48,40 +48,54 @@ class TwitterFollowController extends Controller
         $follow_target_id = $request->id;
         // 1日のフォロー上限を超えないように、現在のフォローした数を取得
         $follow_limit_count = Auth::user()->follow_limit_count;
+        // 前回の15分毎のフォロー上限から15分後の値を格納
+        $follow_limit_time = session()->get('follow_limit_time');
+        // 現在の時間を格納
+        $now_time = time();
 
-        // 本日のリクエスト上限の範囲内か判定、超えていたらフォローの処理を行わずメッセージを返す
-        if($follow_limit_count < self::DAY_FOLLOW_LIMIT){
+        // 現在の時刻が15分経過していたら処理を実行
+        if($follow_limit_time > $now_time){
+        Log::debug('前回の制限から15分経過しています。処理を実行します');
+
+            // 本日のリクエスト上限の範囲内か判定、超えていたらフォローの処理を行わずメッセージを返す
+            if($follow_limit_count < self::DAY_FOLLOW_LIMIT){
+                
+                    // APIのエンドポイントを叩きフォローする
+                    $result = $connection->post('friendships/create', [
+                    'user_id' => $follow_target_id,
+                    ]);
+                    // Errorハンドリング
+                    if ($connection->getLastHttpCode() == 200) {
+                        // 通信成功時の処理
+                        if ($result->following) {
+                            // 既にフォローしているユーザーだった時の処理
+                            Log::debug('既にフォローしています；'. print_r($result, true));
+                            // APIへのリクエストは通っているので、リミット数をカウントする。
+                            ++$follow_limit_count;
+                            Auth::user()->follow_limit_time = time(); // 現在の時間を格納
+                            Auth::user()->follow_limit_count = $follow_limit_count;
+                            Auth::user()->update();
+                            return response()->json(['forbidden' => '既にフォローしているユーザーです'], 403);
+                        }
+                        // APIへのリクエスト後、リミット数をカウント
+                        ++$follow_limit_count;
+                        Auth::user()->follow_limit_time = time(); // 現在の時間を格納
+                        Auth::user()->follow_limit_count = $follow_limit_count;
+                        Auth::user()->update();
             
-            // APIのエンドポイントを叩きフォローする
-            $result = $connection->post('friendships/create', [
-              'user_id' => $follow_target_id,
-             ]);
-            // Errorハンドリング
-            if ($connection->getLastHttpCode() == 200) {
-                // 通信成功時の処理
-                if ($result->following) {
-                    // 既にフォローしているユーザーだった時の処理
-                    Log::debug('既にフォローしています；'. print_r($result, true));
-                    // APIへのリクエストは通っているので、リミット数をカウントする。
-                    ++$follow_limit_count;
-                    Auth::user()->follow_limit_count = $follow_limit_count;
-                    Auth::user()->update();
-                    return response()->json(['forbidden' => '既にフォローしているユーザーです'], 403);
-                }
-                // APIへのリクエスト後、リミット数をカウント
-                ++$follow_limit_count;
-                Auth::user()->follow_limit_count = $follow_limit_count;
-                Auth::user()->update();
+                        return response()->json(['success' => 'フォローしました！'], 200);
+                    } else {
+                        // 通信失敗時の処理
+                        return response()->json(['error' => 'Errorが発生しています。'], 400);
+                    }
     
-                return response()->json(['success' => 'フォローしました！'], 200);
-            } else {
-                // 通信失敗時の処理
-                return response()->json(['error' => 'Errorが発生しています。'], 400);
+            }else{
+                Log::debug('本日のフォロー上限に到達しました。'. $follow_limit_count. '/400回');
+                return response()->json(['error' => '本日のリクエスト上限に到達しました。'], 403);
             }
 
         }else{
-            Log::debug('本日のフォロー上限に到達しました。'. $follow_limit_count. '/400回');
-            return response()->json(['error' => '本日のリクエスト上限に到達しました。'], 403);
+            return response()->json(['error' => 'API制限中です。しばらくお待ち下さい。'], 403);
         }
 
     }
