@@ -105,7 +105,6 @@ class LoginController extends Controller
         'name' => $user->getNickname(),
         'email' => $user->getEmail(),
         'my_twitter_id' => $user->getId(),
-        'avatar' => $user->getAvatar(),
         'twitter_token' => $user->token,
         'twitter_token_secret' => $user->tokenSecret,
       ]);
