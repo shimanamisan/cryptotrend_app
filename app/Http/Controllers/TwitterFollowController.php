@@ -16,8 +16,12 @@ class TwitterFollowController extends Controller
     const AUTO_FOLLOW_STATUS_STOP = 0;
     // 1日のフォロー上限の400を超えない異様にする
     const DAY_FOLLOW_LIMIT = 400;
+    // 15分を秒に変換、個別でフォローする際の上限に使用する
+    const QUARTER_MINUTES = 15 * 60;
+        
 
-    // 各ユーザーのtokenを元に、API接続前の認証処理を行うメソッド
+
+    // 認証済みのユーザーのtokenを元に、API接続前の認証処理を行うメソッド
     public function twitterAuth()
     {
         // ヘルパー関数のconfigメソッドを通じて、config/services.phpのtwitterの登録した中身を参照
@@ -37,17 +41,18 @@ class TwitterFollowController extends Controller
     // ユーザーをフォローするメソッド
     public function follow(Request $request)
     {
+        // 
         // インスタンスを生成
         $connection = $this->twitterAuth();
-
         // フォローするユーザーのIDを格納
         $follow_target_id = $request->id;
+        // 
         // 1日のフォロー上限を超えないように、現在のフォローした数を取得
         $follow_count = Auth::user()->follow_count;
 
         $result = $connection->post('friendships/create', [
-      'user_id' => $follow_target_id,
-    ]);
+          'user_id' => $follow_target_id,
+         ]);
 
         if ($result->following) {
             Log::debug('既にフォローしています；'. print_r($result, true));
@@ -88,8 +93,12 @@ class TwitterFollowController extends Controller
     // 自動フォロー機能呼び出し
     public function handl()
     {
+        $today = date();
+        dd("本日の日付".$today);
         // DBからautofollowカラムが1のユーザーを取得
         $auto_follow_run_user_list = User::where('autofollow', self::AUTO_FOLLOW_STATUS_RUN)->get();
+        Log::debug('=== 自動フォローステータスがONのユーザーを取得しています:handlメソッド ===');
+        Log::debug(count($auto_follow_run_user_list). ' 人のユーザーが自動フォローをONにしています。');
 
         if($auto_follow_run_user_list->isEmpty()){
             Log::debug('自動フォローのユーザーが存在していないため処理を終了します');
@@ -99,16 +108,17 @@ class TwitterFollowController extends Controller
             $twitter_id = $auto_follow_run_user_item->my_twitter_id;
             $twitter_user_token = $auto_follow_run_user_item->twitter_token;
             $twitter_user_token_secret = $auto_follow_run_user_item->twitter_token_secret;
-            Log::debug('=== 自動フォローステータスがONのユーザーを取得しています:handlメソッド ===');
+            $follow_count = $auto_follow_run_user_item->follow_count;
+         
+            
 
             // ステータスがONのユーザーの数だけ下記のオートフォローが実行される
-            
-            $this->autoFollow($twitter_id, $twitter_user_token, $twitter_user_token_secret);
+            $this->autoFollow($twitter_id, $twitter_user_token, $twitter_user_token_secret, $follow_count);
         }
     }
 
     // 自動フォロー機能
-    public function autoFollow($twitter_id, $twitter_user_token, $twitter_user_token_secret)
+    public function autoFollow($twitter_id, $twitter_user_token, $twitter_user_token_secret, $follow_count)
     {   
         // 1回の処理で15フォローを超えないようにする
         $system_follow_counter = 0;
@@ -119,31 +129,45 @@ class TwitterFollowController extends Controller
 
         // DBに登録されているユーザを取得
         $twitterUserList = $this->getTwitterUser();
-        
         Log::debug('=== フォローターゲットが格納されています:autoFollowメソッド ===');
-
         // フォローしているユーザーを取得
         $follow_target = $this->fetchFollowTarget($twitter_id, $twitterUserList, $connect);
         // フォローしていないユーザーを抽出する
         $follow_target_list = array_diff($twitterUserList, $follow_target);
 
-    
+        // dd($follow_target_list);
+       
+        foreach($follow_target_list as $unfollow_id){
+            ++$system_follow_counter;
+
+            if($system_follow_counter < 15){
+                Log::debug('まだ '. $system_follow_counter . ' 回目のループなのでフォローを継続します');
+                // $result = $connect->post('friendships/create', [
+                //     'user_id' => $target_id
+                // ]);
+            }else{
+                Log::debug('フォローの上限を超えました。処理を停止します。：'. $system_follow_counter . ' 回目のループ');
+                $system_follow_counter = 0;
+                Log::debug('カウンターをリセットして、単位ユーザ当たりのカウンターをリセットします。$system_follow_counter：'. $system_follow_counter);
+                break;
+            }
+
+        }
 
     }
     
     // 自分のフォローしているユーザーを取得する
     public function fetchFollowTarget($twitter_id, $twitterUserList, $connect)
-    {       
+    {   
         // 15分毎15リクエストが上限です
         $result = $connect->get('friends/ids', [
             'user_id' => $twitter_id
             ])->ids;
-
-            Log::debug('取得結果 : ' .print_r($result, true));
+            // Log::debug('取得結果 : ' .print_r($result, true));
         return $result;
     }
 
-    // DBからフォローするためのユーザー情報を取得する
+    // DBからTwitterユーザー情報を取得する
     public function getTwitterUser()
     {
         // DBより仮想通貨関連のアカウントを取得

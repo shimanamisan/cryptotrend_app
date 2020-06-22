@@ -14,7 +14,7 @@ class AddFollowCountToUsers extends Migration
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
-             $table->integer('follow_count')->default(0);
+             $table->string('follow_limit_count')->default(0);
         });
     }
 
@@ -26,7 +26,7 @@ class AddFollowCountToUsers extends Migration
     public function down()
     {
         Schema::table('users', function (Blueprint $table) {
-             $table->dropColumn('follow_count');
+             $table->dropColumn('follow_limit_count');
         });
     }
 }

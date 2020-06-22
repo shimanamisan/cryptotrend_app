@@ -23,6 +23,7 @@ class CreateUsersTable extends Migration
             $table->string('avatar')->nullable();
             $table->string('twitter_token')->nullable();
             $table->string('twitter_token_secret')->nullable();
+            $table->string('follow_limit_time')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });
