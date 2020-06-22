@@ -41,25 +41,33 @@ class TwitterFollowController extends Controller
     // ユーザーをフォローするメソッド
     public function follow(Request $request)
     {
-        // 
         // インスタンスを生成
         $connection = $this->twitterAuth();
         // フォローするユーザーのIDを格納
         $follow_target_id = $request->id;
-        // 
         // 1日のフォロー上限を超えないように、現在のフォローした数を取得
-        $follow_count = Auth::user()->follow_count;
+        $follow_limit_count = Auth::user()->follow_limit_count;
 
         $result = $connection->post('friendships/create', [
           'user_id' => $follow_target_id,
          ]);
+        if($connection->getLastHttpCode() === 200){
+            // 通信成功時の処理
+            if ($result->following) {
+                Log::debug('既にフォローしています；'. print_r($result, true));
+                return response()->json(['forbidden' => '既にフォローしているユーザーです'], 403);
+            }
+            
+            ++$follow_limit_count;
+            Auth::user()->follow_limit_count = $follow_limit_count;
+            Auth::user()->update();
 
-        if ($result->following) {
-            Log::debug('既にフォローしています；'. print_r($result, true));
-            return response()->json(['forbidden' => '既にフォローしているユーザーです'], 403);
+            return response()->json(['success' => 'フォローしました！'], 200);            
+        }else{
+            // 通信失敗時の処理
+            return response()->json(['error' => 'Errorが発生しています。']);
+
         }
-
-        return response()->json(['success' => 'フォローしました！'], 200);
     }
 
     // 自動フォローのON/OFFを切り替える
@@ -68,17 +76,16 @@ class TwitterFollowController extends Controller
         $user = Auth::user();
         // 自動フォローがONになっているか確認
         $autoFollow_flg = $request->status;
-        // dd(gettype($autoFollow_flg));
 
         // ログイン中のユーザーでusersテーブルのautofollowが1だったら自動フォローする
         // そうでなければ処理を行わない
         if ($autoFollow_flg === 0) {
-            $user->autofollow = ++$autoFollow_flg;
+            $user->autofollow_status = ++$autoFollow_flg;
             $user->update();
             Log::debug('自動フォローをONにしました：' . $autoFollow_flg);
             return;
         } else {
-            $user->autofollow = --$autoFollow_flg;
+            $user->autofollow_status = --$autoFollow_flg;
             $user->update();
             Log::debug('自動フォローをOFFにしました：' . $autoFollow_flg);
             return;
@@ -93,10 +100,14 @@ class TwitterFollowController extends Controller
     // 自動フォロー機能呼び出し
     public function handl()
     {
-        $today = date();
-        dd("本日の日付".$today);
+        $now_time = time(); // 現在の時刻
+
+        /**
+         * 後にシステム全体での上限、1000フォローを超えていたら実施しない処理を追記する
+         */
+
         // DBからautofollowカラムが1のユーザーを取得
-        $auto_follow_run_user_list = User::where('autofollow', self::AUTO_FOLLOW_STATUS_RUN)->get();
+        $auto_follow_run_user_list = User::where('autofollow_status', self::AUTO_FOLLOW_STATUS_RUN)->get();
         Log::debug('=== 自動フォローステータスがONのユーザーを取得しています:handlメソッド ===');
         Log::debug(count($auto_follow_run_user_list). ' 人のユーザーが自動フォローをONにしています。');
 
@@ -105,23 +116,33 @@ class TwitterFollowController extends Controller
             exit;
         }
         foreach ($auto_follow_run_user_list as $auto_follow_run_user_item) {
+            $user = $auto_follow_run_user_item; // 各ユーザーのUserモデル
             $twitter_id = $auto_follow_run_user_item->my_twitter_id;
             $twitter_user_token = $auto_follow_run_user_item->twitter_token;
             $twitter_user_token_secret = $auto_follow_run_user_item->twitter_token_secret;
-            $follow_count = $auto_follow_run_user_item->follow_count;
+            $follow_limit_count = $auto_follow_run_user_item->follow_limit_count;
+            
+            if($follow_limit_count < self::DAY_FOLLOW_LIMIT ){
+                Log::debug($user->name. ' さんはまだ1日の上限ではないので処理を継続します '.$follow_limit_count.'/400');
+                // 1ユーザー当たり1日の上限、400フォロー以下だったら自動フォローを実行する
+                // ステータスがONのユーザーの数だけ下記のオートフォローが実行される
+                $this->autoFollow($user, $twitter_id, $twitter_user_token, $twitter_user_token_secret, $follow_limit_count);
+                
+            }else{
+                Log::debug($user->name.' さんは1日の上限を超えていたので処理を終了します '.$follow_limit_count.'/400');
+                continue;
+            }
          
             
 
-            // ステータスがONのユーザーの数だけ下記のオートフォローが実行される
-            $this->autoFollow($twitter_id, $twitter_user_token, $twitter_user_token_secret, $follow_count);
         }
     }
 
     // 自動フォロー機能
-    public function autoFollow($twitter_id, $twitter_user_token, $twitter_user_token_secret, $follow_count)
+    public function autoFollow($user, $twitter_id, $twitter_user_token, $twitter_user_token_secret, $follow_limit_count)
     {   
         // 1回の処理で15フォローを超えないようにする
-        $system_follow_counter = 0;
+        $system_follow_counter_quarter_minutes = 0;
 
         // インスタンスを生成
         $connect = $this->twitterOAuth($twitter_user_token, $twitter_user_token_secret);
@@ -130,6 +151,7 @@ class TwitterFollowController extends Controller
         // DBに登録されているユーザを取得
         $twitterUserList = $this->getTwitterUser();
         Log::debug('=== フォローターゲットが格納されています:autoFollowメソッド ===');
+
         // フォローしているユーザーを取得
         $follow_target = $this->fetchFollowTarget($twitter_id, $twitterUserList, $connect);
         // フォローしていないユーザーを抽出する
@@ -137,18 +159,27 @@ class TwitterFollowController extends Controller
 
         // dd($follow_target_list);
        
-        foreach($follow_target_list as $unfollow_id){
-            ++$system_follow_counter;
+        foreach($follow_target_list as $follow_target_id){
+            // 15分毎に15フォローを超えないようにするカウンター
+            ++$system_follow_counter_quarter_minutes;
 
-            if($system_follow_counter < 15){
-                Log::debug('まだ '. $system_follow_counter . ' 回目のループなのでフォローを継続します');
+            if($system_follow_counter_quarter_minutes < 15){
+                Log::debug('まだ '. $system_follow_counter_quarter_minutes . ' 回目のループなのでフォローを継続します');
                 // $result = $connect->post('friendships/create', [
-                //     'user_id' => $target_id
+                //     'user_id' => $follow_target_id
                 // ]);
+
+                // 1日にフォローできる数をカウントしていく（usersテーブルより取得）
+                ++$follow_limit_count;
+                $user->follow_limit_count = $follow_limit_count;
+                $user->update();
+                /**
+                 * アプリ全体として1000フォローを超えないように自動フォロー中もカウントする必要がある
+                 */
             }else{
-                Log::debug('フォローの上限を超えました。処理を停止します。：'. $system_follow_counter . ' 回目のループ');
-                $system_follow_counter = 0;
-                Log::debug('カウンターをリセットして、単位ユーザ当たりのカウンターをリセットします。$system_follow_counter：'. $system_follow_counter);
+                Log::debug($system_follow_counter_quarter_minutes . ' 回目、フォローの上限を超えました。処理を停止します。');
+                $system_follow_counter_quarter_minutes = 0;
+                Log::debug('カウンターをリセットして、単位ユーザ当たりのカウンターをリセットします。$system_follow_counter_quarter_minutes：'. $system_follow_counter_quarter_minutes);
                 break;
             }
 

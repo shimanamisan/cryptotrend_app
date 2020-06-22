@@ -17,8 +17,8 @@
           :class="{ 'c-btn__disabled': !this.autoFollow_flg }"
           @click="sendAutoFollowRequest"
         >
-          <p v-if="!parseBoolean">自動フォロー機能OFF</p>
-          <p v-else>自動フォロー機能ON</p>
+          <p v-if="parseBoolean">自動フォロー機能ON</p>
+          <p v-else>自動フォロー機能OFF</p>
         </button>
         <p
           class="p-twuser__header__text"
@@ -80,7 +80,7 @@ export default {
       flash_message_flg: false,
       already_follow_user: false,
       // 自動フォロー中のフラグ(ユーザー情報より取得)
-      autoFollow_flg: this.user.autofollow,
+      autoFollow_flg: this.user.autofollow_status,
     };
   },
   methods: {
@@ -107,13 +107,12 @@ export default {
     async sendAutoFollowRequest() {
       // catch(error => error.response || error)で非同期通信が成功しても失敗してもresponseに結果を代入する
       const response = await axios.post('/autofollow', { status: this.autoFollow_flg }).catch((error) => error.response || error);
-
-      if (this.autoFollow_flg !== 0) {
-        this.autoFollow_flg = 0;
-      } else {
+      
+      if (this.autoFollow_flg == 0) {
         this.autoFollow_flg = 1;
+      } else {
+        this.autoFollow_flg = 0;
       }
-
       console.log(response);
     },
     async sendFollowRequest(id, index) {
@@ -132,7 +131,6 @@ export default {
         this.isShowMessage();
         setTimeout(this.isShowMessage, 2000);
       }
-
       // this.already_follow_user = false;
     },
   },
@@ -141,8 +139,6 @@ export default {
     getTwitterUserItems() {
       let current = this.currentPage * this.parPage;
       let start = current - this.parPage;
-      // console.log(start + '件から' + current + '件まで表示中');
-
       // sliceで配列を切り取る。index番号で指定するのでstartは0番から始まる
       return this.tw_userItems.slice(start, current);
     },
