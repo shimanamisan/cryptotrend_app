@@ -2,12 +2,9 @@
   <div>
     <transition name="flash">
       <div class="u-flashmsg" v-show="flash_message_flg">
-        <div v-if="already_follow_user">
-          <p>既にフォロー済みです</p>
-        </div>
-        <div v-else>
-          <p>フォローしました！</p>
-        </div>
+        <ul v-for="(msg, index) in this.systemMessage" :key="index">
+          <li>{{ msg }}</li>
+        </ul>
       </div>
     </transition>
     <section class="c-container c-container__twusr">
@@ -78,7 +75,7 @@ export default {
       currentPage: 1,
       // 登録後のメッセージ表示フラグ
       flash_message_flg: false,
-      already_follow_user: false,
+      systemMessage: '',
       // 自動フォロー中のフラグ(ユーザー情報より取得)
       autoFollow_flg: this.user.autofollow_status,
     };
@@ -121,17 +118,29 @@ export default {
       // catch(error => error.response || error)で非同期通信が成功しても失敗してもresponseに結果を代入する
       const response = await axios.post('/follow', { id: id }).catch((error) => error.response || error);
 
+      // 通信が成功した時の処理
       if (response.status === 200) {
-        // 通信が成功した時の処理
+        // 返却されたメッセージを格納
+        this.systemMessage = response.data;
+        // フラッシュメッセージを表示
+        this.isShowMessage();
+        // フォローしたユーザーの要素を削除
         this.tw_userItems.splice(index, 1);
+        // 2秒後にメッセージを非表示にする
+        setTimeout(this.isShowMessage, 2000);
+
+        // ユーザーを既にフォローしていた時の処理
+      } else if (response.status === 403) {
+        this.systemMessage = response.data;
         this.isShowMessage();
         setTimeout(this.isShowMessage, 2000);
-      } else if (response.status === 403) {
-        this.isAlreadyUserMessage()
+
+        // 何か予期せぬErrorが発生したとき
+      }else{
+        this.systemMessage = response.data;
         this.isShowMessage();
         setTimeout(this.isShowMessage, 2000);
       }
-      // this.already_follow_user = false;
     },
   },
   computed: {

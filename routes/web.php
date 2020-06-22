@@ -53,3 +53,4 @@ Route::group(['middleware' => 'auth'], function () {
 // 開発時テスト用ルーティング
 Route::get('/userList', 'TwitterController@userList');
 Route::get('/autoFollow', 'TwitterFollowController@handl');
+Route::get('/limit', 'TwitterController@limit');

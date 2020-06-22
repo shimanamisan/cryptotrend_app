@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\TwitterUser;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Abraham\TwitterOAuth\TwitterOAuth;
 use Illuminate\Support\Carbon; // ★ 追加
 use Illuminate\Support\Facades\DB; // ★追加
 
@@ -141,5 +142,39 @@ class TwitterController extends Controller
 
         // return view('userList', ['tw_user' => $tw_user]);
         return view('userList', compact('tw_user', 'user'));
+    }
+
+
+
+    /**
+     * これはテスト用の処理
+     */
+
+    // ユーザーのAPIリミットの残存回数を取得
+    public function limit()
+    {
+        $connect = $this->twitterAuth();
+
+        $search_result = $connect->get('application/rate_limit_status');
+
+        dd($search_result->resources);
+
+       
+    }
+
+    public function twitterAuth()
+    {
+        // ヘルパー関数のconfigメソッドを通じて、config/services.phpのtwitterの登録した中身を参照
+        $config = config('services.twitter');
+        // APIキーを格納
+        $api_key = $config['client_id'];
+        $api_key_secret = $config['client_secret'];
+        // アクセストークンを格納
+        $access_token = session('access_token');
+        $access_token_secret = session('access_token_secret');
+
+        $OAuth = new TwitterOAuth($api_key, $api_key_secret, $access_token, $access_token_secret);
+
+        return $OAuth;
     }
 }
