@@ -6,7 +6,7 @@
 @include('layouts.head')
 
 @section('content')
-<div >
-
+<div id="coins-component">
+    <coins-component/>
 </div>
 @endsection

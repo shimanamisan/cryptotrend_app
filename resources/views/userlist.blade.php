@@ -7,7 +7,7 @@
 
 @section('content')
 <div id="twitteruser-component">
-    <twitteruser-component  
+    <twitteruser-component
     :tw_user="{{ ($tw_user) }}"
     :user="{{ $user }}"
     />

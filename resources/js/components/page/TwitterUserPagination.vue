@@ -2,22 +2,20 @@
   <div>
     <transition name="flash">
       <div class="u-flashmsg" v-show="flash_message_flg">
-        <div v-if="already_follow">
-          <p>既にフォロー済みです</p>
-        </div>
-        <div v-else>
-          <p>フォローしました！</p>
-        </div>
+        <ul v-for="(msg, index) in this.systemMessage" :key="index">
+          <li>{{ msg }}</li>
+        </ul>
       </div>
     </transition>
     <section class="c-container c-container__twusr">
       <div class="p-twuser__header">
         <button
           class="c-btn c-btn__common c-btn__common--autofollow"
+          :class="{ 'c-btn__disabled': !this.autoFollow_flg }"
           @click="sendAutoFollowRequest"
         >
-          <p v-if="this.autoFollow_flg === 0">自動フォロー機能OFF</p>
-          <p v-else>自動フォロー機能ON</p>
+          <p v-if="parseBoolean">自動フォロー機能ON</p>
+          <p v-else>自動フォロー機能OFF</p>
         </button>
         <p
           class="p-twuser__header__text"
@@ -77,9 +75,9 @@ export default {
       currentPage: 1,
       // 登録後のメッセージ表示フラグ
       flash_message_flg: false,
-      already_follow: false,
-      // 自動フォロー中のフラグ
-      autoFollow_flg: this.user.autofollow
+      systemMessage: '',
+      // 自動フォロー中のフラグ(ユーザー情報より取得)
+      autoFollow_flg: this.user.autofollow_status,
     };
   },
   methods: {
@@ -89,7 +87,7 @@ export default {
     },
     paginationNumber() {
       // 表示するページネーションの数を割り出すために、総数を表示させる数で割っている
-      this.parPage = Math.ceil(this.totalPage / 5);
+      this.parPage = Math.ceil(this.totalPage / 8);
     },
     scrollTop() {
       window.scrollTo({
@@ -97,41 +95,59 @@ export default {
         behavior: 'auto',
       });
     },
-    showMessage(){
-        this.flash_message_flg = !this.flash_message_flg
+    isShowMessage() {
+      this.flash_message_flg = !this.flash_message_flg;
     },
-    async sendAutoFollowRequest(){
+    isAlreadyUserMessage() {
+      this.already_follow_user = !this.already_follow_user;
+    },
+    async sendAutoFollowRequest() {
       // catch(error => error.response || error)で非同期通信が成功しても失敗してもresponseに結果を代入する
-      const response = await axios.post('/autofollow', { status : this.autoFollow_flg }).catch(error => error.response || error)
-
-      console.log(response)
+      const response = await axios.post('/autofollow', { status: this.autoFollow_flg }).catch((error) => error.response || error);
+      
+      if (this.autoFollow_flg == 0) {
+        this.autoFollow_flg = 1;
+      } else {
+        this.autoFollow_flg = 0;
+      }
+      console.log(response);
     },
     async sendFollowRequest(id, index) {
-      console.log('twitter_id：' +id + '、 インデックス番号：' + index)
-      
-      // catch(error => error.response || error)で非同期通信が成功しても失敗してもresponseに結果を代入する
-      const response = await axios.post('/follow', { id : id }).catch(error => error.response || error)
+      console.log('twitter_id：' + id + '、 インデックス番号：' + index);
 
-      if(response.status === 200){
-          // 通信が成功した時の処理
-          this.tw_userItems.splice(index, 1);
-          this.showMessage()
-          setTimeout(this.showMessage, 2000)
-      }else if(response.status === 403){
-          this.showMessage()
-          setTimeout(this.showMessage, 2000)
-          this.already_follow = true;
+      // catch(error => error.response || error)で非同期通信が成功しても失敗してもresponseに結果を代入する
+      const response = await axios.post('/follow', { id: id }).catch((error) => error.response || error);
+
+      // 通信が成功した時の処理
+      if (response.status === 200) {
+        // 返却されたメッセージを格納
+        this.systemMessage = response.data;
+        // フラッシュメッセージを表示
+        this.isShowMessage();
+        // フォローしたユーザーの要素を削除
+        this.tw_userItems.splice(index, 1);
+        // 2秒後にメッセージを非表示にする
+        setTimeout(this.isShowMessage, 2000);
+
+        // ユーザーを既にフォローしていた時の処理
+      } else if (response.status === 403) {
+        this.systemMessage = response.data;
+        this.isShowMessage();
+        setTimeout(this.isShowMessage, 2000);
+
+        // 何か予期せぬErrorが発生したとき
+      }else{
+        this.systemMessage = response.data;
+        this.isShowMessage();
+        setTimeout(this.isShowMessage, 2000);
       }
     },
- 
   },
   computed: {
     // 表示させる要素を切り出す
     getTwitterUserItems() {
       let current = this.currentPage * this.parPage;
       let start = current - this.parPage;
-      // console.log(start + '件から' + current + '件まで表示中');
-
       // sliceで配列を切り取る。index番号で指定するのでstartは0番から始まる
       return this.tw_userItems.slice(start, current);
     },
@@ -148,6 +164,17 @@ export default {
     endPage() {
       let end = this.currentPage * this.parPage;
       return end;
+    },
+    // 自動フォロー中のフラグを元に判定用に真偽値にする（DBで指定したbooleanは0か1で入っているので）
+    parseBoolean() {
+      let flg;
+      if (this.autoFollow_flg == 0) {
+        let flg = false;
+        return flg;
+      } else {
+        let flg = true;
+        return flg;
+      }
     },
   },
   created() {

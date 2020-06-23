@@ -5,27 +5,13 @@ namespace App\Http\Controllers;
 use App\TwitterUser;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Abraham\TwitterOAuth\TwitterOAuth;
 use Illuminate\Support\Carbon; // ★ 追加
 use Illuminate\Support\Facades\DB; // ★追加
 
 class TwitterController extends Controller
 {
-    // Twitter上で仮想通貨関連のユーザーを取得する処理
-    // バッチ処理で1日に一回更新します
-    public function searchTweet()
-    {
-        // 検索ワード
-        $search_key = '"ビットコイン" OR "BTC"';
 
-        // 仮想通貨銘柄に関するツイートを検索
-        // consig/app.phpでエイリアスを設定しているので、useしなくてもバックスラッシュで読み込める 'Twitter' => App\Facades\Twitter::class,
-        $result = \Twitter::get('search/tweets', [
-      'q' => $search_key,
-      'count' => 10,
-    ])->statuses;
-
-        return view('twitter', ['result' => $result]);
-    }
 
     // 関連キーワードがユーザー名又はプロフィールに記載しているユーザーを取得
     public static function userList()
@@ -45,12 +31,12 @@ class TwitterController extends Controller
         $search_limit_count = 20;
         $page_random = rand(1, 100);
 
-        $options = [
-      'q' => $search_key,
-      'count' => $search_limit_count,
-      'page' => $page_random,
-      'lang' => 'ja',
-    ];
+                $options = [
+            'q' => $search_key,
+            'count' => $search_limit_count,
+            'page' => $page_random,
+            'lang' => 'ja',
+            ];
 
         // 仮想通貨に関するユーザーを検索
         $search_result = \Twitter::get('users/search', $options);
@@ -62,16 +48,16 @@ class TwitterController extends Controller
             \Log::debug('twitter_usersテーブルが空なので初期登録処理を実行します。：');
             foreach ($search_result as $search_result_item) {
                 $twitter_user[] = [
-          'twitter_id' => $search_result_item->id,
-          'user_name' => $search_result_item->name,
-          'account_name' => $search_result_item->screen_name,
-          'new_tweet' => $search_result_item->status->text,
-          'description' => $search_result_item->description,
-          'friends_count' => $search_result_item->friends_count,
-          'followers_count' => $search_result_item->followers_count,
-          'created_at' => Carbon::now(),
-          'updated_at' => Carbon::now(),
-        ];
+                'twitter_id' => $search_result_item->id,
+                'user_name' => $search_result_item->name,
+                'account_name' => $search_result_item->screen_name,
+                'new_tweet' => $search_result_item->status->text,
+                'description' => $search_result_item->description,
+                'friends_count' => $search_result_item->friends_count,
+                'followers_count' => $search_result_item->followers_count,
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
+                ];
             }
             $TwitterUser->insert($twitter_user);
             \Log::debug('登録が完了しました。');
@@ -92,16 +78,16 @@ class TwitterController extends Controller
                     ++$alreadyCounter;
                     \Log::debug("DBに存在していたユーザーです。既存ユーザーカウンター：{$alreadyCounter}");
                     $twitter_user = [
-            'twitter_id' => $search_result_item->id,
-            'user_name' => $search_result_item->name,
-            'account_name' => $search_result_item->screen_name,
-            'new_tweet' => $search_result_item->status->text,
-            'description' => $search_result_item->description,
-            'friends_count' => $search_result_item->friends_count,
-            'followers_count' => $search_result_item->followers_count,
-            'created_at' => Carbon::now(),
-            'updated_at' => Carbon::now(),
-          ];
+                        'twitter_id' => $search_result_item->id,
+                        'user_name' => $search_result_item->name,
+                        'account_name' => $search_result_item->screen_name,
+                        'new_tweet' => $search_result_item->status->text,
+                        'description' => $search_result_item->description,
+                        'friends_count' => $search_result_item->friends_count,
+                        'followers_count' => $search_result_item->followers_count,
+                        'created_at' => Carbon::now(),
+                        'updated_at' => Carbon::now(),
+                    ];
                     // 存在していたユーザーの情報を更新します
                     $TwitterUser->where('twitter_id', $search_user_id)->update($twitter_user);
                     \Log::debug('更新しました。更新したID：' . $search_user_id);
@@ -110,16 +96,16 @@ class TwitterController extends Controller
                     \Log::debug("DBに存在していなかったユーザーです。新規ユーザーカウンター：{$newCounter}");
 
                     $twitter_user = [
-            'twitter_id' => $search_result_item->id,
-            'user_name' => $search_result_item->name,
-            'account_name' => $search_result_item->screen_name,
-            'new_tweet' => $search_result_item->status->text,
-            'description' => $search_result_item->description,
-            'friends_count' => $search_result_item->friends_count,
-            'followers_count' => $search_result_item->followers_count,
-            'created_at' => Carbon::now(),
-            'updated_at' => Carbon::now(),
-          ];
+                        'twitter_id' => $search_result_item->id,
+                        'user_name' => $search_result_item->name,
+                        'account_name' => $search_result_item->screen_name,
+                        'new_tweet' => $search_result_item->status->text,
+                        'description' => $search_result_item->description,
+                        'friends_count' => $search_result_item->friends_count,
+                        'followers_count' => $search_result_item->followers_count,
+                        'created_at' => Carbon::now(),
+                        'updated_at' => Carbon::now(),
+                    ];
 
                     $TwitterUser->insert($twitter_user);
                     \Log::debug('新規登録しました。' . print_r($twitter_user, true));
@@ -141,5 +127,39 @@ class TwitterController extends Controller
 
         // return view('userList', ['tw_user' => $tw_user]);
         return view('userList', compact('tw_user', 'user'));
+    }
+
+
+
+    /**
+     * これはテスト用の処理
+     */
+
+    // ユーザーのAPIリミットの残存回数を取得
+    public function limit()
+    {
+        $connect = $this->twitterAuth();
+
+        $search_result = $connect->get('application/rate_limit_status');
+
+        dd($search_result->resources);
+
+       
+    }
+
+    public function twitterAuth()
+    {
+        // ヘルパー関数のconfigメソッドを通じて、config/services.phpのtwitterの登録した中身を参照
+        $config = config('services.twitter');
+        // APIキーを格納
+        $api_key = $config['client_id'];
+        $api_key_secret = $config['client_secret'];
+        // アクセストークンを格納
+        $access_token = session('access_token');
+        $access_token_secret = session('access_token_secret');
+
+        $OAuth = new TwitterOAuth($api_key, $api_key_secret, $access_token, $access_token_secret);
+
+        return $OAuth;
     }
 }

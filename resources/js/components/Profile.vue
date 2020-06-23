@@ -22,7 +22,7 @@
               <label class="p-profile__pic--ImgWrap" for>
                 <input class="p-profile__pic--drop" type="file" />
                 <output class>
-                  <img class="p-profile__pic--output" :src="this.avatar" alt />
+                  <img class="p-profile__pic--output" v-bind:src="userDataForm.avatar" alt />
                 </output>
               </label>
               <div class="p-profile__submitWrap">
@@ -123,7 +123,7 @@ export default {
             userDataForm: {
                 nicname: this.user,
                 email: this.email,
-                avatar: this.avatar,
+                avatar: '../storage/img/no_img.png',
             },
             passwordEditForm: {
                 password: "",
