@@ -28,6 +28,7 @@ Route::get('login/twitter/callback', 'Auth\LoginController@handleTwitterCallback
 
 // 仮想通貨関連のニュースの取得
 Route::get('/news', 'NewsController@index')->name('getNews.index');
+
 // プロフィール画面
 Route::patch('/profile/{id}', 'ProfileController@editProfile')->name('profile.editProfile');
 Route::get('/profile', 'ProfileController@showProfileForm')->name('profile.showProfileForm');
@@ -51,6 +52,7 @@ Route::group(['middleware' => 'auth'], function () {
 });
 
 // 開発時テスト用ルーティング
-Route::get('/userList', 'TwitterController@userList');
-Route::get('/autoFollow', 'TwitterFollowController@handl');
-Route::get('/limit', 'TwitterController@limit');
+Route::get('/coins', 'CoinsController@searchCoins'); // 仮想通貨関連のツイート数を取得する（完成後バッチ処理にする）
+Route::get('/userList', 'TwitterController@userList'); // 仮想通貨関連のツイートをしているユーザーを取得する（完成後バッチ処理にする）
+Route::get('/autoFollow', 'TwitterFollowController@handl'); // 過疎通過関連のユーザーを自動フォローする（完成後バッチ処理にする）
+Route::get('/limit', 'TwitterController@limit'); // ログインしているユーザーのAPI制限のカウント数の一覧を取得する

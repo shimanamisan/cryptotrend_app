@@ -11,22 +11,7 @@ use Illuminate\Support\Facades\DB; // ★追加
 
 class TwitterController extends Controller
 {
-    // Twitter上で仮想通貨関連のユーザーを取得する処理
-    // バッチ処理で1日に一回更新します
-    public function searchTweet()
-    {
-        // 検索ワード
-        $search_key = '"ビットコイン" OR "BTC"';
 
-        // 仮想通貨銘柄に関するツイートを検索
-        // consig/app.phpでエイリアスを設定しているので、useしなくてもバックスラッシュで読み込める 'Twitter' => App\Facades\Twitter::class,
-        $result = \Twitter::get('search/tweets', [
-            'q' => $search_key,
-            'count' => 10,
-            ])->statuses;
-
-        return view('twitter', ['result' => $result]);
-    }
 
     // 関連キーワードがユーザー名又はプロフィールに記載しているユーザーを取得
     public static function userList()
