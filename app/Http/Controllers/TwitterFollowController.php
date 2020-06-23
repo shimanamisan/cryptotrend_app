@@ -200,8 +200,10 @@ class TwitterFollowController extends Controller
 
         // フォローしているユーザーを取得
         $follow_target = $this->fetchFollowTarget($twitter_id, $twitterUserList, $connect);
-        // フォローしていないユーザーを抽出する
-        $follow_target_list = array_diff($twitterUserList, $follow_target);
+        // フォローしているユーザーのIDとDBに登録されているIDの差分を取得する。一致していないもの（フォローしていないユーザー）を取得する
+        // 第一引数が比較元の配列、第二引数に比較する配列を指定する
+        // 比較元の配列にしか無い値を取得する（第二引数の配列の値と一致したものは除外される）
+        $follow_target_list = array_diff($follow_target, $twitterUserList);
 
         // dd($follow_target_list);
         // 全てフォローしてリストが空だったら処理を実施
