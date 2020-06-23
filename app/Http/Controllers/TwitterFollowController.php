@@ -18,7 +18,7 @@ class TwitterFollowController extends Controller
     // 1日のフォロー上限の400を超えないように制御する（400に到達しないように、手前の値を設定）
     const DAY_FOLLOW_LIMIT = 395;
     // 1日にアプリ全体としてのフォロー制限を超えないように制御する
-    const SYSTEM_FOLLOW_LIMIT = 1000;
+    const SYSTEM_FOLLOW_LIMIT = 990;
     // 15分を秒に変換、個別でフォローする際の上限に使用する
     const QUARTER_MINUTES = 15 * 60;
 
@@ -137,7 +137,7 @@ class TwitterFollowController extends Controller
     public function handl()
     {
         /**
-         * 後にシステム全体での上限、1000フォローを超えていたら実施しない処理を追記する
+         * 後にシステム全体での上限、990フォローを超えていたら実施しない処理を追記する
          */
         $SystemManager = SystemManager::where('id', 1)->first();
 
@@ -145,7 +145,7 @@ class TwitterFollowController extends Controller
 
         if($one_day_system_counter_limit < self::SYSTEM_FOLLOW_LIMIT){
 
-            Log::debug('1日のアプリ全体としてのフォロー上限を以内なのでフォローを継続します '. $one_day_system_counter_limit.'/1000回');
+            Log::debug('1日のアプリ全体としてのフォロー上限を以内なのでフォローを継続します '. $one_day_system_counter_limit.'/990回');
             Log::debug('    ');
 
             // DBからautofollowカラムが1のユーザーを取得
@@ -179,7 +179,7 @@ class TwitterFollowController extends Controller
             }
 
         }else{
-            Log::debug('1日のアプリ全体としてのフォロー上限を上回っているので処理を停止します '. $one_day_system_counter_limit.'/1000回');
+            Log::debug('1日のアプリ全体としてのフォロー上限を上回っているので処理を停止します '. $one_day_system_counter_limit.'/990回');
             Log::debug('    ');
             exit();
         }
@@ -210,10 +210,10 @@ class TwitterFollowController extends Controller
             // 
             if($follow_limit_count < self::DAY_FOLLOW_LIMIT && $one_day_system_counter_limit < self::SYSTEM_FOLLOW_LIMIT){
                 Log::debug('1日のユーザーのフォロー制限回数です '. $follow_limit_count.'/395');
-                Log::debug('1日のアプリ全体としてのフォロー制限回数です '. $one_day_system_counter_limit.'/1000回');
+                Log::debug('1日のアプリ全体としてのフォロー制限回数です '. $one_day_system_counter_limit.'/990回');
                 Log::debug('    ');
                 /**
-                 * アプリ全体として1000フォローを超えないように自動フォロー中もカウントする必要がある
+                 * アプリ全体として990フォローを超えないように自動フォロー中もカウントする必要がある
                  */
                 ++$one_day_system_counter_limit;
                 $SystemManager->one_day_system_counter = $one_day_system_counter_limit;
@@ -233,11 +233,6 @@ class TwitterFollowController extends Controller
                     // $result = $connect->post('friendships/create', [
                     //     'user_id' => $follow_target_id
                     // ]);
-    
-             
-    
-                
-    
                 }else{
                     Log::debug($system_follow_counter_quarter_minutes . ' 回目、フォローの上限を超えました。処理を停止します。');
                     
@@ -262,7 +257,7 @@ class TwitterFollowController extends Controller
                 $user->update();
                 break;
             }else{
-                Log::debug('1日のアプリ全体としてのフォロー回数です '. $one_day_system_counter_limit.'/1000回');
+                Log::debug('1日のアプリ全体としてのフォロー回数です '. $one_day_system_counter_limit.'/990');
                 Log::debug('    ');
             break;
             }
