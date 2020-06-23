@@ -32,7 +32,7 @@
             <a class="p-header__item--link" href="{{ route('getNews.index') }}">仮想通貨ニュース一覧</a>
           </li>
           <li class="p-header__item">
-            <a class="p-header__item--link" href="{{ route('searchTweet') }}">トレンド一覧</a>
+            <a class="p-header__item--link" href="{{ route('conins.index') }}">トレンド一覧</a>
           </li>
           <li class="p-header__item">
             <a class="p-header__item--link" href="{{ route('profile.showProfileForm') }}">プロフィール編集</a>

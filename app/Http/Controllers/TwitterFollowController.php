@@ -57,7 +57,6 @@ class TwitterFollowController extends Controller
         // 現在の時間を格納
         $now_time = time();
         Log::debug('現在の時刻です：'.$now_time . '  制限の時間です：'.$release_limit_time);
-        Log::debug($release_limit_time < $now_time);
 
         // 現在の時刻が15分毎14フォローの制限から、15分経過していたら処理を実行
         if($release_limit_time < $now_time){
@@ -70,11 +69,13 @@ class TwitterFollowController extends Controller
                     // $result = $connection->post('friendships/create', [
                     // 'user_id' => $follow_target_id,
                     // ]);
+                    
                     // Errorハンドリング
+                    // 通信成功時の処理
                     if ($connection->getLastHttpCode() == 200) {
-                        // 通信成功時の処理
+
+                        // 既にフォローしているユーザーだった時の処理
                         if ($result->following) {
-                            // 既にフォローしているユーザーだった時の処理
                             Log::debug('既にフォローしています；'. print_r($result, true));
                             // APIへのリクエストは通っているので、リミット数をカウントする。
                             ++$follow_limit_count;
