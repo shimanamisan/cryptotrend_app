@@ -23,17 +23,16 @@ class CoinsController extends Controller
     {
         // 検索ワード
         $search_key = [
-            'BTC' => '"ビットコイン" OR "$BTC" OR "#BTC"',
-            'ETH' => '"イーサリアム" OR "$ETH" OR "#ETH"',
-            'ETC' => '"イーサリアムクラシック" OR "$ETC" OR "#ETC"',
-            'XRP' => '"リップル" OR "$XRP" OR "#XRP"',
-            'NEM' => '"ネム" OR "$NEM" OR "#NEM"',
-            'LTC' => '"ライトコイン" OR "$LTC" OR "#LTC"',
-            'BCH' => '"ビットコインキャッシュ" OR "$BCH" OR "#BCH"',
-            'MONA' => '"仮想通貨ダッシュ”" OR "$MONA" OR "#MONA"',
-            'DASH' => '"ジーキャッシュ" OR "$DASH" OR "#DASH"',
-            'XRM' => '"モネロ" OR "$XRM" OR "#XRM"',
-            'RepMona' => '"オーガー" OR "RepMona"',
+            0 => '"ビットコイン" OR "$BTC" OR "#BTC"',
+            1 => '"イーサリアム" OR "$ETH" OR "#ETH"',
+            2 => '"イーサリアムクラシック" OR "$ETC" OR "#ETC"',
+            3 => '"リップル" OR "$XRP" OR "#XRP"',
+            4 => '"ネム" OR "$NEM" OR "#NEM"',
+            5 => '"ライトコイン" OR "$LTC" OR "#LTC"',
+            6 => '"ビットコインキャッシュ" OR "$BCH" OR "#BCH"',
+            7 => '"仮想通貨ダッシュ”" OR "$MONA" OR "#MONA"',
+            8 => '"ジーキャッシュ" OR "$DASH" OR "#DASH"',
+            9 => '"モネロ" OR "$XRM" OR "#XRM"',
         ];
         // $search_key = '"仮想通貨" OR "ビットコイン" OR "Btc" OR 
         // "イーサリアム" OR "Eth" OR "イーサリアムクラシック" OR "Etc" OR "仮想通貨リスク" OR "Lisk" OR
@@ -53,8 +52,12 @@ class CoinsController extends Controller
                 'result_type' => 'recent' // 取得するツイートの種類（recent＝最新のツイート）
                 ])->statuses;
         }
-        
 
         dd($result);
+
+        foreach($result as $tweet_item){
+
+        }
+        
     }
 }

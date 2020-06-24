@@ -70,9 +70,9 @@ class FollowController extends Controller
                 Log::debug('    ');
                 
                     // APIのエンドポイントを叩きフォローする
-                    // $result = $connection->post('friendships/create', [
-                    // 'user_id' => $follow_target_id,
-                    // ]);
+                    $result = $connection->post('friendships/create', [
+                    'user_id' => $follow_target_id,
+                    ]);
                     
                     // Errorハンドリング
                     // 通信成功時の処理
@@ -211,9 +211,14 @@ class FollowController extends Controller
         $follow_target = $this->fetchFollowTarget($twitter_id, $twitterUserList, $connect);
         // フォローしているユーザーのIDとDBに登録されているIDの差分を取得する。一致していないもの（フォローしていないユーザー）を取得する
         // 第一引数が比較元の配列、第二引数に比較する配列を指定する
-        // 比較元の配列にしか無い値を取得する（第二引数の配列の値と一致したものは除外される）
-        $follow_target_list = array_diff($follow_target, $twitterUserList);
+        // 配列を比較して重複していない値のみ出力（第二引数の配列の値と一致したものは除外される）
+        // 比較元の配列を比較対象の配列と比較し、比較元の配列にしかない値のみを取得
+        $follow_target_list = array_diff($twitterUserList, $follow_target);
 
+        if(empty($follow_target_list)){
+            \Log::debug('リストが空なら処理を停止します。'. print_r($follow_target_list, true));
+        return;
+        }
         // dd($follow_target_list);
         // 全てフォローしてリストが空だったら処理を実施
         foreach($follow_target_list as $follow_target_id){
