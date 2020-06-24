@@ -41,9 +41,9 @@ Route::group(['middleware' => 'auth'], function () {
     // 仮想通貨関連のTwitterユーザーを取得
     Route::get('/tweet-users', 'TwitterController@index')->name('userList.index');
     // ユーザーをフォローする
-    Route::post('/follow', 'TwitterFollowController@follow');
+    Route::post('/follow', 'FollowController@follow');
     // 自動フォロー機能をONにする
-    Route::post('/autofollow', 'TwitterFollowController@autoFollowFlg');
+    Route::post('/autofollow', 'FollowController@autoFollowFlg');
     // 仮想通貨情報のページ
     Route::get('/coins', 'CoinsController@index')->name('conins.index');
 });
@@ -51,5 +51,5 @@ Route::group(['middleware' => 'auth'], function () {
 // 開発時テスト用ルーティング
 Route::get('/test-coins', 'CoinsController@searchCoins'); // 仮想通貨関連のツイート数を取得する（完成後バッチ処理にする）
 Route::get('/test-userList', 'TwitterController@userList'); // 仮想通貨関連のツイートをしているユーザーを取得する（完成後バッチ処理にする）
-Route::get('/test-autoFollow', 'TwitterFollowController@handl'); // 過疎通過関連のユーザーを自動フォローする（完成後バッチ処理にする）
+Route::get('/test-autoFollow', 'FollowController@handl'); // 過疎通過関連のユーザーを自動フォローする（完成後バッチ処理にする）
 Route::get('/test-limit', 'TwitterController@limit'); // ログインしているユーザーのAPI制限のカウント数の一覧を取得する

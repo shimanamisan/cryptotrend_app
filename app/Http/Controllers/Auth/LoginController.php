@@ -87,12 +87,9 @@ class LoginController extends Controller
       \Log::debug('認証に成功しました');
     } catch (\Exception $e) {
       \Log::debug('ログインに失敗しました');
-      dd(print_r($user, true));
       // エラーならログイン画面へリダイレクト
       return redirect('/login')->with('message', 'ログインに失敗しました。');
     }
-
-    // dd($user->getId());
 
     // 既にTwitterユーザーで登録されているか検索、登録されていなければ新規登録する
     $userInfo = User::firstOrCreate(
