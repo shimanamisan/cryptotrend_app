@@ -60,7 +60,7 @@ class LoginController extends Controller
       return redirect()->intended($this->redirectPath());
     }
 
-    \Log::debug('twitter未登録のユーザーです：' . print_r(session()->all(), true));
+    \Log::debug('twitter未登録のユーザーです');
     return redirect()->intended($this->redirectPath());
   }
 
@@ -75,9 +75,10 @@ class LoginController extends Controller
   }
 
   // Twitter認証ページからリダイレクトを受け取り、レスポンスデータを元に新規登録するか否か決定する
-  public function handleTwitterCallback()
+  public function handleTwitterCallback(Request $request)
   {
     try {
+
       // ユーザーデータの取得とアクセストークンの取得
       $user = Socialite::driver('twitter')->user();
       // twitter_idをセッションに保存

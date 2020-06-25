@@ -49,7 +49,7 @@ Route::group(['middleware' => 'auth'], function () {
 });
 
 // 開発時テスト用ルーティング
-Route::get('/test-coins', 'CoinsController@searchCoins'); // 仮想通貨関連のツイート数を取得する（完成後バッチ処理にする）
-Route::get('/test-userList', 'TwitterController@userList'); // 仮想通貨関連のツイートをしているユーザーを取得する（完成後バッチ処理にする）
-Route::get('/test-autoFollow', 'FollowController@handl'); // 過疎通過関連のユーザーを自動フォローする（完成後バッチ処理にする）
-Route::get('/test-limit', 'TwitterController@limit'); // ログインしているユーザーのAPI制限のカウント数の一覧を取得する
+Route::get('/testcoins', 'CoinsController@searchCoins'); // 仮想通貨関連のツイート数を取得する（完成後バッチ処理にする）
+Route::get('/testuserList', 'TwitterController@userList'); // 仮想通貨関連のツイートをしているユーザーを取得する（完成後バッチ処理にする）
+Route::get('/testautoFollow', 'FollowController@handl'); // 過疎通過関連のユーザーを自動フォローする（完成後バッチ処理にする）
+Route::get('/testlimit', 'TwitterController@limit'); // ログインしているユーザーのAPI制限のカウント数の一覧を取得する
