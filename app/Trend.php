@@ -4,17 +4,17 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class ContTweet extends Model
+class Trend extends Model
 {
     protected $fillable = [
-        'coin_prices_id',
+        'coin_id',
         'hour',
         'day',
         'week'
     ];
 
-    public function coin_price()
+    public function coin()
     {
-        return $this->belongdTo('App\CoinPrice');
+        return $this->belongdTo('App\Coin');
     }
 }

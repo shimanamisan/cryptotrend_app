@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class CoinPrice extends Model
+class Coin extends Model
 {
     protected $fillable = [
         'coin_name',
@@ -12,8 +12,8 @@ class CoinPrice extends Model
         'low_price'
     ];
     
-    public function coin_tweets()
+    public function trends()
     {
-        return $this->hasMany('App\CoinTweet');
+        return $this->hasMany('App\Trend');
     }
 }

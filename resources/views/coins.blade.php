@@ -7,6 +7,6 @@
 
 @section('content')
 <div id="coins-component">
-    <coins-component/>
+    <coins-component :coins="{{ $coins }}"/>
 </div>
 @endsection

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateCoinPricesTable extends Migration
+class CreateTrendsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,14 @@ class CreateCoinPricesTable extends Migration
      */
     public function up()
     {
-        Schema::create('coin_prices', function (Blueprint $table) {
+        Schema::create('trends', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('coin_name');
-            $table->string('max_price');
-            $table->string('low_price');
+            $table->integer('coin_id')->unsigned();
+            $table->string('hour')->nullable();
+            $table->string('day')->nullable();
+            $table->string('week')->nullable();
+            $table->foreign('coin_id')->references('id')->on('coins');
+
             $table->timestamps();
         });
     }
@@ -29,6 +32,6 @@ class CreateCoinPricesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('coin_prices');
+        Schema::dropIfExists('trends');
     }
 }
