@@ -68,19 +68,30 @@ class LoginController extends Controller
    * Twitterログイン・新規登録
    *********************************************************/
   // Twitterアプリ側へリダイレクト
-  public function redirectToTwitterProvider()
+  public function getTwitterLogin()
   {
+    // 
     // Twitterアプリ側に認証を求めていく処理
     return Socialite::driver('twitter')->redirect();
   }
 
   // Twitter認証ページからリダイレクトを受け取り、レスポンスデータを元に新規登録するか否か決定する
-  public function handleTwitterCallback(Request $request)
+  public function getTwitterCallback()
   {
+
     try {
 
       // ユーザーデータの取得とアクセストークンの取得
       $user = Socialite::driver('twitter')->user();
+      // 既に登録されているユーザーかチェックする
+      $validate = User::where('my_twitter_id', $user->getId())->first();
+
+      // // emailの有無で条件を分ける
+      // if(empty($validate)){
+      //   \Log::debug('mytwitter_idが無いのでなので未登録ユーザーです');
+      //   return redirect('/login')->with('message', '提供された資格情報を持つアカウントは見つかりませんでした。新規登録を行って下さい。');
+      // }
+
       // twitter_idをセッションに保存
       session(['twitter_id' => $user->id]);
       session(['access_token' => $user->token]);

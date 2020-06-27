@@ -53,7 +53,7 @@
           <span class="u-line--or">または</span>
           <div class="u-wrapp">
             <button class="c-btn c-btn__twitter">
-              <a href="{{ route('twitter.auth') }}">Twitterで登録・ログイン</a>
+              <a href="{{ route('twitter.login') }}">Twitterでログイン</a>
             </button>
           </div>
         </div>

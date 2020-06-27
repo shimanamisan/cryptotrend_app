@@ -44,7 +44,6 @@ class CoinsController extends Controller
             9 => '"モナコイン" OR "$MONA" OR "#MONA"',
             10 => '"ステラルーメン" OR "$XLM" OR "#XLM"',
             11 => '"クアンタム" OR "$QTUM" OR "#QTUM"',
-
         ];
 
         // 15分毎のリクエストの回数をカウントしていく
@@ -151,6 +150,8 @@ class CoinsController extends Controller
         \Log::debug('  ');
 
     }
+
+    // 1日のツイート数を集計するメソッド
     public function day(Coin $coin)
     {   
    
@@ -168,7 +169,6 @@ class CoinsController extends Controller
             9 => '"モナコイン" OR "$MONA" OR "#MONA"',
             10 => '"ステラルーメン" OR "$XLM" OR "#XLM"',
             11 => '"クアンタム" OR "$QTUM" OR "#QTUM"',
-
         ];
 
         // 15分毎のリクエストの回数をカウントしていく

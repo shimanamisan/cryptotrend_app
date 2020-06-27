@@ -22,9 +22,12 @@ Route::get('/', function () {
 Auth::routes();
 
 // Twitter経由でのログインを行う為のURI
-Route::get('login/twitter', 'Auth\LoginController@redirectToTwitterProvider')->name('twitter.auth');
+Route::get('login/twitter', 'Auth\TwitterAuthController@getTwitterLogin')->name('twitter.login');
+// Twitter経由でのユーザー登録を行う為のURI
+Route::get('register/twitter', 'Auth\TwitterAuthController@getTwitterRegister')->name('twitter.register');
 // アプリ側から情報が返ってくるURL
-Route::get('login/twitter/callback', 'Auth\LoginController@handleTwitterCallback')->name('twitter.callback');
+Route::get('auth/twitter/callback', 'Auth\TwitterAuthController@getTwitterCallback');
+// Twitterアカウントて新規登録する処理
 
 // 仮想通貨関連のニュースの取得
 Route::get('/news', 'NewsController@index')->name('getNews.index');
