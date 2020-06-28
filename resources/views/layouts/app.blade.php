@@ -48,9 +48,9 @@
             </form>
           </li>
           @endguest
-          <li class="p-header__item">
+          <!-- <li class="p-header__item">
             <a class="p-header__item--link" href>このサービスについて</a>
-          </li>
+          </li> -->
         </ul>
       </nav>
     </header>

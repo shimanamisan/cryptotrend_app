@@ -8,7 +8,9 @@
         "hot": "cross-env NODE_ENV=development node_modules/webpack-dev-server/bin/webpack-dev-server.js --inline --hot --config=node_modules/laravel-mix/setup/webpack.config.js",
         "prod": "npm run production",
         "production": "cross-env NODE_ENV=production node_modules/webpack/bin/webpack.js --no-progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
-        "build": "webpack -w",
+        "build": "npx webpack",
+        "serve": "npx webpack-dev-server",
+        "serve-watch": "npx webpack --watch --hot",
         "prettier": "prettier"
     },
     "devDependencies": {
@@ -20,6 +22,7 @@
         "axios": "^0.19",
         "babel-loader": "^8.1.0",
         "bootstrap": "^4.0.0",
+        "browser-sync": "^2.26.7",
         "cross-env": "^7.0",
         "css-loader": "^3.5.3",
         "cssnano": "^4.1.10",
