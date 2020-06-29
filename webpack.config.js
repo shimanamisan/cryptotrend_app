@@ -1,17 +1,19 @@
 // productionモードでの圧縮方法、https://reffect.co.jp/html/webpack-4-mini-css-extract-plugin
 
+const path = require('path');
 const { VueLoaderPlugin } = require('vue-loader');
 const LiveReloadPlugin = require('webpack-livereload-plugin');
 // app.jsとapp.cssファイルに分割するためのプラグイン
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const path = require('path');
-const webpack = require('webpack');
+const WebpackBuildNotifierPlugin = require('webpack-build-notifier'); 
+// const BrowserSyncPlugin          = require('browser-sync-webpack-plugin');  
+
 
 // [定数] webpack の出力オプションを指定します
 // 'production' か 'development' を指定
 const MODE = 'development';
 
-// console.log('ファイルパスを確認しています：' + `${__dirname}`);
+console.log('ファイルパスを確認しています：' + `${__dirname}`);
 
 // ソースマップの利用有無(productionのときはソースマップを利用しない)
 const enabledSourceMap = MODE === 'development';
@@ -24,13 +26,13 @@ module.exports = {
   // ${__dirname}が C:\Users\mikan\myVagrant\centos\project までのファイルパスになる
   // vagrantの共有フォルダからコードを書いているのでサーバ側のように/resourcesで始まるとディレクトリが見つからずエラーになる
   // babel-loader8 でasync/awaitを動作させるためには、@babel/polyfillが必要
-  entry: ['@babel/polyfill', path.resolve(__dirname, 'resources/js/app.js')],
+  entry: ['@babel/polyfill', path.join(__dirname, 'resources/js/app.js')],
   // entry: `${__dirname}/resources/js/app.js`,
   output: {
     // 出力ファイル名
     filename: 'app.js',
     // 出力先フォルダを指定
-    path: path.resolve(__dirname, `public/js`),
+    path: path.join(__dirname, `public/js`),
   },
   // 各種プラグインを読み込む
   plugins: [
@@ -44,7 +46,21 @@ module.exports = {
       // この記述ではpublic/js配下にstyle.cssが出力される
       // path: `${__dirname}/public/css`
     }),
-    new webpack.HotModuleReplacementPlugin()
+    new WebpackBuildNotifierPlugin(),
+
+    // new BrowserSyncPlugin({
+    //   host: "host.cryptotrend",
+    //   port: 80,
+    //   proxy: {
+    //     target: "host.cryptotrend",
+    //   },
+    //   files: [
+    //       "resource/views/**/*.blade.php",
+    //       // 公開フォルダを指定
+    //       "public/**/*.*"
+    //   ],
+    //   open: "external"
+    // })
   ],
   module: {
     rules: [

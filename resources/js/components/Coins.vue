@@ -2,25 +2,93 @@
   <div>
     <div class="l-main l-main__common">
       <h1 class="p-coin__title">トレンドランキング</h1>
-      <section class="c-container c-container__twusr">
+      <section class="c-container c-container__coin">
         <div class="p-coin__boxWrapp">
           <ul class="p-coin__list">
-            <li class="p-coin__item">BTC</li>
-            <li class="p-coin__item">ETH</li>
-            <li class="p-coin__item">ETC</li>
-            <li class="p-coin__item">LSK</li>
-            <li class="p-coin__item">FCT</li>
-            <li class="p-coin__item">XRP</li>
-            <li class="p-coin__item">XEM</li>
-            <li class="p-coin__item">BCT</li>
-            <li class="p-coin__item">MONA</li>
-            <li class="p-coin__item">XLM</li>
-            <li class="p-coin__item">QTUM</li>
+            <li class="p-coin__item">
+              <label for="">
+                <input type="checkbox">
+                <span>BTC</span>
+              </label>
+              </li>
+            <li class="p-coin__item">
+              <label for="">
+                <input type="checkbox">
+                <span>ETH</span>
+              </label>
+              </li>
+            <li class="p-coin__item">
+              <label for="">
+                <input type="checkbox">
+                <span>ETC</span>
+              </label>
+              </li>
+            <li class="p-coin__item">
+              <label for="">
+                <input type="checkbox">
+                <span>LSK</span>
+              </label>
+              </li>
+            <li class="p-coin__item">
+              <label for="">
+                <input type="checkbox">
+                <span>FCT</span>
+              </label>
+              </li>
+            <li class="p-coin__item">
+              <label for="">
+                <input type="checkbox">
+                <span>XRP</span>
+              </label>
+              </li>
+            <li class="p-coin__item">
+              <label for="">
+                <input type="checkbox">
+                <span>XEM</span>
+              </label>
+              </li>
+            <li class="p-coin__item">
+              <label for="">
+                <input type="checkbox">
+                <span>BCT</span>
+              </label>
+              </li>
+            <li class="p-coin__item">
+              <label for="">
+                <input type="checkbox">
+                <span>MONA</span>
+              </label>
+              </li>
+            <li class="p-coin__item">
+              <label for="">
+                <input type="checkbox">
+                <span>XLM</span>
+              </label>
+              </li>
+            <li class="p-coin__item">
+              <label for="">
+                <input type="checkbox">
+                <span>QTUM</span>
+              </label>
+              </li>
           </ul>
           <ul class="p-coin__list">
-            <li class="p-coin__item">過去1時間</li>
-            <li class="p-coin__item">過去1日</li>
-            <li class="p-coin__item">過去1週間</li>
+            <li class="p-coin__item">
+              <button>
+                過去1時間
+              </button>
+            </li>
+            <li class="p-coin__item">
+              <button>
+                過去1日
+              </button>
+            </li>
+            <li class="p-coin__item">
+              <button>
+                過去1週間
+              </button>
+            </li>
+
           </ul>
           <div class="p-coin__update_at">
             <span>更新日時:2020-xx-xx 04:zz:xx</span>
@@ -30,14 +98,16 @@
           <table class="p-coin__table--inner" border="3">
             <tr>
               <th class="">RANKING</th>
-              <th>Crypto Coin Name</th>
-              <th>Highest price</th>
-              <th>Cheapest price</th>
+              <th>銘柄</th>
+              <th>ツイート数</th>
+              <th>過去24時間 最高取引価格</th>
+              <th>過去24時間 最安取引価格</th>
             </tr>
             <tr>
               <td>1</td>
               <td>ビットコイン</td>
               <td>10000</td>
+              <td>1000</td>
               <td>1000</td>
             </tr>
             <tr>
@@ -45,11 +115,13 @@
               <td>イーサリアム</td>
               <td>10000</td>
               <td>1000</td>
+              <td>1000</td>
             </tr>
             <tr>
               <td>3</td>
               <td>イーサリアムクラシック</td>
               <td>10000</td>
+              <td>1000</td>
               <td>1000</td>
             </tr>
             <tr>
@@ -57,11 +129,13 @@
               <td>リスク</td>
               <td>10000</td>
               <td>1000</td>
+              <td>1000</td>
             </tr>
             <tr>
               <td>5</td>
               <td>ファクトム</td>
               <td>10000</td>
+              <td>1000</td>
               <td>1000</td>
             </tr>
             <tr>
@@ -69,11 +143,13 @@
               <td>リップル</td>
               <td>10000</td>
               <td>1000</td>
+              <td>1000</td>
             </tr>
             <tr>
               <td>7</td>
               <td>ネム</td>
               <td>10000</td>
+              <td>1000</td>
               <td>1000</td>
             </tr>
             <tr>
@@ -81,11 +157,13 @@
               <td>ライトコイン</td>
               <td>10000</td>
               <td>1000</td>
+              <td>1000</td>
             </tr>
             <tr>
               <td>9</td>
               <td>ビットコインキャッシュ</td>
               <td>10000</td>
+              <td>1000</td>
               <td>1000</td>
             </tr>
             <tr>
@@ -93,17 +171,20 @@
               <td>モナコイン</td>
               <td>10000</td>
               <td>1000</td>
+              <td>1000</td>
             </tr>
             <tr>
               <td>11</td>
-              <td>ステラルーメ</td>
+              <td>ステラルーメン</td>
               <td>10000</td>
+              <td>1000</td>
               <td>1000</td>
             </tr>
             <tr>
               <td>12</td>
               <td>クアンタム</td>
               <td>10000</td>
+              <td>1000</td>
               <td>1000</td>
             </tr>
           </table>
