@@ -5,8 +5,6 @@
 @include('layouts.head')
 
 @section('content')
-<div id="news-component">
-    <!-- <news-component :news_data="{{ json_encode($newsList) }}"/> -->
+    <!-- app.bladeのyieldの箇所に読み込まれる -->
     <news-component :news_data="{{ ($newsList) }}"/>
-</div>
 @endsection

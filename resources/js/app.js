@@ -46,15 +46,16 @@ Vue.component('coins-component', require('./components/Coins.vue').default);
 //     render: h => h(App)
 // }).$mount("#app");
 
-const app1 = new Vue({
-  el: '#profire-component',
+const app = new Vue({
+  el: '#app',
 });
-const app2 = new Vue({
-  el: '#news-component',
-});
-const app3 = new Vue({
-  el: '#twitteruser-component',
-});
-const app4 = new Vue({
-  el: '#coins-component',
-});
+
+// const app2 = new Vue({
+//   el: '#news-component',
+// });
+// const app3 = new Vue({
+//   el: '#twitteruser-component',
+// });
+// const app4 = new Vue({
+//   el: '#coins-component',
+// });

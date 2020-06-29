@@ -8,9 +8,7 @@
         "hot": "cross-env NODE_ENV=development node_modules/webpack-dev-server/bin/webpack-dev-server.js --inline --hot --config=node_modules/laravel-mix/setup/webpack.config.js",
         "prod": "npm run production",
         "production": "cross-env NODE_ENV=production node_modules/webpack/bin/webpack.js --no-progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
-        "build": "npx webpack",
-        "serve": "npx webpack-dev-server",
-        "serve-watch": "npx webpack --watch --hot",
+        "build": "npx webpack -w",
         "prettier": "prettier"
     },
     "devDependencies": {
@@ -35,6 +33,7 @@
         "lodash": "^4.17.13",
         "mini-css-extract-plugin": "^0.9.0",
         "node-sass": "^4.14.1",
+        "optimize-css-assets-webpack-plugin": "^5.0.3",
         "popper.js": "^1.12",
         "postcss-loader": "^3.0.0",
         "prettier": "^2.0.5",
@@ -42,6 +41,7 @@
         "sass": "^1.20.1",
         "sass-loader": "^8.0.2",
         "style-loader": "^1.2.1",
+        "terser-webpack-plugin": "^3.0.6",
         "url-loader": "^4.1.0",
         "vue": "^2.5.17",
         "vue-loader": "^15.9.2",

@@ -6,10 +6,10 @@
 @include('layouts.head')
 
 @section('content')
-<div id="twitteruser-component">
+    <!-- app.bladeのyieldの箇所に読み込まれる -->
     <twitteruser-component
     :tw_user="{{ ($tw_user) }}"
     :user="{{ $user }}"
     />
-</div>
+
 @endsection

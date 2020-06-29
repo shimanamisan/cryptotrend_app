@@ -5,12 +5,11 @@
 @include('layouts.head')
 
 @section('content')
-<div id="profire-component">
+    <!-- app.bladeのyieldの箇所に読み込まれる -->
     <profile-component 
         endpoint="{{ url('profile') }}" 
         user="{{ $user->name }}"
         email="{{ $user->email }}"
         avatar="{{ $user->avatar }}"
     />
-</div>
 @endsection

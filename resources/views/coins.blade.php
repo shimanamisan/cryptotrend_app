@@ -6,7 +6,6 @@
 @include('layouts.head')
 
 @section('content')
-<div id="coins-component">
+    <!-- app.bladeのyieldの箇所に読み込まれる -->
     <coins-component :coins="{{ $coins }}"/>
-</div>
 @endsection

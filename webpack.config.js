@@ -2,9 +2,14 @@
 
 const path = require('path');
 const { VueLoaderPlugin } = require('vue-loader');
-const LiveReloadPlugin = require('webpack-livereload-plugin');
+// LIVEリロードをするためのプラグイン
+// const LiveReloadPlugin = require('webpack-livereload-plugin');
 // app.jsとapp.cssファイルに分割するためのプラグイン
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+// JSを圧縮するために必要
+const TerserPlugin = require('terser-webpack-plugin');
+// 別ファイルに出力したCSSファイルを圧縮するために必要
+const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const WebpackBuildNotifierPlugin = require('webpack-build-notifier'); 
 // const BrowserSyncPlugin          = require('browser-sync-webpack-plugin');  
 
@@ -34,11 +39,20 @@ module.exports = {
     // 出力先フォルダを指定
     path: path.join(__dirname, `public/js`),
   },
+    // 最適化オプションを上書き
+    optimization: {
+      minimizer: [
+        new TerserPlugin({}),
+        new OptimizeCssAssetsPlugin({})
+      ]
+    },
   // 各種プラグインを読み込む
   plugins: [
     // Vueを読み込めるようにするため
     new VueLoaderPlugin(),
-    new LiveReloadPlugin(),
+    // LIVEリロードするためのプラグイン
+    // new LiveReloadPlugin(),
+    new TerserPlugin(),
     // jsファイルとcssファイルを分割するためのプラグイン
     new MiniCssExtractPlugin({
       // ファイルの出力先
@@ -114,8 +128,6 @@ module.exports = {
               sourceMap: enabledSourceMap,
             },
           },
-          // // linkタグに出力する機能
-          // "style-loader",
           {
             loader: 'sass-loader',
             options: {
