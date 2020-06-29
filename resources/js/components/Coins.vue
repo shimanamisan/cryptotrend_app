@@ -3,94 +3,94 @@
     <div class="l-main l-main__common">
       <h1 class="p-coin__title">トレンドランキング</h1>
       <section class="c-container c-container__coin">
-        <div class="p-coin__boxWrapp">
+        <div class="p-coin__header">
           <ul class="p-coin__list">
             <li class="p-coin__item">
-              <label for="">
-                <input type="checkbox">
+              <label for="BTC">
+                <input type="checkbox" id="BTC">
                 <span>BTC</span>
               </label>
               </li>
             <li class="p-coin__item">
-              <label for="">
-                <input type="checkbox">
+              <label for="ETH">
+                <input type="checkbox" id="ETH">
                 <span>ETH</span>
               </label>
               </li>
             <li class="p-coin__item">
-              <label for="">
-                <input type="checkbox">
+              <label for="ETC">
+                <input type="checkbox" id="ETC">
                 <span>ETC</span>
               </label>
               </li>
             <li class="p-coin__item">
-              <label for="">
-                <input type="checkbox">
+              <label for="LSK">
+                <input type="checkbox" id="LSK">
                 <span>LSK</span>
               </label>
               </li>
             <li class="p-coin__item">
-              <label for="">
-                <input type="checkbox">
+              <label for="FCT">
+                <input type="checkbox" id="FCT">
                 <span>FCT</span>
               </label>
               </li>
             <li class="p-coin__item">
-              <label for="">
-                <input type="checkbox">
+              <label for="XRP">
+                <input type="checkbox" id="XRP">
                 <span>XRP</span>
               </label>
               </li>
             <li class="p-coin__item">
-              <label for="">
-                <input type="checkbox">
+              <label for="XEM">
+                <input type="checkbox" id="XEM">
                 <span>XEM</span>
               </label>
               </li>
             <li class="p-coin__item">
-              <label for="">
-                <input type="checkbox">
+              <label for="BCT">
+                <input type="checkbox" id="BCT">
                 <span>BCT</span>
               </label>
               </li>
             <li class="p-coin__item">
-              <label for="">
-                <input type="checkbox">
+              <label for="MONA">
+                <input type="checkbox" id="MONA">
                 <span>MONA</span>
               </label>
               </li>
             <li class="p-coin__item">
-              <label for="">
-                <input type="checkbox">
+              <label for="XLM">
+                <input type="checkbox" id="XLM">
                 <span>XLM</span>
               </label>
               </li>
             <li class="p-coin__item">
-              <label for="">
-                <input type="checkbox">
+              <label for="QTUM">
+                <input type="checkbox" id="QTUM">
                 <span>QTUM</span>
               </label>
               </li>
           </ul>
-          <ul class="p-coin__list">
-            <li class="p-coin__item">
-              <button>
+          <ul class="p-coin__list p-coin__list__btn">
+            <li class="p-coin__item__btn">
+              <button class="c-btn c-btn__common">
                 過去1時間
               </button>
             </li>
-            <li class="p-coin__item">
-              <button>
+            <li class="p-coin__item__btn">
+              <button class="c-btn c-btn__common">
                 過去1日
               </button>
             </li>
-            <li class="p-coin__item">
-              <button>
+            <li class="p-coin__item__btn">
+              <button class="c-btn c-btn__common">
                 過去1週間
               </button>
             </li>
 
           </ul>
-          <div class="p-coin__update_at">
+          <div class="p-coin__list p-coin__list__btn p-coin__update_at">
             <span>更新日時:2020-xx-xx 04:zz:xx</span>
           </div>
         </div>
@@ -100,17 +100,17 @@
               <th class="">RANKING</th>
               <th>銘柄</th>
               <th>ツイート数</th>
-              <th>過去24時間 最高取引価格</th>
-              <th>過去24時間 最安取引価格</th>
+              <th>最高取引価格（24H）</th>
+              <th>最安取引価格（24H）</th>
             </tr>
-            <tr>
-              <td>1</td>
-              <td>ビットコイン</td>
-              <td>10000</td>
-              <td>1000</td>
-              <td>1000</td>
+            <tr v-for="(coin, index) in coin_data" :key="index">
+              <td>{{ index + 1 }}</td>
+              <td>{{ coin.coin_name }}</td>
+              <td>{{ coin.hour }}</td>
+              <td>{{ coin.low_price }}</td>
+              <td>{{ coin.max_price }}</td>
             </tr>
-            <tr>
+            <!-- <tr>
               <td>2</td>
               <td>イーサリアム</td>
               <td>10000</td>
@@ -186,7 +186,7 @@
               <td>10000</td>
               <td>1000</td>
               <td>1000</td>
-            </tr>
+            </tr> -->
           </table>
         </div>
       </section>
@@ -196,7 +196,17 @@
 
 <script>
 export default {
+  data(){
+    return{
+      coin_data: this.coins
+    }
+  },
   props: ['coins'],
+  methods:{},
+  computed:{},
+  created(){
+
+  }
 };
 </script>
 

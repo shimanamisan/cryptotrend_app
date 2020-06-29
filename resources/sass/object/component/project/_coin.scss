@@ -8,6 +8,11 @@
     width: 50%;
   }
 
+  &__header {
+    width: 100%;
+    padding: 0 32px;
+  }
+
   &__table {
     margin: 0 auto;
     padding: 32px;
@@ -15,8 +20,24 @@
     @include custumRadius(5px);
   }
 
+  &__item {
+    margin-left: 8px;
+    padding: 8px;
+      & > label {
+        cursor: pointer;
+      }
+    &__btn {
+      margin-left: 24px;
+    }
+  }
+
   &__list {
+    margin-bottom: 24px;
     display: flex;
+    justify-content: center;
+    &__btn {
+      justify-content: flex-end;
+    }
   }
 
   &__table {
@@ -27,19 +48,18 @@
     }
 
     & tr {
-
-        font-size: 1.1rem;
-      & > th, td {
+      font-size: 1.1rem;
+      & > th,
+      td {
         padding: 16px 24px;
         &:first-child {
-            width: 10%;
-          }
+          width: 10%;
+        }
       }
 
       &:nth-of-type(odd) {
         background-color: #fff;
       }
     }
-
   }
 }
