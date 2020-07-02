@@ -14,7 +14,8 @@ class Kernel extends ConsoleKernel
    * @var array
    */
   protected $commands = [
-    //
+    // コマンドを登録
+    Commands\GetCoinsTweet::class,
   ];
 
   /**
@@ -25,8 +26,8 @@ class Kernel extends ConsoleKernel
    */
   protected function schedule(Schedule $schedule)
   {
-    // $schedule->command('inspire')
-    //          ->hourly();
+    // $schedule->command('command:getcoin week')
+    //           ->everyThirtyMinutes();
 
     // $schedule->call(function () {
     //     logger()->info('クロージャーを使ってCronを動作させています');
@@ -70,4 +71,6 @@ class Kernel extends ConsoleKernel
 
     require base_path('routes/console.php');
   }
+
+  
 }
