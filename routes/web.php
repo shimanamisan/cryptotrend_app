@@ -39,14 +39,16 @@ Route::get('/profile', 'ProfileController@showProfileForm')->name('profile.showP
 // ログアウト
 Route::post('/logout', 'Auth\LoginController@logout')->name('logout');
 
+// 認証後の画面
 Route::group(['middleware' => 'auth'], function () {
-    // 認証後の画面
-    // 仮想通貨関連のTwitterユーザーを取得
+
+    // 仮想通貨関連のTwitterユーザーページを表示
     Route::get('/tweet-users', 'TwitterController@index')->name('userList.index');
     // ユーザーをフォローする
     Route::post('/follow', 'FollowController@follow');
     // 自動フォロー機能をONにする
     Route::post('/autofollow', 'FollowController@autoFollowFlg');
+
     // 仮想通貨情報のページを表示
     Route::get('/coins', 'CoinsController@index')->name('conins.index');
     // トレンド情報のデータを取得するエンドポイント
