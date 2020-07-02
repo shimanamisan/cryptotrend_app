@@ -1,7 +1,18 @@
+// productionモードでの圧縮方法、https://reffect.co.jp/html/webpack-4-mini-css-extract-plugin
+
+const path = require('path');
 const { VueLoaderPlugin } = require('vue-loader');
-const LiveReloadPlugin = require('webpack-livereload-plugin');
+// LIVEリロードをするためのプラグイン
+// const LiveReloadPlugin = require('webpack-livereload-plugin');
 // app.jsとapp.cssファイルに分割するためのプラグイン
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+// JSを圧縮するために必要
+const TerserPlugin = require('terser-webpack-plugin');
+// 別ファイルに出力したCSSファイルを圧縮するために必要
+const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+const WebpackBuildNotifierPlugin = require('webpack-build-notifier'); 
+// const BrowserSyncPlugin          = require('browser-sync-webpack-plugin');  
+
 
 // [定数] webpack の出力オプションを指定します
 // 'production' か 'development' を指定
@@ -16,30 +27,54 @@ module.exports = {
   // モード値を production に設定すると最適化された状態で、
   // development に設定するとソースマップ有効でJSファイルが出力される
   mode: MODE,
-
+  watch: true,
   // ${__dirname}が C:\Users\mikan\myVagrant\centos\project までのファイルパスになる
   // vagrantの共有フォルダからコードを書いているのでサーバ側のように/resourcesで始まるとディレクトリが見つからずエラーになる
   // babel-loader8 でasync/awaitを動作させるためには、@babel/polyfillが必要
-  entry: ['@babel/polyfill', `${__dirname}/resources/js/app.js`],
+  entry: ['@babel/polyfill', path.join(__dirname, 'resources/js/app.js')],
   // entry: `${__dirname}/resources/js/app.js`,
   output: {
     // 出力ファイル名
     filename: 'app.js',
     // 出力先フォルダを指定
-    path: `${__dirname}/public/js`,
+    path: path.join(__dirname, `public/js`),
   },
+    // 最適化オプションを上書き
+    optimization: {
+      minimizer: [
+        new TerserPlugin({}),
+        new OptimizeCssAssetsPlugin({})
+      ]
+    },
   // 各種プラグインを読み込む
   plugins: [
     // Vueを読み込めるようにするため
     new VueLoaderPlugin(),
-    new LiveReloadPlugin(),
+    // LIVEリロードするためのプラグイン
+    // new LiveReloadPlugin(),
+    new TerserPlugin(),
     // jsファイルとcssファイルを分割するためのプラグイン
     new MiniCssExtractPlugin({
       // ファイルの出力先
       filename: '../css/style.css',
-      // この記述は必要ないのか
+      // この記述ではpublic/js配下にstyle.cssが出力される
       // path: `${__dirname}/public/css`
     }),
+    new WebpackBuildNotifierPlugin(),
+
+    // new BrowserSyncPlugin({
+    //   host: "host.cryptotrend",
+    //   port: 80,
+    //   proxy: {
+    //     target: "host.cryptotrend",
+    //   },
+    //   files: [
+    //       "resource/views/**/*.blade.php",
+    //       // 公開フォルダを指定
+    //       "public/**/*.*"
+    //   ],
+    //   open: "external"
+    // })
   ],
   module: {
     rules: [
@@ -64,6 +99,17 @@ module.exports = {
           ],
         },
       },
+      // ESlintの設定
+      // {
+      //   test: /\.vue$/,
+      //   exclude: /node_modules/,
+      //   enforce: 'pre',
+      //   use: [
+      //       {
+      //           loader: 'eslint-loader',
+      //       },
+      //   ]
+      // },
       {
         // 対象ファイルは style.scss
         test: /\.scss$/,
@@ -82,8 +128,6 @@ module.exports = {
               sourceMap: enabledSourceMap,
             },
           },
-          // // linkタグに出力する機能
-          // "style-loader",
           {
             loader: 'sass-loader',
             options: {

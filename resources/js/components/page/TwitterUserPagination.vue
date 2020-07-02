@@ -113,8 +113,6 @@ export default {
       console.log(response);
     },
     async sendFollowRequest(id, index) {
-      console.log('twitter_id：' + id + '、 インデックス番号：' + index);
-
       // catch(error => error.response || error)で非同期通信が成功しても失敗してもresponseに結果を代入する
       const response = await axios.post('/follow', { id: id }).catch((error) => error.response || error);
 

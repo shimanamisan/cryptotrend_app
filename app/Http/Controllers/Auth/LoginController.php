@@ -60,7 +60,7 @@ class LoginController extends Controller
       return redirect()->intended($this->redirectPath());
     }
 
-    \Log::debug('twitter未登録のユーザーです：' . print_r(session()->all(), true));
+    \Log::debug('twitter未登録のユーザーです');
     return redirect()->intended($this->redirectPath());
   }
 
@@ -68,18 +68,30 @@ class LoginController extends Controller
    * Twitterログイン・新規登録
    *********************************************************/
   // Twitterアプリ側へリダイレクト
-  public function redirectToTwitterProvider()
+  public function getTwitterLogin()
   {
+    // 
     // Twitterアプリ側に認証を求めていく処理
     return Socialite::driver('twitter')->redirect();
   }
 
   // Twitter認証ページからリダイレクトを受け取り、レスポンスデータを元に新規登録するか否か決定する
-  public function handleTwitterCallback()
+  public function getTwitterCallback()
   {
+
     try {
+
       // ユーザーデータの取得とアクセストークンの取得
       $user = Socialite::driver('twitter')->user();
+      // 既に登録されているユーザーかチェックする
+      $validate = User::where('my_twitter_id', $user->getId())->first();
+
+      // // emailの有無で条件を分ける
+      // if(empty($validate)){
+      //   \Log::debug('mytwitter_idが無いのでなので未登録ユーザーです');
+      //   return redirect('/login')->with('message', '提供された資格情報を持つアカウントは見つかりませんでした。新規登録を行って下さい。');
+      // }
+
       // twitter_idをセッションに保存
       session(['twitter_id' => $user->id]);
       session(['access_token' => $user->token]);
@@ -87,12 +99,9 @@ class LoginController extends Controller
       \Log::debug('認証に成功しました');
     } catch (\Exception $e) {
       \Log::debug('ログインに失敗しました');
-      dd(print_r($user, true));
       // エラーならログイン画面へリダイレクト
       return redirect('/login')->with('message', 'ログインに失敗しました。');
     }
-
-    // dd($user->getId());
 
     // 既にTwitterユーザーで登録されているか検索、登録されていなければ新規登録する
     $userInfo = User::firstOrCreate(

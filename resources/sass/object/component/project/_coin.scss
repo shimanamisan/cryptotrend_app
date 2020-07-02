@@ -1,0 +1,72 @@
+.p-coin {
+  &__title {
+    margin: 0 auto;
+    font-size: 3rem;
+    text-align: center;
+    margin-bottom: 48px;
+    border-bottom: 1px solid;
+    width: 50%;
+  }
+
+  &__header {
+    width: 100%;
+    padding: 0 32px;
+    &__title{
+      text-align: center;
+      margin-bottom: 8px;
+    }
+  }
+
+  &__table {
+    margin: 0 auto;
+    padding: 32px;
+    box-sizing: border-box;
+    @include custumRadius(5px);
+    &__link{
+      color: #707070;
+    }
+  }
+
+  &__item {
+    margin-left: 8px;
+    padding: 8px;
+      & > label {
+        cursor: pointer;
+      }
+    &__btn {
+      margin-left: 24px;
+    }
+  }
+
+  &__list {
+    margin-bottom: 24px;
+    display: flex;
+    justify-content: center;
+    &__btn {
+      justify-content: flex-end;
+    }
+  }
+
+  &__table {
+    text-align: center;
+
+    &--inner {
+      margin: 0 auto;
+    }
+
+    & tr {
+      font-size: 1.1rem;
+      & > th,
+      td {
+        padding: 16px 24px;
+        &:first-child {
+          width: 10%;
+        }
+      }
+
+      &:nth-of-type(odd) {
+        background-color: #fff;
+      }
+    }
+  }
+}

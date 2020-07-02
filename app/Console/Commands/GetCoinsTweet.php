@@ -1,46 +1,64 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Console\Commands;
 
 use App\Coin; // ★追記
-use App\Trend; // ★追記
-use Carbon\Carbon; // ★追記
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Console\Command;
 use Abraham\TwitterOAuth\TwitterOAuth; // ★追記
 use Abraham\TwitterOAuth\TwitterOAuthException; // ★追記
-use Laravel\Socialite\Facades\Socialite; // 追加
 
-
-class CoinsController extends Controller
+class GetCoinsTweet extends Command
 {
+
+    
+    /**
+     * The name and signature of the console command.
+     *
+     * @var string
+     */
+    protected $signature = 'command:getcoin {datetime}';
+
+    /**
+     * The console command description.
+     *
+     * @var string
+     */
+    protected $description = '仮想通貨に関するツイート取得用のバッチ処理です';
+
+    /**
+     * Create a new command instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        parent::__construct();
+    }
+
+    /**
+     * Execute the console command.
+     *
+     * @return mixed
+     */
+    // public function handle()
+    // {
+    //     $date = $this->argument('datetime');
+    //     logger()->info('hello'. $date);
+        
+    // }
+
+
     // search/tweetsのリクエストの上限は、15分毎450回（アプリケーション認証時）
     const SEARCH_REQUEST_LIMIT = 450;
     // 
     const REQUEST_LIMIT＿MINUTES = 15;
 
-    public function index()
+    public function handle(Coin $coin)
     {
-        // ビューファイルを表示させる
-        return view('coins');
-    }
 
-    public function getTrendCoins()
-    {
-        $coins = DB::table('coins')
-        ->join('trends', 'coins.id', '=', 'trends.coin_id')
-        ->orderBy('week', 'DESC')
-        ->get();
-
-        return $coins;
-    }
-
-
-    // Twitter上で仮想通貨関連のツイートをしているユーザーを取得する処理
-    // 30分毎にバッチ処理で定期的に実行
-    public function getTrendTweet(Coin $coin, $date)
-    {   
-   
+        // バッチ処理で実行する際の引数を受け取る
+        $date = $this->argument('datetime');
+       
         \Log::debug($date . ' の処理が開始しています');
         \Log::debug('   ');
    
@@ -114,10 +132,11 @@ class CoinsController extends Controller
                     $response_result = $connection->get('search/tweets', $params);
                     
                 }catch(TwitterOAuthException $e){
-                    \Log::debug('============ 例外が発生しました ============');
                     \Log::debug($e->getMessage());
+                    \Log::debug('  ');
                     \Log::debug($e->getTrace());
-                    \Log::debug('============ メッセージ終了 ============');
+                    \Log::debug('  ');
+                    
                     // httpリクエストに関する例外が発生した場合は、ループを抜けてして次の仮想通貨へ移る
                     break;
                 }
@@ -125,12 +144,9 @@ class CoinsController extends Controller
                 // エラーハンドリング
                 if($connection->getLastHttpCode() !== 200){
                     // サーバ側でエラーが発生若しくはAPI制限がかかったら処理を停止する
-                    // 15分間待機して処理を継続する
-                    \Log::debug('サーバ側でエラー若しくはAPI制限に掛かりました。処理を待機します');
-                    \Log::debug('900秒待機中・・・・');
-                    // 900秒（15分間待機して処理を再開する）
-                    sleep(900);
-                    continue;
+                    \Log::debug('サーバ側でエラー若しくはAPI制限に掛かりました。処理を停止します');
+                    \Log::debug('  ');
+                    return;
                 }
                     // リクエストをカウント
                     ++$search_request_limit_count;
@@ -191,8 +207,16 @@ class CoinsController extends Controller
 
         \Log::debug('ここの処理は最後かな？');
         \Log::debug('  ');
-
+        
     }
+
+    //   // Twitter上で仮想通貨関連のツイートをしているユーザーを取得する処理
+    // // 30分毎にバッチ処理で定期的に実行
+    // public function getTrendTweet(Coin $coin, $date)
+    // {   
+   
+
+    // }
 
     // アプリケーション単位で認証する（ベアラートークンの取得）
     private function twitterOauth2()
@@ -275,6 +299,4 @@ class CoinsController extends Controller
             break;
         }
     }
-
 }
-
