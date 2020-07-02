@@ -13,16 +13,16 @@ class CreateTrendsTable extends Migration
      */
     public function up()
     {
-        Schema::create('trends', function (Blueprint $table) {
-            $table->increments('id');
-            $table->integer('coin_id')->unsigned();
-            $table->string('hour')->nullable();
-            $table->string('day')->nullable();
-            $table->string('week')->nullable();
-            $table->foreign('coin_id')->references('id')->on('coins');
+        // Schema::create('trends', function (Blueprint $table) {
+        //     $table->increments('id');
+        //     $table->integer('coin_id')->unsigned();
+        //     $table->string('hour')->nullable();
+        //     $table->string('day')->nullable();
+        //     $table->string('week')->nullable();
+        //     $table->foreign('coin_id')->references('id')->on('coins');
 
-            $table->timestamps();
-        });
+        //     $table->timestamps();
+        // });
     }
 
     /**
@@ -32,6 +32,6 @@ class CreateTrendsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('trends');
+        // Schema::dropIfExists('trends');
     }
 }

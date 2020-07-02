@@ -13,6 +13,12 @@ class Trend extends Model
         'week'
     ];
 
+    protected $casts = [
+        'hour' => 'integer',
+        'day' => 'integer',
+        'week' => 'integer',
+    ];
+
     public function coin()
     {
         return $this->belongdTo('App\Coin');

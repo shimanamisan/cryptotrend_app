@@ -104,7 +104,7 @@
               <th>最高取引価格（24H）</th>
               <th>最安取引価格（24H）</th>
             </tr>
-            <tr v-for="(coin, index) in coin_data" :key="index">
+            <tr v-for="(coin, index) in getprice" :key="index">
               <td>{{ index + 1 }}</td>
               <td><a class="p-coin__table__link" :href="serch_url+coin.coin_name">{{ coin.coin_name }}</a></td>
               <td>{{ coin.hour }}</td>
@@ -132,7 +132,7 @@
 export default {
   data(){
     return{
-      coin_data: '',
+      coin_data: [],
       serch_url: 'https://twitter.com/search?q='
     }
   },
@@ -140,13 +140,31 @@ export default {
   methods:{
     async getHourCoins(){
       await axios.get('/coins/trend').then(response => {
+        console.log(response.data)
+        
+        console.log(typeof(response.data[0].hour))
         this.coin_data = response.data
       }).catch(error => {
         alert('エラーが発生しました。しばらくしてから、再度アクセスして下さい。')
       })
+    },
+   
+  },
+  computed:{
+     getprice(){
+       
+      return this.coin_data.sort((a,b) => {
+
+        // if(a.hour > b.hour) return -1;
+        if(a.hour > b.hour) {
+          return -1;
+        } else {
+          return 1
+        }
+        // return 0;
+      })
     }
   },
-  computed:{},
   created(){
     this.getHourCoins()
   }
