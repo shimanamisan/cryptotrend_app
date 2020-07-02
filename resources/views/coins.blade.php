@@ -7,5 +7,5 @@
 
 @section('content')
     <!-- app.bladeのyieldの箇所に読み込まれる -->
-    <coins-component :coins="{{ $coins }}"/>
+    <Coins/>
 @endsection
