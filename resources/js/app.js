@@ -24,15 +24,18 @@ require('./bootstrap');
 //     require("./components/ExampleComponent.vue").default
 // );
 // sass ファイル読み込み
-import '../sass/style.scss';
+// import '../sass/style.scss';
 import _ from 'lodash';
 
 import Vue from 'vue';
 
+
 Vue.component('profile-component', require('./components/Profile.vue').default);
 Vue.component('news-component', require('./components/News.vue').default);
 Vue.component('twitteruser-component', require('./components/UserList.vue').default);
-Vue.component('coins-component', require('./components/Coins.vue').default);
+
+import Profile from './components/Profile.vue'
+import Coins from './components/Coins.vue'
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -46,16 +49,11 @@ Vue.component('coins-component', require('./components/Coins.vue').default);
 //     render: h => h(App)
 // }).$mount("#app");
 
-const app = new Vue({
+new Vue({
   el: '#app',
+  components:{
+    Coins,
+    Profile
+  }
 });
 
-// const app2 = new Vue({
-//   el: '#news-component',
-// });
-// const app3 = new Vue({
-//   el: '#twitteruser-component',
-// });
-// const app4 = new Vue({
-//   el: '#coins-component',
-// });
