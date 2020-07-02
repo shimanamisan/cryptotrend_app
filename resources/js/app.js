@@ -29,11 +29,8 @@ import _ from 'lodash';
 
 import Vue from 'vue';
 
-
-Vue.component('profile-component', require('./components/Profile.vue').default);
-Vue.component('news-component', require('./components/News.vue').default);
-Vue.component('twitteruser-component', require('./components/UserList.vue').default);
-
+import News from './components/News.vue'
+import UserList from './components/UserList.vue'
 import Profile from './components/Profile.vue'
 import Coins from './components/Coins.vue'
 
@@ -52,8 +49,11 @@ import Coins from './components/Coins.vue'
 new Vue({
   el: '#app',
   components:{
+    News,
+    UserList,
     Coins,
-    Profile
+    Profile,
+ 
   }
 });
 

@@ -7,9 +7,6 @@
 
 @section('content')
     <!-- app.bladeのyieldの箇所に読み込まれる -->
-    <twitteruser-component
-    :tw_user="{{ ($tw_user) }}"
-    :user="{{ $user }}"
-    />
+    <User-List :tw_user="{{ ($tw_user) }}" :user="{{ $user }}" />
 
 @endsection

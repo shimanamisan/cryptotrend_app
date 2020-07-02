@@ -108,86 +108,19 @@
               <td>{{ index + 1 }}</td>
               <td><a class="p-coin__table__link" :href="serch_url+coin.coin_name">{{ coin.coin_name }}</a></td>
               <td>{{ coin.hour }}</td>
-              <td>{{ coin.low_price }}</td>
-              <td>{{ coin.max_price }}</td>
+              <template v-if="coin.max_price == 0">
+                <td>不明</td>
+              </template>
+              <template v-else>
+                <td>{{ coin.max_price }}</td>
+              </template>
+               <template v-if="coin.low_price == 0">
+                <td>不明</td>
+              </template>
+              <template v-else>
+                <td>{{ coin.low_price }}</td>
+              </template>
             </tr>
-            <!-- <tr>
-              <td>2</td>
-              <td>イーサリアム</td>
-              <td>10000</td>
-              <td>1000</td>
-              <td>1000</td>
-            </tr>
-            <tr>
-              <td>3</td>
-              <td>イーサリアムクラシック</td>
-              <td>10000</td>
-              <td>1000</td>
-              <td>1000</td>
-            </tr>
-            <tr>
-              <td>4</td>
-              <td>リスク</td>
-              <td>10000</td>
-              <td>1000</td>
-              <td>1000</td>
-            </tr>
-            <tr>
-              <td>5</td>
-              <td>ファクトム</td>
-              <td>10000</td>
-              <td>1000</td>
-              <td>1000</td>
-            </tr>
-            <tr>
-              <td>6</td>
-              <td>リップル</td>
-              <td>10000</td>
-              <td>1000</td>
-              <td>1000</td>
-            </tr>
-            <tr>
-              <td>7</td>
-              <td>ネム</td>
-              <td>10000</td>
-              <td>1000</td>
-              <td>1000</td>
-            </tr>
-            <tr>
-              <td>8</td>
-              <td>ライトコイン</td>
-              <td>10000</td>
-              <td>1000</td>
-              <td>1000</td>
-            </tr>
-            <tr>
-              <td>9</td>
-              <td>ビットコインキャッシュ</td>
-              <td>10000</td>
-              <td>1000</td>
-              <td>1000</td>
-            </tr>
-            <tr>
-              <td>10</td>
-              <td>モナコイン</td>
-              <td>10000</td>
-              <td>1000</td>
-              <td>1000</td>
-            </tr>
-            <tr>
-              <td>11</td>
-              <td>ステラルーメン</td>
-              <td>10000</td>
-              <td>1000</td>
-              <td>1000</td>
-            </tr>
-            <tr>
-              <td>12</td>
-              <td>クアンタム</td>
-              <td>10000</td>
-              <td>1000</td>
-              <td>1000</td>
-            </tr> -->
           </table>
         </div>
       </section>

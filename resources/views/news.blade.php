@@ -6,5 +6,5 @@
 
 @section('content')
     <!-- app.bladeのyieldの箇所に読み込まれる -->
-    <news-component :news_data="{{ ($newsList) }}"/>
+    <News :news_data="{{ ($newsList) }}"/>
 @endsection

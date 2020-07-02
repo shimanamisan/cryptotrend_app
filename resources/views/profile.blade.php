@@ -6,7 +6,7 @@
 
 @section('content')
     <!-- app.bladeのyieldの箇所に読み込まれる -->
-    <profile-component 
+    <Profile 
         endpoint="{{ url('profile') }}" 
         user="{{ $user->name }}"
         email="{{ $user->email }}"
