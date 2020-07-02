@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Coin; // ★追記
-use App\Trend; // ★追記
 use Carbon\Carbon; // ★追記
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -118,8 +117,8 @@ class CoinsController extends Controller
                     \Log::debug($e->getMessage());
                     \Log::debug($e->getTrace());
                     \Log::debug('============ メッセージ終了 ============');
-                    // httpリクエストに関する例外が発生した場合は、ループを抜けてして次の仮想通貨へ移る
-                    break;
+                    // httpリクエストに関する例外が発生した場合は、その処理を一回スキップして次の処理へ移る
+                    continue;
                 }
 
                 // エラーハンドリング
@@ -227,25 +226,25 @@ class CoinsController extends Controller
 
             case 'hour':
                 // updateOrCreateメソッド：第一引数に指定したカラムに値が存在していれば更新し、無ければ新規登録する
-                $coinObj->trends()->updateOrCreate(
+                $coinObj->hours()->updateOrCreate(
                     ['coin_id' => $i],
-                    ['hour' => $trend_count]);
+                    ['tweet' => $trend_count]);
                     \Log::debug('1時間あたりのツイート数を計測したデータを保存しました');
                     \Log::debug('  ');
                 break ;
 
             case 'day':
-                $coinObj->trends()->updateOrCreate(
+                $coinObj->days()->updateOrCreate(
                     ['coin_id' => $i],
-                    ['day' => $trend_count]);
+                    ['tweet' => $trend_count]);
                     \Log::debug('1日あたりのツイート数を計測したデータを保存しました');
                     \Log::debug('  ');
                 break;
                 
             case 'week':
-                $coinObj->trends()->updateOrCreate(
+                $coinObj->weeks()->updateOrCreate(
                     ['coin_id' => $i],
-                    ['week' => $trend_count]);
+                    ['tweet' => $trend_count]);
                     \Log::debug('1週間あたりのツイート数を計測したデータを保存しました');
                     \Log::debug('  ');
                 break ;

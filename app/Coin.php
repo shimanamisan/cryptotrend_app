@@ -12,8 +12,18 @@ class Coin extends Model
         'low_price'
     ];
     
-    public function trends()
+    public function hours()
     {
-        return $this->hasMany('App\Trend');
+        return $this->hasMany('App\Hour');
+    }
+    
+    public function days()
+    {
+        return $this->hasMany('App\Day');
+    }
+    
+    public function weeks()
+    {
+        return $this->hasMany('App\Week');
     }
 }
