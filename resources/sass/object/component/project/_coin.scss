@@ -30,8 +30,16 @@
   &__item {
     margin-left: 8px;
     padding: 8px;
+    background-color: $check_box_color_main;
+    &:hover {
+      transition: 0.3s;
+      cursor: pointer;
+      opacity: 0.7;
+    }
+    @include custumRadius(5px);
       & > label {
         cursor: pointer;
+        display: block;
       }
     &__btn {
       margin-left: 24px;
@@ -43,7 +51,7 @@
     display: flex;
     justify-content: center;
     &__btn {
-      justify-content: flex-end;
+      justify-content: center;
     }
   }
 

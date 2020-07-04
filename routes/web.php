@@ -49,16 +49,21 @@ Route::group(['middleware' => 'auth'], function () {
     // 自動フォロー機能をONにする
     Route::post('/autofollow', 'FollowController@autoFollowFlg');
 
+    /*****************************************
+     * トレンド表示ページ関連のルーティング
+     *****************************************/
     // 仮想通貨情報のページを表示
     Route::get('/coins', 'CoinsController@index')->name('conins.index');
-    // トレンド情報のデータを取得するエンドポイント
-    Route::get('/coins/trend', 'CoinsController@getTrendCoins');
+    // 過去1時間のツイート数を取得するエンドポイント
+    Route::get('/coins/hour', 'CoinsController@getHourCoins');
+    // 過去1日のツイート数を取得するエンドポイント
+    Route::get('/coins/day', 'CoinsController@getDayCoins');
+    // 1時間のスイート数を取得するエンドポイント
+    Route::get('/coins/week', 'CoinsController@getWeekCoins');
 });
 
 // 開発時テスト用ルーティング
 Route::get('/testcoin/{date}', 'CoinsController@getTrendTweet'); // 仮想通貨関連のツイート数を取得する（完成後バッチ処理にする）
-Route::get('/2', 'CoinsController@day'); // 仮想通貨関連のツイート数を取得する（完成後バッチ処理にする）
-Route::get('/3', 'CoinsController@week'); // 仮想通貨関連のツイート数を取得する（完成後バッチ処理にする）
 Route::get('/testuserList', 'TwitterController@userList'); // 仮想通貨関連のツイートをしているユーザーを取得する（完成後バッチ処理にする）
 Route::get('/testautoFollow', 'FollowController@handl'); // 過疎通過関連のユーザーを自動フォローする（完成後バッチ処理にする）
 Route::get('/applimit', 'TwitterController@applimit'); // アプリケーション認証のAPI制限のカウント数の一覧を取得する
