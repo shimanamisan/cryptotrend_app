@@ -24,11 +24,28 @@ class CoinsController extends Controller
         return view('coins');
     }
 
-    public function getTrendCoins()
+    public function getHourCoins()
     {
         $coins = DB::table('coins')
-        ->join('trends', 'coins.id', '=', 'trends.coin_id')
-        ->orderBy('week', 'DESC')
+        ->join('hours', 'coins.id', '=', 'hours.coin_id')
+        ->get();
+
+        return $coins;
+    }
+
+    public function getDayCoins()
+    {
+        $coins = DB::table('coins')
+        ->join('days', 'coins.id', '=', 'days.coin_id')
+        ->get();
+
+        return $coins;
+    }
+    
+    public function getWeekCoins()
+    {
+        $coins = DB::table('coins')
+        ->join('weeks', 'coins.id', '=', 'weeks.coin_id')
         ->get();
 
         return $coins;
@@ -102,7 +119,7 @@ class CoinsController extends Controller
             \Log::debug($search_key[$i]. ' の検索が始まっています。');
             \Log::debug('  ');
 
-            // ツイートを取得してく（450回の制限を超えないように）
+            // ツイートを取得してく
             for($k = 0; $k < self::SEARCH_REQUEST_LIMIT; $k++){
             // for($k = 0; $k < self::SEARCH_REQUEST_LIMIT; $k++){
             
@@ -117,6 +134,8 @@ class CoinsController extends Controller
                     \Log::debug($e->getMessage());
                     \Log::debug($e->getTrace());
                     \Log::debug('============ メッセージ終了 ============');
+                    \Log::debug('リクエスト結果が空なのでオブジェクトを配列に変換する処理をスキップします。');
+                    \Log::debug('   ');
                     // httpリクエストに関する例外が発生した場合は、その処理を一回スキップして次の処理へ移る
                     continue;
                 }
