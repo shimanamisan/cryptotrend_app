@@ -23,8 +23,9 @@ require('./bootstrap');
 //     "example-component",
 //     require("./components/ExampleComponent.vue").default
 // );
+
 // sass ファイル読み込み
-// import '../sass/style.scss';
+import '../sass/style.scss';
 import _ from 'lodash';
 
 import Vue from 'vue';
