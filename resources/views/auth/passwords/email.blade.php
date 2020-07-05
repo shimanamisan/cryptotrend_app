@@ -5,7 +5,7 @@
 @include('layouts.head')
 
 @section('content')
-<main class="l-main l-main__auth l-main__auth--reminder">
+<main class="l-main l-main__auth l-main__auth--reminder u-padding__top--lg">
       <div class="c-container__auth">
         @if (session('status'))
             <div class="alert alert-success" role="alert">
@@ -36,7 +36,7 @@
             @enderror
             <div class="u-wrapp">
               <button
-                class="c-btn c-btn__login"
+                class="c-btn c-btn__auth"
                 type="submit"
               >送信する</button>
             </div>

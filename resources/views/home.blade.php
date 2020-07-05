@@ -45,12 +45,11 @@
               <img src="{{ asset('storage') }}/img/section01.png" alt />
             </div>
             <div class="p-sitemap__info">
-              <h1 class="p-sitemap__title u-margin--bottom u-padding--top">SNSで話題の銘柄をウォッチ！</h1>
+              <h1 class="p-sitemap__title u-margin__bottom--lg u-padding__top--lg">SNSで話題の銘柄をウォッチ！</h1>
               <p class="p-sitemap__text">
-                サンプルテキスト。サンプルテキスト。サンプルテキスト。
-                サンプルテキスト。サンプルテキスト。サンプルテキスト。
-                サンプルテキスト。サンプルテキスト。サンプルテキスト。
-                サンプルテキスト。サンプルテキスト。サンプルテキスト。
+                Twitterで今話題の銘柄は何なのか？
+                タイムラインに投稿されている、各銘柄ごとのツイート数を集計し、
+                トレンドの動向をチェックすることが出来ます。
               </p>
             </div>
           </div>
@@ -63,12 +62,10 @@
               <img src="{{ asset('storage') }}/img/section02.jpg" alt />
             </div>
             <div class="p-sitemap__info">
-              <h1 class="p-sitemap__title u-margin--bottom u-padding--top">仮想通貨の最新ニュースをチェック！</h1>
+              <h1 class="p-sitemap__title u-margin__bottom--lg u-padding__top--lg">仮想通貨の最新ニュースをチェック！</h1>
               <p class="p-sitemap__text">
-                サンプルテキスト。サンプルテキスト。サンプルテキスト。
-                サンプルテキスト。サンプルテキスト。サンプルテキスト。
-                サンプルテキスト。サンプルテキスト。サンプルテキスト。
-                サンプルテキスト。サンプルテキスト。サンプルテキスト。
+                仮想通貨関連のニュースのキーワードを元に、Googleニュースをまとめています。
+                自分で検索する手間が省けるので、すぐに最新ニュースをチェックすることが出来ます。
               </p>
             </div>
           </div>
@@ -81,12 +78,11 @@
               <img src="{{ asset('storage') }}/img/section03.jpg" alt />
             </div>
             <div class="p-sitemap__info">
-              <h1 class="p-sitemap__title u-margin--bottom u-padding--top">気になるユーザーをフォロー！</h1>
+              <h1 class="p-sitemap__title u-margin__bottom--lg u-padding__top--lg">気になるユーザーをフォロー！</h1>
               <p class="p-sitemap__text">
-                サンプルテキスト。サンプルテキスト。サンプルテキスト。
-                サンプルテキスト。サンプルテキスト。サンプルテキスト。
-                サンプルテキスト。サンプルテキスト。サンプルテキスト。
-                サンプルテキスト。サンプルテキスト。サンプルテキスト。
+                仮想通貨関連の情報を発信しているユーザーをフォローすることが出来ます！
+                自動フォロー機能を有効することによって、一覧表示されているユーザーを自動でフォローすることが出来ます。
+                もちろん、ご自身で個別にフォローすることも可能です。
               </p>
             </div>
           </div>

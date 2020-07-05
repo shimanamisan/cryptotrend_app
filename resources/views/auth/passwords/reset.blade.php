@@ -56,7 +56,7 @@
             />
 
             <div class="u-wrapp">
-              <button class="c-btn c-btn__login" type="submit">
+              <button class="c-btn c-btn__auth" type="submit">
                 パスワードを変更
               </button>
             </div>

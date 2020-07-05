@@ -43,8 +43,11 @@
 }
 
 .u-padding {
-  &--top {
-    padding-top: 80px;
+  &__top {
+
+    &--lg {
+      padding-top: 150px;
+    }
   }
 }
 
