@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use Carbon\Carbon; // ★追記
 use App\Coin; // ★追記
 use Illuminate\Console\Command;
 use Abraham\TwitterOAuth\TwitterOAuth; // ★追記
@@ -44,9 +45,7 @@ class GetCoinsTweet extends Command
     // {
     //     $date = $this->argument('datetime');
     //     logger()->info('hello'. $date);
-        
     // }
-
 
     // search/tweetsのリクエストの上限は、15分毎450回（アプリケーション認証時）
     const SEARCH_REQUEST_LIMIT = 450;
@@ -249,7 +248,10 @@ class GetCoinsTweet extends Command
                 // updateOrCreateメソッド：第一引数に指定したカラムに値が存在していれば更新し、無ければ新規登録する
                 $coinObj->hours()->updateOrCreate(
                     ['coin_id' => $i],
-                    ['tweet' => $trend_count]);
+                    [
+                        'tweet' => $trend_count,
+                        'updated_at' => Carbon::now()
+                    ]);
                     \Log::debug('1時間あたりのツイート数を計測したデータを保存しました');
                     \Log::debug('  ');
                 break ;
@@ -257,7 +259,10 @@ class GetCoinsTweet extends Command
             case 'day':
                 $coinObj->days()->updateOrCreate(
                     ['coin_id' => $i],
-                    ['tweet' => $trend_count]);
+                    [
+                        'tweet' => $trend_count,
+                        'updated_at' => Carbon::now()
+                    ]);
                     \Log::debug('1日あたりのツイート数を計測したデータを保存しました');
                     \Log::debug('  ');
                 break;
@@ -265,7 +270,10 @@ class GetCoinsTweet extends Command
             case 'week':
                 $coinObj->weeks()->updateOrCreate(
                     ['coin_id' => $i],
-                    ['tweet' => $trend_count]);
+                    [
+                        'tweet' => $trend_count,
+                        'updated_at' => Carbon::now()
+                    ]);
                     \Log::debug('1週間あたりのツイート数を計測したデータを保存しました');
                     \Log::debug('  ');
                 break ;

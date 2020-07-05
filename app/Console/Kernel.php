@@ -27,7 +27,19 @@ class Kernel extends ConsoleKernel
   protected function schedule(Schedule $schedule)
   {
     $schedule->command('command:getcoin week')
-    ->dailyAt('22:15');
+    ->dailyAt('23:50');
+
+    $schedule->command('command:getcoin week')
+    ->dailyAt('3:50');
+
+    $schedule->command('command:getcoin hour')
+    ->dailyAt('1:50');
+
+    $schedule->command('command:getcoin day')
+    ->dailyAt('2:50');
+
+    $schedule->command('command:getticker')
+    ->everyThirtyMinutes();
 
     // $schedule->call(function () {
     //     logger()->info('クロージャーを使ってCronを動作させています');
