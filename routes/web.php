@@ -32,9 +32,7 @@ Route::get('auth/twitter/callback', 'Auth\TwitterAuthController@getTwitterCallba
 // 仮想通貨関連のニュースの取得
 Route::get('/news', 'NewsController@index')->name('getNews.index');
 
-// プロフィール画面
-Route::patch('/profile/{id}', 'ProfileController@editProfile')->name('profile.editProfile');
-Route::get('/profile', 'ProfileController@showProfileForm')->name('profile.showProfileForm');
+
 
 // ログアウト
 Route::post('/logout', 'Auth\LoginController@logout')->name('logout');
@@ -42,24 +40,34 @@ Route::post('/logout', 'Auth\LoginController@logout')->name('logout');
 // 認証後の画面
 Route::group(['middleware' => 'auth'], function () {
 
+    /**********************************************
+     * ユーザーフォロー機能関連のルーティング
+     **********************************************/
     // 仮想通貨関連のTwitterユーザーページを表示
     Route::get('/tweet-users', 'TwitterController@index')->name('userList.index');
-    // ユーザーをフォローする
+    // Ajax処理：ユーザーをフォローする
     Route::post('/follow', 'FollowController@follow');
-    // 自動フォロー機能をONにする
+    // Ajax処理：自動フォロー機能をONにする
     Route::post('/autofollow', 'FollowController@autoFollowFlg');
 
     /*****************************************
-     * トレンド表示ページ関連のルーティング
+     * トレンド表示機能関連のルーティング
      *****************************************/
     // 仮想通貨情報のページを表示
     Route::get('/coins', 'CoinsController@index')->name('conins.index');
-    // 過去1時間のツイート数を取得するエンドポイント
+    // Ajax処理：過去1時間のツイート数を取得するエンドポイント
     Route::get('/coins/hour', 'CoinsController@getHourCoins');
-    // 過去1日のツイート数を取得するエンドポイント
+    // Ajax処理：過去1日のツイート数を取得するエンドポイント
     Route::get('/coins/day', 'CoinsController@getDayCoins');
-    // 1時間のスイート数を取得するエンドポイント
+    // Ajax処理：1時間のスイート数を取得するエンドポイント
     Route::get('/coins/week', 'CoinsController@getWeekCoins');
+
+    /*****************************************
+     * プロフィール機能関連のルーティング
+     *****************************************/
+    // プロフィール画面
+    Route::patch('/profile/{id}', 'ProfileController@editProfile')->name('profile.editProfile');
+    Route::get('/profile', 'ProfileController@showProfileForm')->name('profile.showProfileForm');
 });
 
 // 開発時テスト用ルーティング
