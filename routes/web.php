@@ -76,3 +76,4 @@ Route::get('/testuserList', 'TwitterController@userList'); // 仮想通貨関連
 Route::get('/testautoFollow', 'FollowController@handl'); // 過疎通過関連のユーザーを自動フォローする（完成後バッチ処理にする）
 Route::get('/applimit', 'TwitterController@applimit'); // アプリケーション認証のAPI制限のカウント数の一覧を取得する
 Route::get('/userlimit', 'TwitterController@userlimit'); // ログインしているユーザーのAPI制限のカウント数の一覧を取得する
+Route::get('/getTicker', 'CoinsController@getTicker'); // ログインしているユーザーのAPI制限のカウント数の一覧を取得する
