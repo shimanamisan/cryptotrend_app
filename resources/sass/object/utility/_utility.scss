@@ -42,6 +42,29 @@
   }
 }
 
+.u-margin {
+  &__top {
+    &--ss {
+      margin-top: 8px;
+    }
+    &--s {
+      margin-top: 16px;
+    }
+    &--m {
+      margin-top: 24px;
+    }
+    &--l {
+      margin-top: 32px;
+    }
+    &--xl {
+      margin-top: 40px;
+    }
+    &--lg {
+      margin-top: 48px;
+    }
+  }
+}
+
 .u-padding {
   &__top {
 
