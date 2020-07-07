@@ -54,11 +54,7 @@
         </ul>
       </nav>
     </header>
-    @if(Session::has('message'))
-    <div class="u-flashmsg">
-      <p>{{ session('message') }}</p>
-    </div>
-    @endif
+
 
   @yield('content')
 

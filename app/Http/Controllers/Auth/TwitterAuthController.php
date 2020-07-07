@@ -56,18 +56,16 @@ class TwitterAuthController extends Controller
                 // メールアドレスが未登録の場合は、ユーザー登録していないユーザーと判定する
                 $userInfo = User::where('email', $user->getEmail())->first();
                 // twitter_idも格納
-                $userId = User::where('my_twitter_id', $user->getId())->first();
-
-                // dd(empty($userInfo));
+                $twserId = User::where('my_twitter_id', $user->getId())->first();
                     
                     // Twitter_id及びメールアドレスが登録されていなかったら未登録ユーザーとする
-                    if( empty($userId) || empty($userInfo) ){
+                    if( empty($twUserId) || empty($userInfo) ){
                         \Log::debug('emailが無いのでなので未登録ユーザーです');
                         \Log::debug('   ');
                         // 画面遷移する前にログインフラグを削除
                         session()->forget('login_flg');
                         // ログイン画面へリダイレクト
-                        return redirect('/register')->with('message', '提供された資格情報を持つアカウントは見つかりませんでした。新規登録を行って下さい。');
+                        return redirect('/register')->with('error_message', '提供された資格情報を持つアカウントは見つかりませんでした。新規登録を行って下さい。');
 
                     }
 
@@ -77,6 +75,8 @@ class TwitterAuthController extends Controller
                     'twitter_token' => $user->token,
                     'twitter_token_secret' => $user->tokenSecret,
                 ]);
+
+                dd($userInfo);
 
                 $userInfo->save();
 
@@ -116,12 +116,12 @@ class TwitterAuthController extends Controller
         }
    
     } catch (\Exception $e) {
-      \Log::debug('ログインに失敗しました');
+      \Log::debug('ログインに失敗しました。例外の処理に入っています。');
       \Log::debug('   ');
       // 画面遷移する前にログインフラグを削除
       session()->forget('login_flg');
       // エラーならログイン画面へリダイレクト
-      return redirect('/login')->with('message', 'ログインに失敗しました。');
+      return redirect('/login')->with('error_message', 'ログインに失敗しました。');
     }
   }
 

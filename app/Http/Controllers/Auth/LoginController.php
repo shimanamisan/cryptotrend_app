@@ -42,9 +42,9 @@ class LoginController extends Controller
     $this->middleware('guest')->except('logout');
   }
 
-  /*********************************************************
-   * トレイトのauthenticatedメソッドをオーバーライド
-   *********************************************************/
+  /******************************************************************
+   * AuthenticatesUsersトレイトのauthenticatedメソッドをオーバーライド
+   ******************************************************************/
   // 引数の$userに$this->guard()->user()の認証済みユーザーの情報が入ってくる
   // この関数はトレイト側では空になっているので、常にredirectPathメソッドでリダイレクトされる
   // このメソッドに認証後の処理を挟んでログイン後の画面へ遷移させるようにしている
@@ -64,8 +64,11 @@ class LoginController extends Controller
     \Log::debug('twitter未登録のユーザーです');
     return redirect()->intended($this->redirectPath());
   }
-
-  // オーバーライド
+  
+  /******************************************************************
+   * AuthenticatesUsersトレイトのcredentialsメソッドをオーバーライド
+  ******************************************************************/
+  // メールアドレスログイン時、delete_flgが立っていないユーザーを検索するよう条件を追加
   protected function credentials(Request $request)
   {
       $temporary = $request->only($this->username(), 'password');
@@ -75,69 +78,22 @@ class LoginController extends Controller
       return $temporary;
   }
 
-  /*********************************************************
-   * Twitterログイン・新規登録
-   *********************************************************/
-  // Twitterアプリ側へリダイレクト
-  public function getTwitterLogin()
+  /******************************************************************
+   * AuthenticatesUsersトレイトのcredentialsメソッドをオーバーライド
+  ******************************************************************/
+  protected function validateLogin(Request $request)
   {
-    // 
-    // Twitterアプリ側に認証を求めていく処理
-    return Socialite::driver('twitter')->redirect();
+    $request->validate([
+      $this->username() => 'required|string|email',
+      'password' => 'required|string',
+    ]);
   }
 
-  // Twitter認証ページからリダイレクトを受け取り、レスポンスデータを元に新規登録するか否か決定する
-  public function getTwitterCallback()
-  {
-
-    try {
-
-      // ユーザーデータの取得とアクセストークンの取得
-      $user = Socialite::driver('twitter')->user();
-      // 既に登録されているユーザーかチェックする
-      $validate = User::where('my_twitter_id', $user->getId())->first();
-
-      // // emailの有無で条件を分ける
-      // if(empty($validate)){
-      //   \Log::debug('mytwitter_idが無いのでなので未登録ユーザーです');
-      //   return redirect('/login')->with('message', '提供された資格情報を持つアカウントは見つかりませんでした。新規登録を行って下さい。');
-      // }
-
-      // twitter_idをセッションに保存
-      session(['twitter_id' => $user->id]);
-      session(['access_token' => $user->token]);
-      session(['access_token_secret' => $user->tokenSecret]);
-      \Log::debug('認証に成功しました');
-    } catch (\Exception $e) {
-      \Log::debug('ログインに失敗しました');
-      // エラーならログイン画面へリダイレクト
-      return redirect('/login')->with('message', 'ログインに失敗しました。');
-    }
-
-    // 既にTwitterユーザーで登録されているか検索、登録されていなければ新規登録する
-    $userInfo = User::firstOrCreate(
-      // usersテーブルのtwitter_tokenカラムに同じ値を持つレコードがあるかチェック
-      // emailで判断すると本アプリ側や、Twitter側でユーザーがメールアドレスを変更した時に新たに作成されてしまう
-      ['twitter_token' => $user->token],
-      // twitter_tokenカラムに同じ値がなかった場合は、下記の項目をINSERTする
-      [
-        // Userモデルで$fillableに設定していないカラムにはINSERTされないので注意
-        'name' => $user->getNickname(),
-        'email' => $user->getEmail(),
-        'my_twitter_id' => $user->getId(),
-        'twitter_token' => $user->token,
-        'twitter_token_secret' => $user->tokenSecret,
-      ]);
-
-    session(['follow_limit_time' => $userInfo->follow_limit_time]);
-    \Log::debug('セッション情報を取得します' . print_r(session()->all(), true));
-    Auth::login($userInfo);
-
-    // プロフィール編集画面へリダイレクト
-    return redirect()->to('/mypage');
-  }
-
-  // ログイン後のリダイレクト先をオーバーライド
+  /******************************************************************
+   * RedirectsUsersトレイトのredirectPathメソッドをオーバーライド
+  ******************************************************************/
+  // AuthenticatesUsersトレイトで読み込まれているRedirectsUsersトレイトのredirectPathメソッドを上書き
+  // ログイン後のリダイレクト先を変更
   // デフォルトだとリダイレクト先が/homeになっている
   public function redirectPath()
   {
