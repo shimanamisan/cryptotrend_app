@@ -58,12 +58,12 @@ class TwitterAuthController extends Controller
                                   ->where('delete_flg', 0)
                                   ->first();
                 // twitter_idも同様に格納
-                $twserId = User::where('my_twitter_id', $user->getId())
+                $twUserId = User::where('my_twitter_id', $user->getId())
                                   ->where('delete_flg', 0)
                                   ->first();
                     // Twitter_id及びメールアドレスが登録されていなかったら未登録ユーザーとする
                     if( empty($twUserId) || empty($userInfo) ){
-                        \Log::debug('emailが無いのでなので未登録ユーザーです');
+                        \Log::debug('emailかtwitter_idが無いのでなので未登録ユーザーです');
                         \Log::debug('   ');
                         // 画面遷移する前にログインフラグを削除
                         session()->forget('login_flg');
@@ -88,6 +88,11 @@ class TwitterAuthController extends Controller
                 Auth::login($userInfo);
                 // 画面遷移する前にログインフラグを削除
                 session()->forget('login_flg');
+                // セッションにTwitterユーザー情報を入れる
+                session(['twitter_id' => $user->id]);
+                session(['access_token' => $user->token]);
+                session(['access_token_secret' => $user->tokenSecret]);
+                session(['follow_limit_time' => $userInfo->follow_limit_time]);
                 // トレンド一覧画面へリダイレクト
                 \Log::debug(session()->all());
                 return redirect()->to('/coins');
