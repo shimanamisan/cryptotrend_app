@@ -43,15 +43,13 @@
               {{ $message }}
             </div>
             @enderror
-            <a class="p-form__inquiry" href="{{ route('password.request') }}"
-              ><span>パスワードをお忘れですか？</span></a
-            >
-            <p class="p-form__auth--save">
+           
+            <div class="p-form__info--save">
                     <label>
-                        <input type="checkbox" name="pass_save">
+                        <input type="checkbox" name="remember">
                         ログイン情報を保持する
                     </label>
-            </p>
+            </div>
             <div class="u-wrapp">
               <input
                 class="c-btn c-btn__auth"
@@ -59,6 +57,9 @@
                 value="ログイン"
               />
             </div>
+            <a class="p-form__inquiry" href="{{ route('password.request') }}"
+              ><span>パスワードをお忘れですか？</span></a
+            >
           </form>
           <hr class="u-line" />
           <span class="u-line--or">または</span>

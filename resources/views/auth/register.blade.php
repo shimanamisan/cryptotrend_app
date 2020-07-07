@@ -10,6 +10,11 @@
         <div class="p-form__title">
           新規登録する
         </div>
+        @if(Session::has('error_message'))
+        <div class="c-error__authflash">
+            <p>{{ session('error_message') }}</p>
+        </div>
+        @endif
         <hr class="u-line" />
         <div class="p-form__body">
           <form method="POST" action="">
@@ -38,13 +43,14 @@
               {{ $message }}
             </div>
             @enderror
-            <label class="p-form__info" for="password">パスワード</label><span class="p-form__info--small">※半角英数8文字以上で入力して下さい</span>
+            <label class="p-form__info" for="password">パスワード</label>
             <input
               class="c-form__input c-from__input--signup @error('password') c-error__input @enderror"
               type="password"
               name="password"
               value="{{ old('password') }}"
             />
+            <span class="p-form__info--pass">※半角英数8文字以上で入力して下さい</span>
             @error('password')
             <div class="c-error">
               {{ $message }}
