@@ -86,6 +86,9 @@ class LoginController extends Controller
     $request->validate([
       $this->username() => 'required|string|email',
       'password' => 'required|string',
+    ],
+    [
+      'email.email' => '有効なメールアドレスを指定してください。'
     ]);
   }
 
