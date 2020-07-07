@@ -10,6 +10,11 @@
         <div class="p-form__title">
           ログインする
         </div>
+      @if(Session::has('error_message'))
+        <div class="c-error__authflash">
+            <p>{{ session('error_message') }}</p>
+        </div>
+      @endif
         <hr class="u-line" />
         <div class="p-form__body">
           <form method="POST" action="{{ route('login') }}">
