@@ -66,6 +66,10 @@ Route::group(['middleware' => 'auth'], function () {
     // プロフィール画面
     Route::patch('/mypage/{id}', 'MypageController@editProfile')->name('mypage.editProfile');
     Route::get('/mypage', 'MypageController@index')->name('mypage.index');
+    // Ajax処理：ユーザーデータの取得
+    Route::get('/mypage/user', 'MypageController@getUserData');
+    // 退会処理
+    Route::post('/mypage/delete', 'MypageController@delete');
 });
 
 // 開発時テスト用ルーティング

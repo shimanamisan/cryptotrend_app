@@ -10,12 +10,20 @@ class MypageController extends Controller
 {
     public function index()
     {
+
+        return view('mypage');
+    }
+
+    public function getUserData()
+    {
+        // Ajax処理でユーザー情報を取得
         $user = Auth::user();
 
-        // dd($user);
+        return $user;
+    }
 
-        Log::debug('プロフィール画面でユーザー情報を取得しています：' . $user);
-
-        return view('mypage', ['user' => $user]);
+    public function delete()
+    {
+        $user = Auth::user();
     }
 }
