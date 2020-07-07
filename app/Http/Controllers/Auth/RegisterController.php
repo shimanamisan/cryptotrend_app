@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Http\Controllers\Controller;
-use App\Providers\RouteServiceProvider;
 use App\User;
-use Illuminate\Foundation\Auth\RegistersUsers;
+use Illuminate\Validation\Rule; // ★追加
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
+use App\Providers\RouteServiceProvider;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Foundation\Auth\RegistersUsers;
 
 class RegisterController extends Controller
 {
@@ -49,11 +50,21 @@ class RegisterController extends Controller
      */
     protected function validator(array $data)
     {
+        // カスタムエラーメッセージ
+        $message = [
+            'email' => '有効なメールアドレスを指定してください。',
+            'regex' => '半角英数のみご利用いただけます。',
+            'confirmed' => ':attributeと、:attribute再入力が一致していません。',
+        ];
+
         return Validator::make($data, [
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users',],
-            'password' => ['required', 'string', 'min:8', 'confirmed'],
-        ]);
+            // 'email' => ['required', 'string', 'email', 'max:255', 'unique:users',],
+            'email' => ['required', 'string', 'email', 'max:255',
+                        // ユーザーテーブルのdelete_flgが0のユーザーに対してemailの同値チェックを行う
+                        Rule::unique('users', 'email')->where('delete_flg', 0)],
+            'password' => ['required', 'string', 'min:8', 'max:255', 'confirmed', 'regex:/^[a-zA-Z0-9]+$/'],
+        ], $message);
     }
 
     /**
@@ -71,9 +82,10 @@ class RegisterController extends Controller
         ]);
     }
 
+    // RedirectsUsersトレイトのredirectPathメソッドを上書き
     public function redirectPath()
     {
-        return '/coins';
+        return '/mypage';
         //例）return 'costs/index';
     }
 }
