@@ -6,9 +6,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log; // 追加
 use Illuminate\Support\Facades\Auth; // 追加
 
-class ProfileController extends Controller
+class MypageController extends Controller
 {
-    public function showProfileForm()
+    public function index()
     {
         $user = Auth::user();
 
@@ -16,6 +16,6 @@ class ProfileController extends Controller
 
         Log::debug('プロフィール画面でユーザー情報を取得しています：' . $user);
 
-        return view('profile', ['user' => $user]);
+        return view('mypage', ['user' => $user]);
     }
 }

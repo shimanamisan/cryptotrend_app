@@ -5,6 +5,8 @@
 @include('layouts.head')
 
 @section('content')
+<div id="app">
     <!-- app.bladeのyieldの箇所に読み込まれる -->
     <News :news_data="{{ ($newsList) }}"/>
+</div>
 @endsection

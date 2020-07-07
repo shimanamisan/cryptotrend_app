@@ -50,6 +50,7 @@ class LoginController extends Controller
   // このメソッドに認証後の処理を挟んでログイン後の画面へ遷移させるようにしている
   protected function authenticated(Request $request, $user)
   {
+
     // twitter認証済みのユーザーであればtokenを格納する
     $access_token = $user->twitter_token;
     $access_token_secret = $user->twitter_token_secret;
@@ -62,6 +63,16 @@ class LoginController extends Controller
 
     \Log::debug('twitter未登録のユーザーです');
     return redirect()->intended($this->redirectPath());
+  }
+
+  // オーバーライド
+  protected function credentials(Request $request)
+  {
+      $temporary = $request->only($this->username(), 'password');
+      // 論理削除フラグが立っていないユーザーを検索するパラメータを追加
+      $temporary['delete_flg'] = 0;
+
+      return $temporary;
   }
 
   /*********************************************************
@@ -123,14 +134,14 @@ class LoginController extends Controller
     Auth::login($userInfo);
 
     // プロフィール編集画面へリダイレクト
-    return redirect()->to('/profile');
+    return redirect()->to('/mypage');
   }
 
   // ログイン後のリダイレクト先をオーバーライド
   // デフォルトだとリダイレクト先が/homeになっている
   public function redirectPath()
   {
-    return '/profile';
+    return '/mypage';
     //例）return 'costs/index';
   }
 }

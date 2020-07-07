@@ -32,8 +32,6 @@ Route::get('auth/twitter/callback', 'Auth\TwitterAuthController@getTwitterCallba
 // 仮想通貨関連のニュースの取得
 Route::get('/news', 'NewsController@index')->name('getNews.index');
 
-
-
 // ログアウト
 Route::post('/logout', 'Auth\LoginController@logout')->name('logout');
 
@@ -66,8 +64,8 @@ Route::group(['middleware' => 'auth'], function () {
      * プロフィール機能関連のルーティング
      *****************************************/
     // プロフィール画面
-    Route::patch('/profile/{id}', 'ProfileController@editProfile')->name('profile.editProfile');
-    Route::get('/profile', 'ProfileController@showProfileForm')->name('profile.showProfileForm');
+    Route::patch('/mypage/{id}', 'MypageController@editProfile')->name('mypage.editProfile');
+    Route::get('/mypage', 'MypageController@index')->name('mypage.index');
 });
 
 // 開発時テスト用ルーティング

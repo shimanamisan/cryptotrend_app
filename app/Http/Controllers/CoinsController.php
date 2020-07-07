@@ -51,26 +51,6 @@ class CoinsController extends Controller
         return $coins;
     }
 
-    // 現在はビットコインのみ24時間の取引価格を取得
-    public function getTicker(Coin $coin)
-    {
-        $result = file_get_contents('https://coincheck.com/api/ticker');
-
-        $ticker = json_decode($result);
-
-        // dd($ticker);
-
-        $coins = $coin->find(1);
-        
-        $coins->max_price = $ticker->high;
-
-        $coins->low_price = $ticker->low;
-
-        $coins->save();
-        
-    }
-
-
     // // Twitter上で仮想通貨関連のツイートをしているユーザーを取得する処理
     // // 30分毎にバッチ処理で定期的に実行
     // public function getTrendTweet(Coin $coin, $date)

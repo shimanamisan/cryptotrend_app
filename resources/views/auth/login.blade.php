@@ -41,6 +41,12 @@
             <a class="p-form__inquiry" href="{{ route('password.request') }}"
               ><span>パスワードをお忘れですか？</span></a
             >
+            <p class="p-form__auth--save">
+                    <label>
+                        <input type="checkbox" name="pass_save">
+                        ログイン情報を保持する
+                    </label>
+            </p>
             <div class="u-wrapp">
               <input
                 class="c-btn c-btn__auth"
