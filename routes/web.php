@@ -32,34 +32,46 @@ Route::get('auth/twitter/callback', 'Auth\TwitterAuthController@getTwitterCallba
 // 仮想通貨関連のニュースの取得
 Route::get('/news', 'NewsController@index')->name('getNews.index');
 
-// プロフィール画面
-Route::patch('/profile/{id}', 'ProfileController@editProfile')->name('profile.editProfile');
-Route::get('/profile', 'ProfileController@showProfileForm')->name('profile.showProfileForm');
-
 // ログアウト
 Route::post('/logout', 'Auth\LoginController@logout')->name('logout');
 
 // 認証後の画面
 Route::group(['middleware' => 'auth'], function () {
 
+    /**********************************************
+     * ユーザーフォロー機能関連のルーティング
+     **********************************************/
     // 仮想通貨関連のTwitterユーザーページを表示
     Route::get('/tweet-users', 'TwitterController@index')->name('userList.index');
-    // ユーザーをフォローする
+    // Ajax処理：ユーザーをフォローする
     Route::post('/follow', 'FollowController@follow');
-    // 自動フォロー機能をONにする
+    // Ajax処理：自動フォロー機能をONにする
     Route::post('/autofollow', 'FollowController@autoFollowFlg');
 
+    /*****************************************
+     * トレンド表示機能関連のルーティング
+     *****************************************/
     // 仮想通貨情報のページを表示
     Route::get('/coins', 'CoinsController@index')->name('conins.index');
-    // トレンド情報のデータを取得するエンドポイント
-    Route::get('/coins/trend', 'CoinsController@getTrendCoins');
+    // Ajax処理：過去1時間のツイート数を取得するエンドポイント
+    Route::get('/coins/hour', 'CoinsController@getHourCoins');
+    // Ajax処理：過去1日のツイート数を取得するエンドポイント
+    Route::get('/coins/day', 'CoinsController@getDayCoins');
+    // Ajax処理：1時間のスイート数を取得するエンドポイント
+    Route::get('/coins/week', 'CoinsController@getWeekCoins');
+
+    /*****************************************
+     * プロフィール機能関連のルーティング
+     *****************************************/
+    // プロフィール画面
+    Route::patch('/mypage/{id}', 'MypageController@editProfile')->name('mypage.editProfile');
+    Route::get('/mypage', 'MypageController@index')->name('mypage.index');
 });
 
 // 開発時テスト用ルーティング
 Route::get('/testcoin/{date}', 'CoinsController@getTrendTweet'); // 仮想通貨関連のツイート数を取得する（完成後バッチ処理にする）
-Route::get('/2', 'CoinsController@day'); // 仮想通貨関連のツイート数を取得する（完成後バッチ処理にする）
-Route::get('/3', 'CoinsController@week'); // 仮想通貨関連のツイート数を取得する（完成後バッチ処理にする）
 Route::get('/testuserList', 'TwitterController@userList'); // 仮想通貨関連のツイートをしているユーザーを取得する（完成後バッチ処理にする）
 Route::get('/testautoFollow', 'FollowController@handl'); // 過疎通過関連のユーザーを自動フォローする（完成後バッチ処理にする）
 Route::get('/applimit', 'TwitterController@applimit'); // アプリケーション認証のAPI制限のカウント数の一覧を取得する
 Route::get('/userlimit', 'TwitterController@userlimit'); // ログインしているユーザーのAPI制限のカウント数の一覧を取得する
+Route::get('/getTicker', 'CoinsController@getTicker'); // ログインしているユーザーのAPI制限のカウント数の一覧を取得する

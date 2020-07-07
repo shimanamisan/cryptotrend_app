@@ -6,6 +6,8 @@
 @include('layouts.head')
 
 @section('content')
+<div id="app">
     <!-- app.bladeのyieldの箇所に読み込まれる -->
     <Coins/>
+</div>    
 @endsection

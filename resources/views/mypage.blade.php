@@ -5,11 +5,13 @@
 @include('layouts.head')
 
 @section('content')
+<div id="app">
     <!-- app.bladeのyieldの箇所に読み込まれる -->
-    <Profile 
-        endpoint="{{ url('profile') }}" 
+    <Mypage 
+        endpoint="{{ url('mypage') }}" 
         user="{{ $user->name }}"
         email="{{ $user->email }}"
         avatar="{{ $user->avatar }}"
     />
+</div>
 @endsection

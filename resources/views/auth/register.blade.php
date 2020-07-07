@@ -38,7 +38,7 @@
               {{ $message }}
             </div>
             @enderror
-            <label class="p-form__info" for="password">パスワード</label>
+            <label class="p-form__info" for="password">パスワード</label><span class="p-form__info--small">※半角英数8文字以上で入力して下さい</span>
             <input
               class="c-form__input c-from__input--signup @error('password') c-error__input @enderror"
               type="password"

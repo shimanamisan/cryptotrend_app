@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use Carbon\Carbon; // ★追記
 use App\Coin; // ★追記
 use Illuminate\Console\Command;
 use Abraham\TwitterOAuth\TwitterOAuth; // ★追記
@@ -44,9 +45,7 @@ class GetCoinsTweet extends Command
     // {
     //     $date = $this->argument('datetime');
     //     logger()->info('hello'. $date);
-        
     // }
-
 
     // search/tweetsのリクエストの上限は、15分毎450回（アプリケーション認証時）
     const SEARCH_REQUEST_LIMIT = 450;
@@ -121,7 +120,7 @@ class GetCoinsTweet extends Command
             \Log::debug($search_key[$i]. ' の検索が始まっています。');
             \Log::debug('  ');
 
-            // ツイートを取得してく（450回の制限を超えないように）
+            // ツイートを取得してく
             for($k = 0; $k < self::SEARCH_REQUEST_LIMIT; $k++){
             // for($k = 0; $k < self::SEARCH_REQUEST_LIMIT; $k++){
             
@@ -132,21 +131,25 @@ class GetCoinsTweet extends Command
                     $response_result = $connection->get('search/tweets', $params);
                     
                 }catch(TwitterOAuthException $e){
+                    \Log::debug('============ 例外が発生しました ============');
                     \Log::debug($e->getMessage());
-                    \Log::debug('  ');
                     \Log::debug($e->getTrace());
-                    \Log::debug('  ');
-                    
-                    // httpリクエストに関する例外が発生した場合は、ループを抜けてして次の仮想通貨へ移る
-                    break;
+                    \Log::debug('============ メッセージ終了 ============');
+                    \Log::debug('リクエスト結果が空なのでオブジェクトを配列に変換する処理をスキップします。');
+                    \Log::debug('   ');
+                    // httpリクエストに関する例外が発生した場合は、その処理を一回スキップして次の処理へ移る
+                    continue;
                 }
 
                 // エラーハンドリング
                 if($connection->getLastHttpCode() !== 200){
                     // サーバ側でエラーが発生若しくはAPI制限がかかったら処理を停止する
-                    \Log::debug('サーバ側でエラー若しくはAPI制限に掛かりました。処理を停止します');
-                    \Log::debug('  ');
-                    return;
+                    // 15分間待機して処理を継続する
+                    \Log::debug('サーバ側でエラー若しくはAPI制限に掛かりました。処理を待機します');
+                    \Log::debug('900秒待機中・・・・');
+                    // 900秒（15分間待機して処理を再開する）
+                    sleep(900);
+                    continue;
                 }
                     // リクエストをカウント
                     ++$search_request_limit_count;
@@ -207,16 +210,8 @@ class GetCoinsTweet extends Command
 
         \Log::debug('ここの処理は最後かな？');
         \Log::debug('  ');
-        
+
     }
-
-    //   // Twitter上で仮想通貨関連のツイートをしているユーザーを取得する処理
-    // // 30分毎にバッチ処理で定期的に実行
-    // public function getTrendTweet(Coin $coin, $date)
-    // {   
-   
-
-    // }
 
     // アプリケーション単位で認証する（ベアラートークンの取得）
     private function twitterOauth2()
@@ -251,25 +246,34 @@ class GetCoinsTweet extends Command
 
             case 'hour':
                 // updateOrCreateメソッド：第一引数に指定したカラムに値が存在していれば更新し、無ければ新規登録する
-                $coinObj->trends()->updateOrCreate(
+                $coinObj->hours()->updateOrCreate(
                     ['coin_id' => $i],
-                    ['hour' => $trend_count]);
+                    [
+                        'tweet' => $trend_count,
+                        'updated_at' => Carbon::now()
+                    ]);
                     \Log::debug('1時間あたりのツイート数を計測したデータを保存しました');
                     \Log::debug('  ');
                 break ;
 
             case 'day':
-                $coinObj->trends()->updateOrCreate(
+                $coinObj->days()->updateOrCreate(
                     ['coin_id' => $i],
-                    ['day' => $trend_count]);
+                    [
+                        'tweet' => $trend_count,
+                        'updated_at' => Carbon::now()
+                    ]);
                     \Log::debug('1日あたりのツイート数を計測したデータを保存しました');
                     \Log::debug('  ');
                 break;
                 
             case 'week':
-                $coinObj->trends()->updateOrCreate(
+                $coinObj->weeks()->updateOrCreate(
                     ['coin_id' => $i],
-                    ['week' => $trend_count]);
+                    [
+                        'tweet' => $trend_count,
+                        'updated_at' => Carbon::now()
+                    ]);
                     \Log::debug('1週間あたりのツイート数を計測したデータを保存しました');
                     \Log::debug('  ');
                 break ;

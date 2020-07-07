@@ -10,4 +10,12 @@
       border-color: #ff6366;
     }
   }
+
+  &__authflash{
+    @include custumRadius(5px);
+    padding: 12px 16px;
+    background-color: #ffd6da;
+    color: $font-color_default;
+    margin-top: 32px;
+  }
 }

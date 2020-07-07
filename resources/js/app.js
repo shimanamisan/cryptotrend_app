@@ -23,15 +23,16 @@ require('./bootstrap');
 //     "example-component",
 //     require("./components/ExampleComponent.vue").default
 // );
+
 // sass ファイル読み込み
-// import '../sass/style.scss';
-import _ from 'lodash';
+import '../sass/style.scss';
+import _, { functionsIn } from 'lodash';
 
 import Vue from 'vue';
 
 import News from './components/News.vue'
 import UserList from './components/UserList.vue'
-import Profile from './components/Profile.vue'
+import Mypage from './components/Mypage.vue'
 import Coins from './components/Coins.vue'
 
 /**
@@ -40,20 +41,27 @@ import Coins from './components/Coins.vue'
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
-// new Vue({
-//     // h(App)の引数にApp.vueコンポーネントのオブジェクトが入ってくる
-//     // renderではコンポーネントのオブジェクト（テンプレートやメソッドなど）を突っ込んで描画することができる
-//     render: h => h(App)
-// }).$mount("#app");
+// console.logに#appが無いとエラーが出ないように変更
+(function(){
 
-new Vue({
-  el: '#app',
-  components:{
-    News,
-    UserList,
-    Coins,
-    Profile,
- 
+  // #app idが付いた要素がない場合はVueインスタンスを生成しない
+  if(!document.querySelector('#app') ){
+
+    return null
+
+  }else{
+    
+    new Vue({
+      el: '#app',
+      components:{
+        News,
+        UserList,
+        Coins,
+        Mypage,
+      }
+    });
   }
-});
+
+})();
+
 

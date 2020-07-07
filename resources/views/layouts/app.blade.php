@@ -35,7 +35,7 @@
             <a class="p-header__item--link" href="{{ route('conins.index') }}">トレンド一覧</a>
           </li>
           <li class="p-header__item">
-            <a class="p-header__item--link" href="{{ route('profile.showProfileForm') }}">プロフィール編集</a>
+            <a class="p-header__item--link" href="{{ route('mypage.index') }}">マイページ</a>
           </li>
           <li class="p-header__item">
             <a class="p-header__item--link" 
@@ -54,16 +54,9 @@
         </ul>
       </nav>
     </header>
-    @if(Session::has('message'))
-    <div class="u-flashmsg">
-      <p>{{ session('message') }}</p>
-    </div>
-    @endif
 
-<div id="app">
+
   @yield('content')
-</div>
-
 
 </body>
 </html>

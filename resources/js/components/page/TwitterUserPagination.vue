@@ -182,13 +182,5 @@ export default {
 </script>
 
 <style>
-.flash-enter-active,
-.flash-leave-active {
-  transition: all 0.6s ease;
-}
-.flash-enter,
-.flash-leave-to {
-  opacity: 0;
-  transform: translateX(50px);
-}
+
 </style>

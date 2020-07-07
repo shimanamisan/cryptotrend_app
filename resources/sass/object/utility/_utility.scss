@@ -21,21 +21,33 @@
 
 .u-margin {
   &__bottom {
-    &--s {
+    &--ss {
       margin-bottom: 8px;
     }
-    &--sd {
+    &--s {
       margin-bottom: 16px;
     }
-    &--md {
+    &--m {
+      margin-bottom: 24px;
+    }
+    &--l {
+      margin-bottom: 32px;
+    }
+    &--xl {
+      margin-bottom: 40px;
+    }
+    &--lg {
       margin-bottom: 48px;
     }
   }
 }
 
 .u-padding {
-  &--top {
-    padding-top: 80px;
+  &__top {
+
+    &--lg {
+      padding-top: 150px;
+    }
   }
 }
 
@@ -47,4 +59,14 @@
   z-index: 5;
   top: 20%;
   right: 5%;
+}
+
+.flash-enter-active,
+.flash-leave-active {
+  transition: all 0.6s ease;
+}
+.flash-enter,
+.flash-leave-to {
+  opacity: 0;
+  transform: translateX(50px);
 }
