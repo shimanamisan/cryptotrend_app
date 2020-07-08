@@ -68,7 +68,9 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/mypage', 'MypageController@index')->name('mypage.index');
     // Ajax処理：ユーザーデータの取得
     Route::get('/mypage/user', 'MypageController@getUserData');
-    // 退会処理
+    // Ajax処理：ユーザーデータやパスワードの新規登録
+    Route::post('/mypage/userdata', 'MypageController@storUserData');
+    // Ajax処理：退会処理
     Route::post('/mypage/delete', 'MypageController@delete');
 });
 

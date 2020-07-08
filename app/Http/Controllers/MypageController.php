@@ -51,7 +51,7 @@ class MypageController extends Controller
             return $user;
         }else{
         // パスワード更新時の処理
-            
+            dd($request->all());
         }
 
     }
