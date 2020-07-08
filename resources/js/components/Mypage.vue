@@ -14,29 +14,59 @@
               <label for="nicname">ニックネーム</label>
               <input
                 class="c-form__input"
+                :class="{ 'c-error__input': errors_nicname }"
                 type="text"
                 name="nicname"
                 v-model="userDataForm.nicname"
+                placeholder="your username"
+                @focus="clearError('nicname')"
               />
+              <div v-if="errors_nicname" class="c-error">
+                <ul v-if="errors_nicname">
+                  <li v-for="msg in errors_nicname" :key="msg">
+                    {{ msg }}
+                  </li>
+                </ul>
+              </div>
             </div>
+
             <div class="p-mypage__content__body u-margin__bottom--m">
               <label for>メールアドレス</label>
               <input
                 class="c-form__input"
+                :class="{ 'c-error__input': errors_email }"
                 type="text"
                 v-model="userDataForm.email"
+                placeholder="email@example.com"
+                @focus="clearError('email')"
               />
+              <div v-if="errors_email" class="c-error">
+                <ul v-if="errors_email">
+                  <li v-for="msg in errors_email" :key="msg">
+                    {{ msg }}
+                  </li>
+                </ul>
+              </div>
             </div>
 
             <div class="p-mypage__content__body u-margin__bottom--m">
               <label for>新しいパスワード</label>
               <input
                 class="c-form__input"
+                :class="{ 'c-error__input': errors_password }"
                 type="password"
                 v-model="userDataForm.password"
                 placeholder="パスワード"
+                @focus="clearError('pass')"
               />
-              <template v-if="this.password !== null">
+              <div v-if="errors_password" class="c-error">
+                <ul v-if="errors_password">
+                  <li v-for="msg in errors_password" :key="msg">
+                    {{ msg }}
+                  </li>
+                </ul>
+              </div>
+              <template v-if="!this.isset_pass">
                 <span class="p-mypage__text"
                   >※半角英数で8文字以上ご使用下さい</span
                 >
@@ -52,19 +82,22 @@
                 class="c-form__input"
                 type="password"
                 placeholder="パスワードの確認"
-                v-model="userDataForm.password_confirm"
+                v-model="userDataForm.password_confirmation"
               />
 
               <div class="p-mypage__content--inwrap">
                 <div class="p-mypage__content--cancel">
-                  <button class="c-btn p-mypage__btn p-mypage__btn--cancel">
-                    キャンセル
+                  <button
+                    class="c-btn p-mypage__btn p-mypage__btn--cancel"
+                    @click="cancelFrom"
+                  >
+                    入力をクリア
                   </button>
                 </div>
                 <div class="p-mypage__content--submit">
                   <button
                     class="c-btn p-mypage__btn p-mypage__btn--submit"
-                    disabled="disabled"
+                    @click="storUserData"
                   >
                     変更を保存
                   </button>
@@ -83,7 +116,9 @@
               退会処理を行います。アカウントの利用を停止すると、CryptoTrendにログインしたり、仮想通貨関連の情報が見れなくなります。
             </p>
           </div>
-          <button class="c-btn p-mypage__dlbtn">アカウントを停止する</button>
+          <button class="c-btn p-mypage__dlbtn" @click="deleteUser">
+            アカウントを停止する
+          </button>
         </div>
       </div>
     </main>
@@ -100,8 +135,12 @@ export default {
         nicname: this.user,
         email: this.email,
         password: this.password,
-        password_confirm: this.password_confirm,
+        password_confirmation: this.password_confirmation,
       },
+      errors_nicname: null,
+      errors_email: null,
+      errors_password: null,
+      isset_pass: false,
       isDisabled: true,
     };
   },
@@ -111,14 +150,76 @@ export default {
       const response = await axios
         .get('/mypage/user')
         .catch((error) => error.response || error);
-        console.log(response.data)
-      if(response.status === 200){
-        this.userId = response.data.id
-        this.userDataForm.nicname = response.data.name
-        this.userDataForm.email = response.data.email
-        this.userDataForm.password = response.data.password
-      }else{
-        alert('エラーが発生しました。しばらくお待ち下さい')
+      // console.log(response.data);
+      if (response.status === 200) {
+        this.userId = response.data.id;
+        this.userDataForm.nicname = response.data.name;
+        this.userDataForm.email = response.data.email;
+        this.userDataForm.password = response.data.password;
+        this.isset_pass = response.data.isset_pass;
+      } else {
+        alert('エラーが発生しました。しばらくお待ち下さい');
+      }
+    },
+    async storUserData() {
+      const response = await axios
+        .post('/mypage/userdata', {
+          id: this.userId,
+          name: this.userDataForm.nicname,
+          email: this.userDataForm.email,
+          password: this.userDataForm.password,
+          password_confirmation: this.userDataForm.password_confirmation,
+        })
+        .catch((error) => error.response || error);
+      // console.log(response.data);
+      if (response.status === 200) {
+        this.userId = response.data.id;
+        this.userDataForm.nicname = response.data.name;
+        this.userDataForm.email = response.data.email;
+        this.userDataForm.password = response.data.password;
+      } else if (response.status === 422) {
+        // console.log(response.data.errors);
+        this.errors_nicname = response.data.errors.name;
+        this.errors_email = response.data.errors.email;
+        this.errors_password = response.data.errors.password;
+
+        // バリデーションで引っかかった場合は、パスワード入力フォームは空にする
+        this.userDataForm.password = null;
+        this.userDataForm.password_confirmation = null;
+      } else {
+        alert('エラーが発生しました。しばらくお待ち下さい');
+      }
+    },
+    async deleteUser() {
+      if (confirm('退会します。よろしいですか？')) {
+        const response = await axios
+          .post('/mypage/delete')
+          .catch((error) => error.response || error);
+        // console.log(response);
+        if (response.status === 200) {
+          // 退会後ページを移動
+          window.location = '/';
+        } else {
+          alert('エラーが発生しました。しばらくお待ち下さい');
+          window.location = '/login';
+        }
+      }
+    },
+    cancelFrom() {
+      this.errors = null;
+      this.userDataForm.nicname = null;
+      this.userDataForm.email = null;
+      this.userDataForm.password = null;
+      this.userDataForm.password_confirmation = null;
+    },
+    clearError(value) {
+      if (value === 'nicname') {
+        // console.log(typeof value);
+        this.errors_nicname = null;
+      } else if (value === 'email') {
+        this.errors_email = null;
+      } else if (value === 'pass') {
+        this.errors_password = null;
       }
     },
   },

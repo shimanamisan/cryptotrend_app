@@ -9,11 +9,16 @@
   }
 
   &__header {
-    width: 100%;
     padding: 0 32px;
-    &__title{
+    &__title {
       text-align: center;
-      margin-bottom: 8px;
+    }
+  
+    &__container {
+      justify-items: center;
+      justify-content: center;
+      display: flex;
+      margin-bottom: 16px;
     }
   }
 
@@ -22,7 +27,7 @@
     padding: 32px;
     box-sizing: border-box;
     @include custumRadius(5px);
-    &__link{
+    &__link {
       color: #707070;
     }
   }
@@ -37,10 +42,10 @@
       opacity: 0.7;
     }
     @include custumRadius(5px);
-      & > label {
-        cursor: pointer;
-        display: block;
-      }
+    & > label {
+      cursor: pointer;
+      display: block;
+    }
     &__btn {
       margin-left: 24px;
     }
