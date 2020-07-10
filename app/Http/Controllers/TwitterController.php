@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\TwitterUser;
+use App\Twuser;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Abraham\TwitterOAuth\TwitterOAuth;
@@ -25,7 +25,7 @@ class TwitterController extends Controller
         // JSON形式へ変換
         $user = json_encode($outh_user);
         // 新しく登録されたアカウントから表示していく
-        $result = TwitterUser::orderBy('id', 'desc')->get();
+        $result = Twuser::orderBy('id', 'desc')->get();
         // 取得した情報をJSON形式へ変換
         $tw_user = json_encode($result);
 
