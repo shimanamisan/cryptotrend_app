@@ -95,14 +95,15 @@ class GetTwitterUsers extends Command
                 \Log::debug('TwitterユーザーのIDを取り出しています：' . $search_user_id);
 
                 // 既に登録済みのIDかDBを検索する
-                $result = $TwitterUser->where('twitter_id', $search_user_id)->get();
+                $result = $TwitterUser->where('id', $search_user_id)->get();
 
-                // Collectionが空でなければDBに既に登録させれいるTwitterユーザー
-                if ($result->isNotEmpty()) {
-                    // idで検索できていればDBに存在している
-                    ++$alreadyCounter;
-                    \Log::debug("DBに存在していたユーザーです。既存ユーザーカウンター：{$alreadyCounter}");
-                    $twitter_user = [
+                try {
+                    // Collectionが空でなければDBに既に登録させれいるTwitterユーザー
+                    if ($result->isNotEmpty()) {
+                        // idで検索できていればDBに存在している
+                        ++$alreadyCounter;
+                        \Log::debug("DBに存在していたユーザーです。既存ユーザーカウンター：{$alreadyCounter}");
+                        $twitter_user = [
                         'id' => $search_result_item->id,
                         'user_name' => $search_result_item->name,
                         'account_name' => $search_result_item->screen_name,
@@ -113,14 +114,14 @@ class GetTwitterUsers extends Command
                         'created_at' => Carbon::now(),
                         'updated_at' => Carbon::now(),
                     ];
-                    // 存在していたユーザーの情報を更新します
-                    $TwitterUser->where('twitter_id', $search_user_id)->update($twitter_user);
-                    \Log::debug('更新しました。更新したID：' . $search_user_id);
-                } else {
-                    ++$newCounter;
-                    \Log::debug("DBに存在していなかったユーザーです。新規ユーザーカウンター：{$newCounter}");
+                        // 存在していたユーザーの情報を更新します
+                        $TwitterUser->where('twitter_id', $search_user_id)->update($twitter_user);
+                        \Log::debug('更新しました。更新したID：' . $search_user_id);
+                    } else {
+                        ++$newCounter;
+                        \Log::debug("DBに存在していなかったユーザーです。新規ユーザーカウンター：{$newCounter}");
 
-                    $twitter_user = [
+                        $twitter_user = [
                         'id' => $search_result_item->id,
                         'user_name' => $search_result_item->name,
                         'account_name' => $search_result_item->screen_name,
@@ -131,8 +132,12 @@ class GetTwitterUsers extends Command
                         'created_at' => Carbon::now(),
                         'updated_at' => Carbon::now(),
                     ];
-                    $TwitterUser->insert($twitter_user);
-                    \Log::debug('新規登録しました。' . print_r($twitter_user, true));
+                        $TwitterUser->insert($twitter_user);
+                        \Log::debug('新規登録しました。' . print_r($twitter_user, true));
+                    }
+                } catch (\Exception $e) {
+                    \Log::debug('例外が発生しました。ループ処理をスキップします' .$e->getMessage());
+                    continue;
                 }
             }
         }
