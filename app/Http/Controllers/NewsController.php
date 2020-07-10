@@ -7,6 +7,11 @@ use Illuminate\Support\Facades\Log; // ★追加
 
 class NewsController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     public function index()
     {
         Log::debug('====== Google APIからニュースを取得しています ======');

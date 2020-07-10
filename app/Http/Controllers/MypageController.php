@@ -11,6 +11,11 @@ use Illuminate\Support\Facades\Auth; // ★追加
 
 class MypageController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     public function index()
     {
 

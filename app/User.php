@@ -7,7 +7,8 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use App\Notifications\PasswordResetNotification; // 追加
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
-class User extends Authenticatable
+// email認証用にimplements MustVerifyEmail を追記
+class User extends Authenticatable implements MustVerifyEmail
 {
     use Notifiable;
 
@@ -52,4 +53,13 @@ class User extends Authenticatable
     {
         $this->notify(new PasswordResetNotification($token));
     }
+
+    /**
+     * リレーションシップ 
+     */
+    public function follows()
+    {
+        return $this->hasMany('App\Follow');
+    }
+
 }

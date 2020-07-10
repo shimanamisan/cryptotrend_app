@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateTwitterUsersTable extends Migration
+class CreateTwusersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,8 @@ class CreateTwitterUsersTable extends Migration
      */
     public function up()
     {
-        Schema::create('twitter_users', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->string('twitter_id');
+        Schema::create('twusers', function (Blueprint $table) {
+            $table->string('id')->primary()->comment('twitter_idが入るカラム');
             $table->string('user_name');
             $table->string('account_name');
             $table->string('new_tweet');
@@ -33,6 +32,6 @@ class CreateTwitterUsersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('twitter_users');
+        Schema::dropIfExists('twusers');
     }
 }

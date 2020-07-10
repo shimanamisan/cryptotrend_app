@@ -4,10 +4,10 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class TwitterUser extends Model
+class Twuser extends Model
 {
     protected $fillable = [
-        'twitter_id',
+        'id',
         'user_name',
         'account_name',
         'new_tweet',
@@ -15,4 +15,13 @@ class TwitterUser extends Model
         'friends_count',
         'followers_count',
     ];
+
+    /**
+     * リレーションシップ followテーブル
+     * 
+     */
+    public function follows()
+    {
+        return $this->hasMany('App\Follow');
+    }
 }

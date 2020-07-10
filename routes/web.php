@@ -19,7 +19,7 @@ Route::get('/', function () {
 
 // 認証系のルーティングそれに対応するコントローラがまとまっている
 // Illuminate\Routing\Routerクラスのauth()メソッドにルーティングが記述されている
-Auth::routes();
+Auth::routes(); // email認証の機能を有効化
 
 // Twitter経由でのログインを行う為のURI
 Route::get('login/twitter', 'Auth\TwitterAuthController@getTwitterLogin')->name('twitter.login');
@@ -64,7 +64,8 @@ Route::group(['middleware' => 'auth'], function () {
      * プロフィール機能関連のルーティング
      *****************************************/
     // プロフィール画面
-    Route::patch('/mypage/{id}', 'MypageController@editProfile')->name('mypage.editProfile');
+    // Route::patch('/mypage/{id}', 'MypageController@editProfile')->name('mypage.editProfile');
+    
     Route::get('/mypage', 'MypageController@index')->name('mypage.index');
     // Ajax処理：ユーザーデータの取得
     Route::get('/mypage/user', 'MypageController@getUserData');
@@ -75,9 +76,5 @@ Route::group(['middleware' => 'auth'], function () {
 });
 
 // 開発時テスト用ルーティング
-Route::get('/testcoin/{date}', 'CoinsController@getTrendTweet'); // 仮想通貨関連のツイート数を取得する（完成後バッチ処理にする）
-Route::get('/testuserList', 'TwitterController@userList'); // 仮想通貨関連のツイートをしているユーザーを取得する（完成後バッチ処理にする）
-Route::get('/testautoFollow', 'FollowController@handl'); // 過疎通過関連のユーザーを自動フォローする（完成後バッチ処理にする）
-Route::get('/applimit', 'TwitterController@applimit'); // アプリケーション認証のAPI制限のカウント数の一覧を取得する
-Route::get('/userlimit', 'TwitterController@userlimit'); // ログインしているユーザーのAPI制限のカウント数の一覧を取得する
-Route::get('/getTicker', 'CoinsController@getTicker'); // ログインしているユーザーのAPI制限のカウント数の一覧を取得する
+Route::get('/applimit', 'TestController@applimit'); // アプリケーション認証のAPI制限のカウント数の一覧を取得する
+Route::get('/userlimit', 'TestController@userlimit'); // ログインしているユーザーのAPI制限のカウント数の一覧を取得する

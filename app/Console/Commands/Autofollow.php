@@ -64,9 +64,6 @@ class Autofollow extends Command
       \Log::info('AutoFollow : 開始');
       \Log::info('=====================================================================');
   
-      // \Log::info('=====================================================================');
-      // \Log::info('AutoFollow : 終了');
-      // \Log::info('=====================================================================');
         /**
          * 後にシステム全体での上限、990フォローを超えていたら実施しない処理を追記する
          */
@@ -87,7 +84,7 @@ class Autofollow extends Command
             if($auto_follow_run_user_list->isEmpty()){
               \Log::debug('自動フォローのユーザーが存在していないため処理を終了します');
               \Log::debug('    ');
-                exit();
+              exit();
             }
             foreach($auto_follow_run_user_list as $auto_follow_run_user_item) {
                 $user = $auto_follow_run_user_item; // 各ユーザーのUserモデル
@@ -114,7 +111,10 @@ class Autofollow extends Command
           \Log::debug('    ');
             exit();
         }
-      \Log::debug('処理を終了します');
+
+      \Log::debug('=====================================================================');
+      \Log::debug('AutoFollow : 終了');
+      \Log::debug('=====================================================================');
     }
 
     // 自動フォロー機能
@@ -136,10 +136,9 @@ class Autofollow extends Command
         // 配列を比較して重複していない値のみ出力（第二引数の配列の値と一致したものは除外される）
         // 比較元の配列を比較対象の配列と比較し、比較元の配列にしかない値のみを取得
         $follow_target_list = array_diff($twitterUserList, $follower_list);
-
      
         // dd($follow_target_list);
-        // 全てフォローしてリストが空だったら処理を実施
+        // 全てフォローしてリストが空だったら処理を停止
         foreach($follow_target_list as $follow_target_id){
 
             if(empty($follow_target_list)){
