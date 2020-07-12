@@ -43,7 +43,11 @@ Route::group(['middleware' => 'auth'], function () {
      **********************************************/
     // 仮想通貨関連のTwitterユーザーページを表示
     Route::get('/tweet-users', 'TwitterController@index')->name('userList.index');
-    // Ajax処理：ユーザーをフォローする
+    // Ajax処理：DBに登録した関連ユーザーを表示する
+    // Route::get('/userlist', 'TwitterController@getTwitterUserList');
+    // // Ajax処理：認証済みのユーザーの情報を取得
+    // Route::get('/authuser', 'TwitterController@authUser');
+    // // Ajax処理：ユーザーをフォローする
     Route::post('/follow', 'FollowController@follow');
     // Ajax処理：自動フォロー機能をONにする
     Route::post('/autofollow', 'FollowController@autoFollowFlg');

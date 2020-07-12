@@ -58,6 +58,16 @@ class LoginController extends Controller
       session(['access_token' => $access_token]);
       session(['access_token_secret' => $access_token_secret]);
       \Log::debug('twitter_token及びtwitter_token_secretが空でない場合はセッションに格納します：' . print_r(session()->all(), true));
+
+      /*******
+       * DB側の関連ユーザーとTwitterアカウントのフォローしているユーザーを比較し、
+       * 一致していないユーザーがいればfollowsテーブルに登録する
+      ********/
+
+
+
+
+
       return redirect()->intended($this->redirectPath());
     }
 
@@ -102,5 +112,48 @@ class LoginController extends Controller
   {
     return '/mypage';
     //例）return 'costs/index';
+  }
+
+  // 自分のフォローしているユーザーを取得する
+  public function fetchFollowTarget($twitter_id, $twitterUserList, $connect)
+  {   
+      // 15分毎15リクエストが上限です
+      $result = $connect->get('friends/ids', [
+          'user_id' => $twitter_id
+          ])->ids;
+          //\Log::debug('取得結果 : ' .print_r($result, true));
+      return $result;
+  }
+
+  // DBからTwitterユーザー情報を取得する
+  public function getTwitterUser()
+  {
+      // DBより仮想通貨関連のアカウントを取得
+      $dbresult = Twuser::all();
+
+      foreach ($dbresult as $item) {
+          $twitterUserList[] = $item->id;
+      }
+      
+      return $twitterUserList;
+  }
+  
+  // TwitterOAuthインスタンスを生成する
+  public function autoFollowAuth($twitter_user_token, $twitter_user_token_secret)
+  {
+    \Log::debug('=== インスタンスを生成します === ');
+
+          // ヘルパー関数のconfigメソッドを通じて、config/services.phpのtwitterの登録した中身を参照
+          $config = config('services.twitter');
+          // APIキーを格納
+          $api_key = $config['client_id'];
+          $api_key_secret = $config['client_secret'];
+          // アクセストークンを格納
+          $access_token = $twitter_user_token;
+          $access_token_secret = $twitter_user_token_secret;
+  
+          $OAuth = new TwitterOAuth($api_key, $api_key_secret, $access_token, $access_token_secret);
+  
+          return $OAuth;
   }
 }

@@ -18,6 +18,7 @@ class TwitterController extends Controller
         $this->middleware('auth');
     }
 
+    // テンプレートを表示する
     public function index()
     {
         // 認証されたユーザー情報を取得
