@@ -43,14 +43,16 @@ class GetTicker extends Command
         $result = file_get_contents('https://coincheck.com/api/ticker');
 
         $ticker = json_decode($result);
-
-        $coins = $coin->find(1);
-        
-        $coins->max_price = $ticker->high;
-
-        $coins->low_price = $ticker->low;
-
-        $coins->save();
+        try {
+            $coins = $coin->find(1);
+            
+            $coins->max_price = $ticker->high;
     
+            $coins->low_price = $ticker->low;
+    
+            $coins->save();
+        } catch (\Exception $e) {
+            \Log::debug('例外が発生しました。処理を停止します。' . $e->getMessage());
+        }
     }
 }

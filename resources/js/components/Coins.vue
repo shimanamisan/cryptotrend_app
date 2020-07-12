@@ -4,9 +4,7 @@
       <h1 class="p-coin__title">トレンドランキング</h1>
       <section class="c-container c-container__coin">
         <div class="p-coin__header">
-          <p class="p-coin__header__title">
-            ※チェックすると銘柄で絞り込みが出来ます
-          </p>
+      
 
           <CoinSearch :coin-data="this.coni_data" @check-vent="checkCoins" />
 

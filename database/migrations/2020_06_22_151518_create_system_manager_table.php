@@ -14,7 +14,7 @@ class CreateSystemManagerTable extends Migration
     public function up()
     {
         Schema::create('system_managers', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->increments('id');
             $table->string('one_day_system_counter');
             $table->timestamps();
         });

@@ -3,7 +3,7 @@
 namespace App\Console\Commands;
 
 use App\User;
-use App\TwitterUser; // ★追記
+use App\Twuser; // ★追記
 use App\SystemManager; // ★追記
 use Illuminate\Console\Command;
 use Abraham\TwitterOAuth\TwitterOAuth; // ★追記
@@ -15,14 +15,14 @@ class Autofollow extends Command
    *
    * @var string
    */
-  protected $signature = 'autofollow';
+  protected $signature = 'command:autofollow';
 
   /**
    * The console command description.
    *
    * @var string
    */
-  protected $description = 'Command description';
+  protected $description = '自動フォローを開始するコマンドです';
 
   /**
    * Create a new command instance.
@@ -57,16 +57,13 @@ class Autofollow extends Command
     // 1日に1000以上フォローしなようにする
 
     // 自動フォロー機能呼び出し
-    public function handl()
+    public function handle()
     {
     
       \Log::info('=====================================================================');
       \Log::info('AutoFollow : 開始');
       \Log::info('=====================================================================');
   
-      // \Log::info('=====================================================================');
-      // \Log::info('AutoFollow : 終了');
-      // \Log::info('=====================================================================');
         /**
          * 後にシステム全体での上限、990フォローを超えていたら実施しない処理を追記する
          */
@@ -87,7 +84,7 @@ class Autofollow extends Command
             if($auto_follow_run_user_list->isEmpty()){
               \Log::debug('自動フォローのユーザーが存在していないため処理を終了します');
               \Log::debug('    ');
-                exit();
+              exit();
             }
             foreach($auto_follow_run_user_list as $auto_follow_run_user_item) {
                 $user = $auto_follow_run_user_item; // 各ユーザーのUserモデル
@@ -114,7 +111,10 @@ class Autofollow extends Command
           \Log::debug('    ');
             exit();
         }
-      \Log::debug('処理を終了します');
+
+      \Log::debug('=====================================================================');
+      \Log::debug('AutoFollow : 終了');
+      \Log::debug('=====================================================================');
     }
 
     // 自動フォロー機能
@@ -137,9 +137,10 @@ class Autofollow extends Command
         // 比較元の配列を比較対象の配列と比較し、比較元の配列にしかない値のみを取得
         $follow_target_list = array_diff($twitterUserList, $follower_list);
 
+        // 配列を比較して、既にフォローしているユーザーのIDを出力
+        // $follow_done_list = array_diff($follower_list, $twitterUserList);
      
-        // dd($follow_target_list);
-        // 全てフォローしてリストが空だったら処理を実施
+        // 全てフォローしてリストが空だったら処理を停止
         foreach($follow_target_list as $follow_target_id){
 
             if(empty($follow_target_list)){
@@ -174,6 +175,7 @@ class Autofollow extends Command
                     $result = $connect->post('friendships/create', [
                         'user_id' => $follow_target_id
                     ]);
+
                 }else{
                   \Log::debug($system_follow_counter_quarter_minutes . ' 回目、フォローの上限を超えました。処理を停止します。');
                     
@@ -189,7 +191,7 @@ class Autofollow extends Command
                   sleep(900);
                     // break;
                 }
-              \Log::debug('連続でフォローしすぎてアカウント凍結されないように3秒間隔をあける');
+              \Log::debug('フォローする間隔を3秒あける');
               \Log::debug('    ');
                 sleep(3);
 
@@ -223,10 +225,10 @@ class Autofollow extends Command
     public function getTwitterUser()
     {
         // DBより仮想通貨関連のアカウントを取得
-        $dbresult = TwitterUser::all();
+        $dbresult = Twuser::all();
 
         foreach ($dbresult as $item) {
-            $twitterUserList[] = $item->twitter_id;
+            $twitterUserList[] = $item->id;
         }
         
         return $twitterUserList;

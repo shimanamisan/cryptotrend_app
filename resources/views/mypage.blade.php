@@ -7,11 +7,6 @@
 @section('content')
 <div id="app">
     <!-- app.bladeのyieldの箇所に読み込まれる -->
-    <Mypage 
-        endpoint="{{ url('mypage') }}" 
-        user="{{ $user->name }}"
-        email="{{ $user->email }}"
-        avatar="{{ $user->avatar }}"
-    />
+    <Mypage />
 </div>
 @endsection

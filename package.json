@@ -58,6 +58,7 @@
         "IE 10"
     ],
     "dependencies": {
+        "json-bigint": "^0.3.1",
         "vuejs-paginate": "^2.1.0"
     }
 }

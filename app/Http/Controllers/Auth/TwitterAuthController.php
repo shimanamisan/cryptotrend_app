@@ -53,20 +53,22 @@ class TwitterAuthController extends Controller
                 \Log::debug('ログイン時の処理です');
                 \Log::debug('   ');
                 
-                // メールアドレスが未登録の場合は、ユーザー登録していないユーザーと判定する
-                $userInfo = User::where('email', $user->getEmail())->first();
-                // twitter_idも格納
-                $twserId = User::where('my_twitter_id', $user->getId())->first();
-                    
+                // delete_flgが立っていないユーザーのメールアドレスが未登録の場合は、ユーザー登録していないユーザーと判定する
+                $userInfo = User::where('email', $user->getEmail())
+                                  ->where('delete_flg', 0)
+                                  ->first();
+                // twitter_idも同様に格納
+                $twUserId = User::where('my_twitter_id', $user->getId())
+                                  ->where('delete_flg', 0)
+                                  ->first();
                     // Twitter_id及びメールアドレスが登録されていなかったら未登録ユーザーとする
                     if( empty($twUserId) || empty($userInfo) ){
-                        \Log::debug('emailが無いのでなので未登録ユーザーです');
+                        \Log::debug('emailかtwitter_idが無いのでなので未登録ユーザーです');
                         \Log::debug('   ');
                         // 画面遷移する前にログインフラグを削除
                         session()->forget('login_flg');
                         // ログイン画面へリダイレクト
                         return redirect('/register')->with('error_message', '提供された資格情報を持つアカウントは見つかりませんでした。新規登録を行って下さい。');
-
                     }
 
                 // emailでユーザー情報が登録されていた場合は、TwitterIDなどをDBへ格納する
@@ -76,7 +78,7 @@ class TwitterAuthController extends Controller
                     'twitter_token_secret' => $user->tokenSecret,
                 ]);
 
-                dd($userInfo);
+                // dd($userInfo);
 
                 $userInfo->save();
 
@@ -86,6 +88,11 @@ class TwitterAuthController extends Controller
                 Auth::login($userInfo);
                 // 画面遷移する前にログインフラグを削除
                 session()->forget('login_flg');
+                // セッションにTwitterユーザー情報を入れる
+                session(['twitter_id' => $user->id]);
+                session(['access_token' => $user->token]);
+                session(['access_token_secret' => $user->tokenSecret]);
+                session(['follow_limit_time' => $userInfo->follow_limit_time]);
                 // トレンド一覧画面へリダイレクト
                 \Log::debug(session()->all());
                 return redirect()->to('/coins');
@@ -128,19 +135,22 @@ class TwitterAuthController extends Controller
   // 
   private function findCreateUser($user)
     {
-        $validUser = User::where('email', $user->getEmail())->first();
+        // 退会していないユーザーを検索
+        $userInfo = User::where('email', $user->getEmail())
+        ->where('delete_flg', 0)
+        ->first();
 
         // メールアドレスで登録済みのユーザーで、新規でTwitter認証をしてきている場合
-        if(!empty($validUser)){
+        if(!empty($userInfo)){
 
-            $validUser->fill([    
+            $userInfo->fill([    
                 'my_twitter_id' => $user->getId(),
                 'twitter_token' => $user->token,
                 'twitter_token_secret' => $user->tokenSecret,
             ]);
 
-            $validUser->save();
-            return $validUser;
+            $userInfo->save();
+            return $userInfo;
         }
 
         // 未登録ユーザーだったときの処理

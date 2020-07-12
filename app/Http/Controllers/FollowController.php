@@ -27,16 +27,20 @@ class FollowController extends Controller
     // フォローボタンからユーザーをフォローする
     public function follow(Request $request)
     {
-        /**
+               /**
          * システムとしての1日のフォロー上限回数を超えた時の処理を追記する
          */
         
         // インスタンスを生成
         $connection = $this->singleFollowAuth();
+
         // フォローするユーザーのIDを格納
         $follow_target_id = $request->id;
+
+
         // 1日のフォロー上限を超えないように、現在のフォローした数を取得
         $follow_limit_count = Auth::user()->follow_limit_count;
+
         // 前回の15分毎のフォロー上限から15分後の値を格納（DBから引っ張ってきた値は数値ではなく数字なので変換する）
         $release_limit_time = (int)session()->get('follow_limit_time');
         // 現在の時間を格納
@@ -53,16 +57,18 @@ class FollowController extends Controller
             if($release_limit_time < $now_time){
                 Log::debug('前回の制限から15分経過しています。処理を実行します');
                 Log::debug('    ');
-                
+                    
                     // APIのエンドポイントを叩きフォローする
                     $result = $connection->post('friendships/create', [
                     'user_id' => $follow_target_id,
                     ]);
-                    
+           
+                    // dd($result);
+                   
                     // Errorハンドリング
                     // 通信成功時の処理
                     if ($connection->getLastHttpCode() == 200) {
-
+                     
                         // 既にフォローしているユーザーだった時の処理
                         if ($result->following) {
                             Log::debug('既にフォローしています；'. print_r($result, true));
@@ -81,8 +87,12 @@ class FollowController extends Controller
             
                         return response()->json(['success' => 'フォローしました！'], 200);
 
-                    } else {
-                        // 通信失敗時の処理
+                    } else if($connection->getLastHttpCode() == 403){
+                        \Log::debug('ステータスコード403の処理です');
+                        // フォロー済みのユーザーだった場合は403のステータスコードを返す
+                        return response()->json(['forbidden' => '既にフォローしているユーザーです'], 403);
+                    }else{
+                          // 通信失敗時の処理
                         return response()->json(['error' => '時間を置いてから再度実行して下さい'], 500);
                     }
             }else{
@@ -133,6 +143,11 @@ class FollowController extends Controller
          // アクセストークンを格納
          $access_token = session('access_token');
          $access_token_secret = session('access_token_secret');
+
+        //  \Log::debug($api_key);
+        //  \Log::debug($api_key_secret);
+        //  \Log::debug($access_token);
+        //  \Log::debug($access_token_secret);
  
          $OAuth = new TwitterOAuth($api_key, $api_key_secret, $access_token, $access_token_secret);
  

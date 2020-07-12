@@ -1,139 +1,124 @@
 <template>
   <div>
     <main class="l-main l-main__common">
-      <ul class="c-tabs__container c-tabs__container--md">
-        <li
-          class="c-tabs__item c-tabs__item--full"
-          :class="{ 'c-tabs__item--active': tab === 1 }"
-          @click="tab = 1"
-        >
-          プロフィール編集
-        </li>
-        <li
-          class="c-tabs__item c-tabs__item--full"
-          :class="{ 'c-tabs__item--active': tab === 2 }"
-          @click="tab = 2"
-        >
-          パスワード変更
-        </li>
-      </ul>
+      <h1 class="p-mypage__title">マイページ</h1>
 
-      <div class="c-container__profile u-margin__bottom--lg">
-        <div class="p-profile__container">
-          <div class="p-profile__body" v-show="tab === 1">
-            <div class="p-profile__content">
-              <p>プロフィール画像</p>
-              <label class="p-profile__pic--ImgWrap" for>
-                <input class="p-profile__pic--drop" type="file" />
-                <output class>
-                  <img
-                    class="p-profile__pic--output"
-                    v-bind:src="userDataForm.avatar"
-                    alt
-                  />
-                </output>
-              </label>
-              <div class="p-profile__submitWrap">
-                <div class="p-profile__content--cancel">
-                  <button class="c-btn p-profile__btn p-profile__btn--cancel">
-                    キャンセル
-                  </button>
-                </div>
-                <div class="p-profile__content--submit">
-                  <button class="c-btn p-profile__btn p-profile__btn--submit">
-                    変更
-                  </button>
-                </div>
-              </div>
-            </div>
-
-            <div class="p-profile__content">
-              <div class="p-profile__content--body">
-                <label for="nicname">ニックネーム</label>
-                <input
-                  class="c-form__input"
-                  type="text"
-                  name="nicname"
-                  v-model="userDataForm.nicname"
-                />
-                <div class="p-profile__content--inwrap">
-                  <div class="p-profile__content--cancel">
-                    <button class="c-btn p-profile__btn p-profile__btn--cancel">
-                      キャンセル
-                    </button>
-                  </div>
-                  <div class="p-profile__content--submit">
-                    <button class="c-btn p-profile__btn p-profile__btn--submit">
-                      変更
-                    </button>
-                  </div>
-                </div>
-              </div>
-              <div class="p-profile__content--body">
-                <label for>メールアドレス</label>
-                <input
-                  class="c-form__input"
-                  type="text"
-                  v-model="userDataForm.email"
-                />
-                <div
-                  class="p-profile__content--inwrap"
-                  v-show="this.editEmail_flg"
-                >
-                  <div class="p-profile__content--cancel">
-                    <button class="c-btn p-profile__btn p-profile__btn--cancel">
-                      キャンセル
-                    </button>
-                  </div>
-                  <div class="p-profile__content--submit">
-                    <button class="c-btn p-profile__btn p-profile__btn--submit">
-                      変更
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
+      <div class="c-container__mypage u-margin__bottom--lg">
+        <div class="p-mypage__container">
+          <div class="p-form__title">
+            各種アカウント情報を変更できます。
           </div>
-          <div class="p-profile__body" v-show="tab === 2">
-            <div class="p-profile__content--body">
+          <hr class="u-line" />
+          <div class="p-mypage__content">
+            <div class="p-mypage__content__body u-margin__bottom--m">
+              <label for="nicname">ニックネーム</label>
+              <input
+                class="c-form__input"
+                :class="{ 'c-error__input': errors_nicname }"
+                type="text"
+                name="nicname"
+                v-model="userDataForm.nicname"
+                placeholder="your username"
+                @focus="clearError('nicname')"
+              />
+              <div v-if="errors_nicname" class="c-error">
+                <ul v-if="errors_nicname">
+                  <li v-for="msg in errors_nicname" :key="msg">
+                    {{ msg }}
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="p-mypage__content__body u-margin__bottom--m">
+              <label for>メールアドレス</label>
+              <input
+                class="c-form__input"
+                :class="{ 'c-error__input': errors_email }"
+                type="text"
+                v-model="userDataForm.email"
+                placeholder="email@example.com"
+                @focus="clearError('email')"
+              />
+              <div v-if="errors_email" class="c-error">
+                <ul v-if="errors_email">
+                  <li v-for="msg in errors_email" :key="msg">
+                    {{ msg }}
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="p-mypage__content__body u-margin__bottom--m">
               <label for>新しいパスワード</label>
               <input
-                class="c-form__input u-margin__bottom--s"
+                class="c-form__input"
+                :class="{ 'c-error__input': errors_password }"
                 type="password"
-                v-model="passwordEditForm.password"
+                v-model="userDataForm.password"
+                placeholder="パスワード"
+                @focus="clearError('pass')"
               />
-
+              <div v-if="errors_password" class="c-error">
+                <ul v-if="errors_password">
+                  <li v-for="msg in errors_password" :key="msg">
+                    {{ msg }}
+                  </li>
+                </ul>
+              </div>
+              <template v-if="!this.isset_pass">
+                <span class="p-mypage__text"
+                  >※半角英数で8文字以上ご使用下さい</span
+                >
+                <br />
+                <span class="p-mypage__text"
+                  >※パスワードを追加するとメールアドレスでログイン出来ます。Twitterアカウントでもログイン出来ます。</span
+                >
+              </template>
+            </div>
+            <div class="p-mypage__content__body u-margin__bottom--m">
               <label for>新しいパスワードの確認</label>
               <input
-                class="c-form__input u-margin__bottom--s"
+                class="c-form__input"
                 type="password"
-                v-model="passwordEditForm.password_confirm"
+                placeholder="パスワードの確認"
+                v-model="userDataForm.password_confirmation"
               />
-              <div class="p-profile__content--inwrap">
-                <div class="p-profile__content--submit u-btn__submit">
+
+              <div class="p-mypage__content--inwrap">
+                <div class="p-mypage__content--cancel">
                   <button
-                    class="c-btn p-profile__btn p-profile__btn--submit u-btn__submit"
-                    :disabled="isDisabled"
+                    class="c-btn p-mypage__btn p-mypage__btn--cancel"
+                    @click="cancelFrom"
                   >
-                    変更
+                    入力をクリア
+                  </button>
+                </div>
+                <div class="p-mypage__content--submit">
+                  <button
+                    class="c-btn p-mypage__btn p-mypage__btn--submit"
+                    @click="storUserData"
+                  >
+                    変更を保存
                   </button>
                 </div>
               </div>
             </div>
           </div>
         </div>
-        <div class="p-profile__container">
-          <div></div>
-        </div>
       </div>
-      <div class="c-container__profile">
-        <div class="p-profile__dlbody">
-          <h1 class="p-profile__dltitle">アカウントの削除</h1>
+      <div class="c-container__mypage">
+        <div class="p-mypage__container p-mypage__dlcontent--common">
+          <h1 class="p-mypage__dltitle">アカウントの停止</h1>
           <hr class="u-line" />
-          <div class="p-profile__dlcontent">
-            <p>退会処理を行います。登録している情報はすべて削除されます。</p>
+          <div class="p-mypage__dlcontent">
+            <p>
+              退会処理を行います。アカウントの利用を停止すると、CryptoTrendにログインしたり、仮想通貨関連の情報が見れなくなります。
+            </p>
           </div>
-          <button class="c-btn p-profile__dlbtn">削除する</button>
+          <button class="c-btn p-mypage__dlbtn" @click="deleteUser">
+            アカウントを停止する
+          </button>
         </div>
       </div>
     </main>
@@ -144,40 +129,103 @@
 export default {
   data() {
     return {
-      // ボタン表示フラグ
-      editImage_flg: false,
-      editName_flg: false,
-      editEmail_flg: false,
-      tab: 1,
+      userId: '',
+      // 入力フォームデータバインディング
       userDataForm: {
         nicname: this.user,
         email: this.email,
-        avatar: '../storage/img/no_img.png',
+        password: this.password,
+        password_confirmation: this.password_confirmation,
       },
-      passwordEditForm: {
-        password: '',
-        password_confirm: '',
-      },
+      errors_nicname: null,
+      errors_email: null,
+      errors_password: null,
+      isset_pass: false,
       isDisabled: true,
     };
   },
-  props: {
-    endpoint: {
-      type: String,
-      default: '',
+  computed: {},
+  methods: {
+    async getUserData() {
+      const response = await axios
+        .get('/mypage/user')
+        .catch((error) => error.response || error);
+      // console.log(response.data);
+      if (response.status === 200) {
+        this.userId = response.data.id;
+        this.userDataForm.nicname = response.data.name;
+        this.userDataForm.email = response.data.email;
+        this.userDataForm.password = response.data.password;
+        this.isset_pass = response.data.isset_pass;
+      } else {
+        alert('エラーが発生しました。しばらくお待ち下さい');
+      }
     },
-    user: {
-      type: String,
+    async storUserData() {
+      const response = await axios
+        .post('/mypage/userdata', {
+          id: this.userId,
+          name: this.userDataForm.nicname,
+          email: this.userDataForm.email,
+          password: this.userDataForm.password,
+          password_confirmation: this.userDataForm.password_confirmation,
+        })
+        .catch((error) => error.response || error);
+      // console.log(response.data);
+      if (response.status === 200) {
+        this.userId = response.data.id;
+        this.userDataForm.nicname = response.data.name;
+        this.userDataForm.email = response.data.email;
+        this.userDataForm.password = response.data.password;
+      } else if (response.status === 422) {
+        // console.log(response.data.errors);
+        this.errors_nicname = response.data.errors.name;
+        this.errors_email = response.data.errors.email;
+        this.errors_password = response.data.errors.password;
+
+        // バリデーションで引っかかった場合は、パスワード入力フォームは空にする
+        this.userDataForm.password = null;
+        this.userDataForm.password_confirmation = null;
+      } else {
+        alert('エラーが発生しました。しばらくお待ち下さい');
+      }
     },
-    email: {
-      type: String,
+    async deleteUser() {
+      if (confirm('退会します。よろしいですか？')) {
+        const response = await axios
+          .post('/mypage/delete')
+          .catch((error) => error.response || error);
+        // console.log(response);
+        if (response.status === 200) {
+          // 退会後ページを移動
+          window.location = '/';
+        } else {
+          alert('エラーが発生しました。しばらくお待ち下さい');
+          window.location = '/login';
+        }
+      }
     },
-    avatar: {
-      type: String,
+    cancelFrom() {
+      this.errors = null;
+      this.userDataForm.nicname = null;
+      this.userDataForm.email = null;
+      this.userDataForm.password = null;
+      this.userDataForm.password_confirmation = null;
+    },
+    clearError(value) {
+      if (value === 'nicname') {
+        // console.log(typeof value);
+        this.errors_nicname = null;
+      } else if (value === 'email') {
+        this.errors_email = null;
+      } else if (value === 'pass') {
+        this.errors_password = null;
+      }
     },
   },
-  computed: {},
-  methods: {},
+  created() {
+    this.getUserData();
+  },
 };
 </script>
 

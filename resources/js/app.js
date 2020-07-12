@@ -4,7 +4,12 @@
  * building robust, powerful web applications using Vue and Laravel.
  */
 
-require('./bootstrap');
+require('./bootstrap')
+// axios use JSON BIGINT Parser
+// const JSONbig = require('json-bigint');
+// axios.defaults.transformResponse =  [function (data) {
+//     return JSONbig.parse(data);
+// }]
 
 // window.Vue = require("vue");
 
@@ -26,7 +31,6 @@ require('./bootstrap');
 
 // sass ファイル読み込み
 import '../sass/style.scss';
-import _, { functionsIn } from 'lodash';
 
 import Vue from 'vue';
 

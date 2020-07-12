@@ -115,7 +115,6 @@ export default {
     async sendFollowRequest(id, index) {
       // catch(error => error.response || error)で非同期通信が成功しても失敗してもresponseに結果を代入する
       const response = await axios.post('/follow', { id: id }).catch((error) => error.response || error);
-
       // 通信が成功した時の処理
       if (response.status === 200) {
         // 返却されたメッセージを格納
@@ -126,13 +125,11 @@ export default {
         this.tw_userItems.splice(index, 1);
         // 2秒後にメッセージを非表示にする
         setTimeout(this.isShowMessage, 2000);
-
         // ユーザーを既にフォローしていた時の処理
       } else if (response.status === 403) {
         this.systemMessage = response.data;
         this.isShowMessage();
         setTimeout(this.isShowMessage, 2000);
-
         // 何か予期せぬErrorが発生したとき
       }else{
         this.systemMessage = response.data;
@@ -182,5 +179,4 @@ export default {
 </script>
 
 <style>
-
 </style>
