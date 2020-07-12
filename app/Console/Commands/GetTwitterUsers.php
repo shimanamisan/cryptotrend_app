@@ -65,13 +65,11 @@ class GetTwitterUsers extends Command
 
         // 仮想通貨に関するユーザーを検索
         $search_result = \Twitter::get('users/search', $options);
-
-        // dd(print_r($search_result, true));
-
         // DBから返却されたコレクションが空だったら初期処理として新規登録します
         if ($dbresult->isEmpty()) {
             \Log::debug('twitter_usersテーブルが空なので初期登録処理を実行します。：');
             foreach ($search_result as $search_result_item) {
+              
                 $twitter_user[] = [
                 'id' => $search_result_item->id,
                 'user_name' => $search_result_item->name,
@@ -115,7 +113,7 @@ class GetTwitterUsers extends Command
                         'updated_at' => Carbon::now(),
                     ];
                         // 存在していたユーザーの情報を更新します
-                        $TwitterUser->where('twitter_id', $search_user_id)->update($twitter_user);
+                        $TwitterUser->where('id', $search_user_id)->update($twitter_user);
                         \Log::debug('更新しました。更新したID：' . $search_user_id);
                     } else {
                         ++$newCounter;
