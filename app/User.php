@@ -24,7 +24,6 @@ class User extends Authenticatable implements MustVerifyEmail
         'my_twitter_id',
         'twitter_token',
         'twitter_token_secret',
-        'avatar',
     ];
 
     /**

@@ -16,6 +16,9 @@ class Twuser extends Model
         'followers_count',
     ];
 
+    // IDなどの数値も文字列化してVue側に渡す
+    // JS側がbigintではなくNumberとして解釈するのが原因のようだ
+    public $incrementing = false;
     /**
      * リレーションシップ followテーブル
      * 
@@ -24,4 +27,5 @@ class Twuser extends Model
     {
         return $this->hasMany('App\Follow');
     }
+
 }
