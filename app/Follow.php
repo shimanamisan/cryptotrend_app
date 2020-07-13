@@ -11,6 +11,8 @@ class Follow extends Model
         'twuser_id'
     ];
 
+    public $primaryKey = 'twuser_id';
+
     public function User()
     {
         return $this->belongsTo('App\User');
