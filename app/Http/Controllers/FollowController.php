@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Follow; // ★追記
 use App\User; // ★追記
-use App\SystemManager; // ★追記
+use Carbon\Carbon; //★追記
 use App\TwitterUser; // ★追記
 use Illuminate\Http\Request;
+use App\SystemManager; // ★追記
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth; // ★追記
 use Abraham\TwitterOAuth\TwitterOAuth; // ★追記
@@ -27,7 +29,7 @@ class FollowController extends Controller
     // フォローボタンからユーザーをフォローする
     public function follow(Request $request)
     {
-               /**
+        /**
          * システムとしての1日のフォロー上限回数を超えた時の処理を追記する
          */
         
@@ -37,15 +39,14 @@ class FollowController extends Controller
         // フォローするユーザーのIDを格納
         $follow_target_id = $request->id;
 
-
         // 1日のフォロー上限を超えないように、現在のフォローした数を取得
         $follow_limit_count = Auth::user()->follow_limit_count;
 
         // 前回の15分毎のフォロー上限から15分後の値を格納（DBから引っ張ってきた値は数値ではなく数字なので変換する）
-        $release_limit_time = (int)session()->get('follow_limit_time');
+        $old_time = Auth::user()->follow_limit_time;
         // 現在の時間を格納
-        $now_time = time();
-        Log::debug('現在の時刻です：'.$now_time . '  制限の時間です：'.$release_limit_time);
+        $now_time = Carbon::now();
+        Log::debug('現在の時刻です：'.$now_time . '  制限の時間です：'.$old_time);
         Log::debug('    ');
 
         // ユーザー当たりの本日のリクエスト上限の範囲内か判定、超えていたらフォローの処理を行わずメッセージを返す
@@ -54,7 +55,7 @@ class FollowController extends Controller
             Log::debug('    ');
 
             // 現在の時刻が15分毎14フォローの制限から、15分経過していたら処理を実行
-            if($release_limit_time < $now_time){
+            if($old_time < $now_time){
                 Log::debug('前回の制限から15分経過しています。処理を実行します');
                 Log::debug('    ');
                     
@@ -74,16 +75,19 @@ class FollowController extends Controller
                             Log::debug('既にフォローしています；'. print_r($result, true));
                             // APIへのリクエストは通っているので、リミット数をカウントする。
                             ++$follow_limit_count;
-                            Auth::user()->follow_limit_time = time(); // 現在の時間を格納
+                            Auth::user()->follow_limit_time = Carbon::now(); // 現在の時間を格納
                             Auth::user()->follow_limit_count = $follow_limit_count;
                             Auth::user()->update();
                             return response()->json(['forbidden' => '既にフォローしているユーザーです'], 403);
                         }
                         // APIへのリクエスト後、リミット数をカウント
                         ++$follow_limit_count;
-                        Auth::user()->follow_limit_time = time(); // 現在の時間を格納
+                        Auth::user()->follow_limit_time = Carbon::now(); // 現在の時間を格納
                         Auth::user()->follow_limit_count = $follow_limit_count;
                         Auth::user()->update();
+
+                        // followsテーブルへ登録
+                        $this->addFollowTable(Auth::user()->id, $follow_target_id);
             
                         return response()->json(['success' => 'フォローしました！'], 200);
 
@@ -152,6 +156,24 @@ class FollowController extends Controller
          $OAuth = new TwitterOAuth($api_key, $api_key_secret, $access_token, $access_token_secret);
  
          return $OAuth;
+     }
+
+     // followsテーブルへの登録
+     public function addFollowTable($userID, $twUserID)
+     {
+        try{
+            Follow::create([
+                'user_id' => $userID,
+                'twuser_id' => $twUserID
+            ]);
+
+            \Log::debug('フォローしたユーザーをfollowsテーブルへ登録しました');
+            \Log::debug('   ');
+
+        }catch(Exception $e){
+            \Log::debug('例外が発生しました' . $e->getMessage());
+            return response()->json(['error' => '問題が発生しました。しばらくお待ち下さい。'], 500);
+        }
      }
 
  

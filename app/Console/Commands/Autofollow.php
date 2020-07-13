@@ -124,21 +124,21 @@ class Autofollow extends Command
         $system_follow_counter_quarter_minutes = 0;
 
         // インスタンスを生成
-        $connect = $this->autoFollowAuth($twitter_user_token, $twitter_user_token_secret);
+        $connection = $this->autoFollowAuth($twitter_user_token, $twitter_user_token_secret);
 
         // DBに登録されているユーザを取得
         $twitterUserList = $this->getTwitterUser();
 
         // フォローしているユーザーを取得
-        $follower_list = $this->fetchFollowTarget($twitter_id, $twitterUserList, $connect);
+        $follow_list = $this->fetchFollowTarget($twitter_id, $twitterUserList, $connection);
         // フォローしているユーザーのIDとDBに登録されているIDの差分を取得する。一致していないもの（フォローしていないユーザー）を取得する
         // 第一引数が比較元の配列、第二引数に比較する配列を指定する
         // 配列を比較して重複していない値のみ出力（第二引数の配列の値と一致したものは除外される）
         // 比較元の配列を比較対象の配列と比較し、比較元の配列にしかない値のみを取得
-        $follow_target_list = array_diff($twitterUserList, $follower_list);
+        $follow_target_list = array_diff($twitterUserList, $follow_list);
 
         // 配列を比較して、既にフォローしているユーザーのIDを出力
-        // $follow_done_list = array_diff($follower_list, $twitterUserList);
+        // $follow_done_list = array_diff($follow_list, $twitterUserList);
      
         // 全てフォローしてリストが空だったら処理を停止
         foreach($follow_target_list as $follow_target_id){
@@ -172,7 +172,7 @@ class Autofollow extends Command
                   \Log::debug('まだ '. $system_follow_counter_quarter_minutes . ' 回目のループなのでフォローを継続します');
                     
                     // フォローを実施する
-                    $result = $connect->post('friendships/create', [
+                    $result = $connection->post('friendships/create', [
                         'user_id' => $follow_target_id
                     ]);
 
@@ -211,10 +211,10 @@ class Autofollow extends Command
     }
     
     // 自分のフォローしているユーザーを取得する
-    public function fetchFollowTarget($twitter_id, $twitterUserList, $connect)
+    public function fetchFollowTarget($twitter_id, $connection)
     {   
         // 15分毎15リクエストが上限です
-        $result = $connect->get('friends/ids', [
+        $result = $connection->get('friends/ids', [
             'user_id' => $twitter_id
             ])->ids;
             //\Log::debug('取得結果 : ' .print_r($result, true));
