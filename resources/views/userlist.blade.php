@@ -8,6 +8,6 @@
 @section('content')
 <div id="app">
     <!-- app.bladeのyieldの箇所に読み込まれる -->
-    <User-List :tw_user="{{ ($tw_user) }}" :user="{{ $user }}" />
+    <User-List :follow_list="{{ ($follow_list) }}" :user="{{ $user }}"/>
 </div>
 @endsection

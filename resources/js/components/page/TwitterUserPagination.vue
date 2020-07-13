@@ -17,26 +17,52 @@
           <p v-if="parseBoolean">自動フォロー機能ON</p>
           <p v-else>自動フォロー機能OFF</p>
         </button>
-        <p
-          class="p-twuser__header__text"
-        >{{ this.totalPage }}件中 {{ pageStart }} - {{ endPage }}件まで表示</p>
-        <p class="p-twuser__header__text">○○人フォロー済</p>
+        <p class="p-twuser__header__text">
+          {{ this.totalPage }}件中 {{ pageStart }} - {{ endPage }}件まで表示
+        </p>
+        <p class="p-twuser__header__text">{{ followCount }}人フォロー済</p>
       </div>
-      <div class="p-twuser__card" v-for="(tw_userItems, index) in getTwitterUserItems" :key="index">
-        <button
-          class="c-btn c-btn__common c-btn__common--follow"
-          @click="sendFollowRequest(tw_userItems.twitter_id, index)"
-        >フォローする</button>
+      <div
+        class="p-twuser__card"
+        v-for="(tw_userItems, index) in getTwitterUserItems"
+        :key="index"
+      >
+        <template v-if="tw_userItems.isFollow">
+          <button
+            class="c-btn c-btn__common c-btn__common--follow"
+            @click="sendUnFollowRequest(tw_userItems.id, index)"
+          >
+            フォロー解除する
+          </button>
+        </template>
+        <template v-else>
+          <button
+            class="c-btn c-btn__common c-btn__common--follow"
+            @click="sendFollowRequest(tw_userItems.id, index)"
+          >
+            フォローする
+          </button>
+        </template>
         <div class="p-twuser__detail__name">{{ tw_userItems.user_name }}</div>
-        <div class="p-twuser__detail__account">＠{{ tw_userItems.account_name }}</div>
-        <div class="p-twuser__detail__description">{{ tw_userItems.description }}</div>
+        <div class="p-twuser__detail__account">
+          ＠{{ tw_userItems.account_name }}
+        </div>
+        <div class="p-twuser__detail__description">
+          {{ tw_userItems.description }}
+        </div>
         <div class="p-twuser__detail__item">
-          <p class="p-twuser__detail__item__count">フォロー数:{{ tw_userItems.friends_count }}</p>
-          <p class="p-twuser__detail__item__count">フォロワー数:{{ tw_userItems.followers_count }}</p>
+          <p class="p-twuser__detail__item__count">
+            フォロー数:{{ tw_userItems.friends_count }}
+          </p>
+          <p class="p-twuser__detail__item__count">
+            フォロワー数:{{ tw_userItems.followers_count }}
+          </p>
         </div>
         <div class="p-twuser__detail">
           <p class="p-twuser__detail__tweet__title">最新ツイート</p>
-          <div class="p-twuser__detail__tweet">{{ tw_userItems.new_tweet }}</div>
+          <div class="p-twuser__detail__tweet">
+            {{ tw_userItems.new_tweet }}
+          </div>
         </div>
       </div>
     </section>
@@ -64,12 +90,15 @@
 <script>
 import Vue from 'vue';
 import Paginate from 'vuejs-paginate';
-Vue.component('paginate', Paginate);
+// Vue.component('paginate', Paginate);
 export default {
-  props: ['tw_user', 'total_page', 'user'],
+  props: ['follow_list', 'total_page', 'user'],
+  components: {
+    Paginate,
+  },
   data() {
     return {
-      tw_userItems: this.tw_user,
+      follow_list_item: this.follow_list,
       totalPage: this.total_page,
       parPage: '',
       currentPage: 1,
@@ -78,6 +107,7 @@ export default {
       systemMessage: '',
       // 自動フォロー中のフラグ(ユーザー情報より取得)
       autoFollow_flg: this.user.autofollow_status,
+      followcounter: 0,
     };
   },
   methods: {
@@ -103,8 +133,10 @@ export default {
     },
     async sendAutoFollowRequest() {
       // catch(error => error.response || error)で非同期通信が成功しても失敗してもresponseに結果を代入する
-      const response = await axios.post('/autofollow', { status: this.autoFollow_flg }).catch((error) => error.response || error);
-      
+      const response = await axios
+        .post('/autofollow', { status: this.autoFollow_flg })
+        .catch((error) => error.response || error);
+
       if (this.autoFollow_flg == 0) {
         this.autoFollow_flg = 1;
       } else {
@@ -114,7 +146,9 @@ export default {
     },
     async sendFollowRequest(id, index) {
       // catch(error => error.response || error)で非同期通信が成功しても失敗してもresponseに結果を代入する
-      const response = await axios.post('/follow', { id: id }).catch((error) => error.response || error);
+      const response = await axios
+        .post('/follow', { id: id })
+        .catch((error) => error.response || error);
       // 通信が成功した時の処理
       if (response.status === 200) {
         // 返却されたメッセージを格納
@@ -122,7 +156,7 @@ export default {
         // フラッシュメッセージを表示
         this.isShowMessage();
         // フォローしたユーザーの要素を削除
-        this.tw_userItems.splice(index, 1);
+        this.follow_list_item.splice(index, 1);
         // 2秒後にメッセージを非表示にする
         setTimeout(this.isShowMessage, 2000);
         // ユーザーを既にフォローしていた時の処理
@@ -131,7 +165,34 @@ export default {
         this.isShowMessage();
         setTimeout(this.isShowMessage, 2000);
         // 何か予期せぬErrorが発生したとき
-      }else{
+      } else {
+        this.systemMessage = response.data;
+        this.isShowMessage();
+        setTimeout(this.isShowMessage, 2000);
+      }
+    },
+    async sendUnFollowRequest(id, index) {
+      // catch(error => error.response || error)で非同期通信が成功しても失敗してもresponseに結果を代入する
+      const response = await axios
+        .post('/follow', { id: id })
+        .catch((error) => error.response || error);
+      // 通信が成功した時の処理
+      if (response.status === 200) {
+        // 返却されたメッセージを格納
+        this.systemMessage = response.data;
+        // フラッシュメッセージを表示
+        this.isShowMessage();
+        // フォローしたユーザーの要素を削除
+        this.follow_list_item.splice(index, 1);
+        // 2秒後にメッセージを非表示にする
+        setTimeout(this.isShowMessage, 2000);
+        // ユーザーを既にフォローしていた時の処理
+      } else if (response.status === 403) {
+        this.systemMessage = response.data;
+        this.isShowMessage();
+        setTimeout(this.isShowMessage, 2000);
+        // 何か予期せぬErrorが発生したとき
+      } else {
         this.systemMessage = response.data;
         this.isShowMessage();
         setTimeout(this.isShowMessage, 2000);
@@ -144,11 +205,11 @@ export default {
       let current = this.currentPage * this.parPage;
       let start = current - this.parPage;
       // sliceで配列を切り取る。index番号で指定するのでstartは0番から始まる
-      return this.tw_userItems.slice(start, current);
+      return this.follow_list.slice(start, current);
     },
     getPageCount() {
       // 取得してきたユーザー情報の総数 ÷ 表示させるページネーション数
-      return Math.ceil(this.tw_userItems.length / this.parPage);
+      return Math.ceil(this.follow_list.length / this.parPage);
     },
     pageStart() {
       let current = this.currentPage * this.parPage;
@@ -171,6 +232,14 @@ export default {
         return flg;
       }
     },
+    // フォローしているユーザー数を表示
+    followCount() {
+      let counter = this.follow_list_item.filter((item) => {
+        return item.isFollow;
+      });
+
+      return counter.length;
+    },
   },
   created() {
     this.paginationNumber();
@@ -178,5 +247,4 @@ export default {
 };
 </script>
 
-<style>
-</style>
+<style></style>
