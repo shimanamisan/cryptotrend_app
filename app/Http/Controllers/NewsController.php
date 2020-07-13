@@ -65,8 +65,6 @@ class NewsController extends Controller
         // json形式へ変換
         $newsList = json_encode($list);
         
-        // return view('news')->with('newsList', $newsList);
         return view('news', ['newsList' => $newsList]);
-        // return view('news', compact('list'));
     }
 }
