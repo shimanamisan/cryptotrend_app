@@ -51,11 +51,11 @@
                     </label>
             </div>
             <div class="u-wrapp">
-              <input
+              <button
                 class="c-btn c-btn__auth"
                 type="submit"
-                value="ログイン"
-              />
+                
+              >ログイン</button>
             </div>
             <a class="p-form__inquiry" href="{{ route('password.request') }}"
               ><span>パスワードをお忘れですか？</span></a
@@ -64,9 +64,9 @@
           <hr class="u-line" />
           <span class="u-line--or">または</span>
           <div class="u-wrapp">
-            <button class="c-btn c-btn__twitter">
-              <a href="{{ route('twitter.login') }}">Twitterでログイン</a>
-            </button>
+         
+              <a href="{{ route('twitter.login') }}" class="c-btn c-btn__twitter">Twitterでログイン</a>
+        
           </div>
         </div>
       </div>
