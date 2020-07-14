@@ -75,8 +75,9 @@
 }
 
 .u-flashmsg {
+  @include custumRadius(5px);
   padding: 30px;
-  background-color: #777777;
+  background-color: #62abf8;
   color: #fff;
   position: fixed;
   z-index: 5;

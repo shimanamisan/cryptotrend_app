@@ -26,13 +26,13 @@
           </li>
           @else
           <li class="p-header__item">
-            <a class="p-header__item--link" href="{{ route('userList.index') }}">ユーザー一覧</a>
+            <a class="p-header__item--link" href="{{ route('userList.index') }}">関連アカウント</a>
           </li>
           <li class="p-header__item">
-            <a class="p-header__item--link" href="{{ route('getNews.index') }}">仮想通貨ニュース一覧</a>
+            <a class="p-header__item--link" href="{{ route('getNews.index') }}">仮想通貨ニュース</a>
           </li>
           <li class="p-header__item">
-            <a class="p-header__item--link" href="{{ route('conins.index') }}">トレンド一覧</a>
+            <a class="p-header__item--link" href="{{ route('conins.index') }}">仮想通貨トレンド</a>
           </li>
           <li class="p-header__item">
             <a class="p-header__item--link" href="{{ route('mypage.index') }}">マイページ</a>
