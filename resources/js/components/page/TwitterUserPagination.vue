@@ -20,7 +20,10 @@
         <p class="p-twuser__header__text">
           {{ this.totalPage }}件中 {{ pageStart }} - {{ endPage }}件まで表示
         </p>
-        <p class="p-twuser__header__text">{{ followCount }}人フォロー済</p>
+        <p class="p-twuser__header__text">
+          {{ this.followcounter }}人フォロー済
+        </p>
+        <p>※1日に個別にフォロー/フォロー解除出来るのは20人が上限です</p>
       </div>
       <div
         class="p-twuser__card"
@@ -29,7 +32,7 @@
       >
         <template v-if="tw_userItems.isFollow">
           <button
-            class="c-btn c-btn__common c-btn__common--follow"
+            class="c-btn c-btn__common c-btn__common--unfollow"
             @click="sendUnFollowRequest(tw_userItems.id, index)"
           >
             フォロー解除する
@@ -98,7 +101,6 @@ export default {
   },
   data() {
     return {
-      follow_list_item: this.follow_list,
       totalPage: this.total_page,
       parPage: '',
       currentPage: 1,
@@ -110,6 +112,9 @@ export default {
       followcounter: 0,
     };
   },
+  /********************************
+   * メソッド
+   ********************************/
   methods: {
     clickCallback(pageNum) {
       this.currentPage = pageNum;
@@ -149,23 +154,29 @@ export default {
       const response = await axios
         .post('/follow', { id: id })
         .catch((error) => error.response || error);
-      // 通信が成功した時の処理
+
       if (response.status === 200) {
+        // 通信が成功した時の処理
+
         // 返却されたメッセージを格納
         this.systemMessage = response.data;
         // フラッシュメッセージを表示
         this.isShowMessage();
-        // フォローしたユーザーの要素を削除
-        this.follow_list_item.splice(index, 1);
+        // // フォローしたユーザーの要素を削除
+        // this.follow_list_item.splice(index, 1);
         // 2秒後にメッセージを非表示にする
         setTimeout(this.isShowMessage, 2000);
-        // ユーザーを既にフォローしていた時の処理
+        // フォロー済みのステータスを通知する
+        this.$emit('is-follow', id);
+
       } else if (response.status === 403) {
+        // ユーザーを既にフォローしていた時の処理
         this.systemMessage = response.data;
         this.isShowMessage();
         setTimeout(this.isShowMessage, 2000);
-        // 何か予期せぬErrorが発生したとき
+
       } else {
+        // 何か予期せぬErrorが発生したとき(500エラーなど)
         this.systemMessage = response.data;
         this.isShowMessage();
         setTimeout(this.isShowMessage, 2000);
@@ -174,7 +185,7 @@ export default {
     async sendUnFollowRequest(id, index) {
       // catch(error => error.response || error)で非同期通信が成功しても失敗してもresponseに結果を代入する
       const response = await axios
-        .post('/follow', { id: id })
+        .post('/unfollow', { id: id })
         .catch((error) => error.response || error);
       // 通信が成功した時の処理
       if (response.status === 200) {
@@ -182,23 +193,33 @@ export default {
         this.systemMessage = response.data;
         // フラッシュメッセージを表示
         this.isShowMessage();
-        // フォローしたユーザーの要素を削除
-        this.follow_list_item.splice(index, 1);
         // 2秒後にメッセージを非表示にする
         setTimeout(this.isShowMessage, 2000);
-        // ユーザーを既にフォローしていた時の処理
+        // フォロー済みのステータスを通知する
+        this.$emit('is-unfollow', id);
+
       } else if (response.status === 403) {
         this.systemMessage = response.data;
         this.isShowMessage();
         setTimeout(this.isShowMessage, 2000);
-        // 何か予期せぬErrorが発生したとき
+
       } else {
+        // 何か予期せぬErrorが発生したとき(500エラーなど)
         this.systemMessage = response.data;
         this.isShowMessage();
         setTimeout(this.isShowMessage, 2000);
       }
     },
+    followUserCounter() {
+      let counter = this.follow_list.filter((item) => {
+        return item.isFollow;
+      });
+      this.followcounter = counter.length;
+    },
   },
+  /********************************
+   * 算出プロパティ
+   ********************************/
   computed: {
     // 表示させる要素を切り出す
     getTwitterUserItems() {
@@ -232,17 +253,20 @@ export default {
         return flg;
       }
     },
-    // フォローしているユーザー数を表示
-    followCount() {
-      let counter = this.follow_list_item.filter((item) => {
-        return item.isFollow;
-      });
-
-      return counter.length;
+  },
+  /********************************
+   * ウォッチャー
+   ********************************/
+  watch: {
+    follow_list: {
+      handler: function (newValue, oldValue) {
+        this.followUserCounter();
+      },
     },
   },
   created() {
     this.paginationNumber();
+    this.followUserCounter();
   },
 };
 </script>
