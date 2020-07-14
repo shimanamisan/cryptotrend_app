@@ -49,6 +49,8 @@ Route::group(['middleware' => 'auth'], function () {
     // Route::get('/authuser', 'TwitterController@authUser');
     // // Ajax処理：ユーザーをフォローする
     Route::post('/follow', 'FollowController@follow');
+    // // Ajax処理：フォローを外す
+    Route::post('/unfollow', 'FollowController@unfollow');
     // Ajax処理：自動フォロー機能をONにする
     Route::post('/autofollow', 'FollowController@autoFollowFlg');
 
