@@ -1,6 +1,6 @@
 .c-link {
-  &--global {
-    color: $link-color;
+  &__common {
+    color: $font-color_default;
     text-decoration: none;
   }
 }

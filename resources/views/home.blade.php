@@ -13,14 +13,25 @@
             仮想通貨の最新情報は
             <br />CRYPTO TOREND
           </h1>
+          @guest
           <div class="p-eyecatch__content">
-            <a href="{{ route('login') }}">
-              <button class="c-btn c-btn__auth c-btn--radius u-btn">ログイン</button>
+            <a href="{{ route('register') }}">
+              <button class="c-btn c-btn__auth c-btn--radius u-btn">新規登録</button>
             </a>
             <div class="p-eyecatch__content--text">
-              <p>既にアカウントをお持ちの方</p>
+            <a class="c-link__common" href="{{ route('login') }}"><p>既にアカウントをお持ちの方</p></a>
             </div>
           </div>
+          @else
+          <div class="p-eyecatch__content">
+            <a href="{{ route('conins.index') }}">
+              <button class="c-btn c-btn__auth c-btn--radius u-btn">トレンドを見る</button>
+            </a>
+            <div class="p-eyecatch__content--text">
+            <a class="c-link__common" href="{{ route('userList.index') }}"><p>関連アカウントをフォローする</p></a>
+            </div>
+          </div>
+          @endguest
         </div>
       </section>
       <section class="c-container__index p-sitemap">
