@@ -4,9 +4,10 @@
       <h1 class="p-coin__title">トレンドランキング</h1>
       <section class="c-container c-container__coin">
         <div class="p-coin__header">
-      
-
-          <CoinSearch :coin-data="this.coni_data" @check-vent="checkCoins" />
+          <CoinSearch :coin-data="this.coni_data" 
+          @check-event="checkCoins" 
+          @clear-event="clearSearch"
+          />
 
           <ul class="p-coin__list p-coin__list__btn">
             <li class="p-coin__item__btn">
@@ -51,7 +52,7 @@
               <td>
                 <a
                   class="p-coin__table__link"
-                  :href="serch_url + coin.coin_name"
+                  :href="search_url + coin.coin_name"
                   >{{ coin.coin_name }}</a
                 >
               </td>
@@ -132,8 +133,8 @@ export default {
         },
       ],
       tweet_data: [], // トレンド表示用データ
-      serch_value: [], // チェックボックスで絞り込む為のデータ
-      serch_url: 'https://twitter.com/search?q=', // Twitterへのリンク
+      search_value: [], // チェックボックスで絞り込む為のデータ
+      search_url: 'https://twitter.com/search?q=', // Twitterへのリンク
     };
   },
   components: {
@@ -142,7 +143,10 @@ export default {
   methods: {
     // 子コンポーネントからチェックボックスの値を受け取り格納する
     checkCoins(value) {
-      this.serch_value = value;
+      this.search_value = value;
+    },
+    clearSearch(){
+      this.search_value = []
     },
     // サーバーから受け取った値をソートし、displayプロパティを追加する
     addProperty(response) {
@@ -217,19 +221,19 @@ export default {
     },
     filterCoins() {
       var tweet_data = this.tweet_data; // DBから取得してきたデータ
-      var serch_value = this.serch_value; // チェックボックスから渡ってきたvalueが格納された配列
+      var search_value = this.search_value; // チェックボックスから渡ってきたvalueが格納された配列
 
       // チェックボックスがチェックされていたら実行
-      if (serch_value.length > 0) {
+      if (search_value.length > 0) {
         // 配列の中のデータを分解
         return tweet_data.filter((item) => {
           // チェックボックスの値と同じものがあれば、その要素を新しい配列として返却
-          return this.serch_value.indexOf(item.coin_name) > -1;
+          return this.search_value.indexOf(item.coin_name) > -1;
         });
 
         // console.log(tweet_data.filter((item) => {
         //   // チェックボックスの値と同じものがあれば、その要素を返却
-        //   return this.serch_value.indexOf(item.coin_name) > -1;
+        //   return this.search_value.indexOf(item.coin_name) > -1;
         // }))
       } else {
         // 何も選択されていない場合は、未処理のデータを返却

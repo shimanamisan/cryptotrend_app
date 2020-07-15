@@ -4,7 +4,12 @@
       <p class="p-coin__header__title">
         ※銘柄をチェックすると、絞り込みが出来ます
       </p>
-      <button class="c-btn__common p-coin__item p-coin__item__btn p-coin__item__btn--clear">絞り込みをクリア</button>
+      <button
+        class="c-btn__common p-coin__item p-coin__item__btn p-coin__item__btn--clear"
+        @click="clearTrigger"
+      >
+        絞り込みをクリア
+      </button>
     </div>
     <ul class="p-coin__list u-margin__bottom--l">
       <li
@@ -38,8 +43,12 @@ export default {
   methods: {
     checkTrigger(e) {
       // console.log(e.target.value)
-      this.$emit('check-vent', this.checkedNames);
+      this.$emit('check-event', this.checkedNames);
     },
+    clearTrigger(){
+      this.$emit('clear-event')
+      this.checkedNames = []
+    }
   },
 };
 </script>
