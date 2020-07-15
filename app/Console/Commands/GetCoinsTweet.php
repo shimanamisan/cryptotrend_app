@@ -76,20 +76,6 @@ class GetCoinsTweet extends Command
             10 => '"ステラルーメン" OR "XLM"',
             11 => '"クアンタム" OR "QTUM"',
         ];
-        // $search_key = [
-        //     0 => '"ビットコイン" OR "$BTC" OR "#BTC"',
-        //     1 => '"イーサリアム" OR "$ETH" OR "#ETH"',
-        //     2 => '"イーサリアムクラシック" OR "$ETC" OR "#ETC"',
-        //     3 => '"リスク" OR "$LSK" OR "#LSK"',
-        //     4 => '"ファクトム" OR "$FCT" OR "#FCT"',
-        //     5 => '"リップル" OR "$XRP" OR "#XRP"',
-        //     6 => '"ネム" OR "$XEM" OR "#XEM"',
-        //     7 => '"ライトコイン" OR "$LTC" OR "#LTC"',
-        //     8 => '"ビットコインキャッシュ" OR "$BCH" OR "#BCH"',
-        //     9 => '"モナコイン" OR "$MONA" OR "#MONA"',
-        //     10 => '"ステラルーメン" OR "$XLM" OR "#XLM"',
-        //     11 => '"クアンタム" OR "$QTUM" OR "#QTUM"',
-        // ];
 
         // 15分毎450回制限のリクエストをカウントしていく
         $search_request_limit_count = 0;

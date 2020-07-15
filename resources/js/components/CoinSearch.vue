@@ -2,9 +2,9 @@
   <div>
     <div class="p-coin__header__container">
       <p class="p-coin__header__title">
-        ※チェックすると銘柄で絞り込みが出来ます
+        ※銘柄をチェックすると、絞り込みが出来ます
       </p>
-      <button class="p-coin__header__btn p-coin__item c-btn__common">クリア</button>
+      <button class="c-btn__common p-coin__item p-coin__item__btn p-coin__item__btn--clear">絞り込みをクリア</button>
     </div>
     <ul class="p-coin__list u-margin__bottom--l">
       <li

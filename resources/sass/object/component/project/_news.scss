@@ -68,4 +68,14 @@
     font-weight: bold;
     margin-right: 10px;
   }
+
+  &__link {
+    color: $font-color_default;
+    transition: all 0.3s;
+    &:hover{
+      font-weight: 600;
+      transition: all 0.3s;
+      cursor: pointer;
+    }
+  }
 }

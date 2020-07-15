@@ -75,9 +75,7 @@
           <hr class="u-line" />
           <span class="u-line--or">または</span>
           <div class="u-wrapp">
-            <button class="c-btn c-btn__twitter">
-              <a href="{{ route('twitter.register') }}">Twitterで新規登録</a>
-            </button>
+              <a href="{{ route('twitter.register') }}" class="c-btn c-btn__twitter">Twitterで新規登録</a>
           </div>
           <div class="p-form__signup--explanation">
             本サービスを登録することにより、<a href="" class="c-link--global"

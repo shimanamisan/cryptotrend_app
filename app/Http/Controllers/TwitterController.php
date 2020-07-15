@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Follow; // ★追加
 use App\Twuser;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -11,7 +12,6 @@ use Illuminate\Support\Facades\DB; // ★追加
 
 class TwitterController extends Controller
 {
-
     public function __construct()
     {
         // $this->middleware(['auth','verified']);
@@ -26,12 +26,44 @@ class TwitterController extends Controller
         // JSON形式へ変換
         $user = json_encode($outh_user);
         // 新しく登録されたアカウントから表示していく
-        $result = Twuser::orderBy('id', 'desc')->get();
-        // 取得した情報をJSON形式へ変換
-        $tw_user = json_encode($result);
+        $tw_user_result = Twuser::orderBy('id', 'desc')->get();
+        // dd($tw_user_result);
+        // フォローテーブルのデータを取得
+        $follow_list_result = Follow::where('user_id', Auth::user()->id)->get();
+        
+        // followsテーブルからのコレクションのオブジェクトが空で無ければ処理を実行
+        if ($follow_list_result->isNotEmpty()) {
+            // 仮想通貨関連一覧ユーザーとフォロー済みのいユーザーのデータを比較
+            // フォローしているユーザーに isFollow プロパティを追加する
+            foreach ($tw_user_result as $tw_item) {
+                // dd(gettype($tw_item->id)); // String
+                $tw_ID = (int)$tw_item->id; // 数値型に変換
+                
+                foreach ($follow_list_result as $follow_item) {
+                    if ($tw_ID === $follow_item->twuser_id) {
+                        $tw_item['isFollow'] = true;
+                        // モデルを配列に変換して、新しい配列へ格納
+                        $new_tw_user[] = $tw_item->toArray();
+                    }
+                }
+            }
+                // 結合先
+                $source = $tw_user_result->toArray(); // コレクションを配列へ変換
+                // 結合元(destinationをsourceに結合する)
+                $destination = $new_tw_user;
+                // 配列の差分を結合する、既存のデータに isFollow = true が追加されたデータが取得できる
+                $result = array_merge($source, $destination);
+            
+                $follow_list = json_encode($source);
 
-        // return view('userList', ['tw_user' => $tw_user]);
-        return view('userList', compact('tw_user', 'user'));
+        } else {
+            // 空だった場合はまだフォローしているユーザーがまだいないので、アプリ側で登録したユーザーをそのまま表示する
+            $source = $tw_user_result;
+
+            $follow_list = json_encode($source);
+        }
+
+        return view('userList', compact('follow_list', 'user'));
     }
 
     // アプリケーション単位で認証する（ベアラートークンの取得）
@@ -52,7 +84,7 @@ class TwitterController extends Controller
         $_bearer_token = $connection->oauth2('oauth2/token', array('grant_type' => 'client_credentials'));
 
         // ベアラートークンをセット
-        if(isset($_bearer_token->access_token)){
+        if (isset($_bearer_token->access_token)) {
             $connection->setBearer($_bearer_token->access_token);
         }
 
