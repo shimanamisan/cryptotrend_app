@@ -4,6 +4,11 @@
       <h1 class="p-mypage__title">マイページ</h1>
 
       <div class="c-container__mypage u-margin__bottom--lg">
+        <transition name="flash">
+          <div class="u-flashmsg" v-show="flash_message_flg">
+            <p>{{ this.systemMessage }}</p>
+          </div>
+        </transition>
         <div class="p-mypage__container">
           <div class="p-form__title">
             各種アカウント情報を変更できます。
@@ -142,10 +147,21 @@ export default {
       errors_password: null,
       isset_pass: false,
       isDisabled: true,
+      // 登録後のメッセージ表示フラグ
+      flash_message_flg: false,
+      systemMessage: '',
+      // パスワード確認用モーダルの表示
+      passwordModalWindow: false
     };
   },
   computed: {},
   methods: {
+    isShowMessage() {
+      this.flash_message_flg = !this.flash_message_flg;
+    },
+    isShowPasswordConfirmForm(){
+      this.passwordModalWindow = !this.passwordModalWindow;
+    },
     async getUserData() {
       const response = await axios
         .get('/mypage/user')
@@ -171,23 +187,32 @@ export default {
           password_confirmation: this.userDataForm.password_confirmation,
         })
         .catch((error) => error.response || error);
-      // console.log(response.data);
       if (response.status === 200) {
-        this.userId = response.data.id;
-        this.userDataForm.nicname = response.data.name;
-        this.userDataForm.email = response.data.email;
-        this.userDataForm.password = response.data.password;
+        this.userId = response.data.user.id;
+        this.userDataForm.nicname = response.data.user.name;
+        this.userDataForm.email = response.data.user.email;
+        this.userDataForm.password = null;
+        this.userDataForm.password_confirmation = null;
+        this.systemMessage = response.data.success;
+
+        // フラッシュメッセージを表示
+        this.isShowMessage();
+        // 2秒後にメッセージを非表示にする
+        setTimeout(this.isShowMessage, 2000);
       } else if (response.status === 422) {
         // console.log(response.data.errors);
         this.errors_nicname = response.data.errors.name;
         this.errors_email = response.data.errors.email;
         this.errors_password = response.data.errors.password;
 
-        // バリデーションで引っかかった場合は、パスワード入力フォームは空にする
-        this.userDataForm.password = null;
-        this.userDataForm.password_confirmation = null;
+        // // バリデーションで引っかかった場合は、パスワード入力フォームは空にする
+        // this.userDataForm.password = null;
+        // this.userDataForm.password_confirmation = null;
       } else {
-        alert('エラーが発生しました。しばらくお待ち下さい');
+        // 何か予期せぬErrorが発生したとき(500エラーなど)
+        this.systemMessage = 'エラーが発生しました。しばらくお待ち下さい';
+        this.isShowMessage();
+        setTimeout(this.isShowMessage, 2000);
       }
     },
     async deleteUser() {
