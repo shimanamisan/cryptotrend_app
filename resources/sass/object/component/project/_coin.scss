@@ -10,15 +10,17 @@
 
   &__header {
     padding: 0 32px;
+
     &__title {
       text-align: center;
     }
-  
+
     &__container {
       justify-items: center;
       justify-content: center;
       display: flex;
       margin-bottom: 16px;
+      line-height: 40px;
     }
   }
 
@@ -48,6 +50,10 @@
     }
     &__btn {
       margin-left: 24px;
+      &--clear {
+        padding: 10px 15px;
+        background-color: #000 !important;
+      }
     }
   }
 

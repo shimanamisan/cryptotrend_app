@@ -38,6 +38,19 @@
     color: $font-color_primary;
     transition: 0.3s;
     padding: 10px 20px;
+    &:hover{
+      background-color: #5a5b79;
+      transition: 0.3s;
+      cursor: pointer;
+    }
+    &--active{
+      background-color: #fff;
+      color: $btn_color;
+      &:hover{
+        transition: 0.3s;
+        cursor: pointer;
+      }
+    }
     &--follow {
       background-color: #2d8bf0;
       position: absolute;
@@ -77,11 +90,9 @@
     background-color: #1da1f2;
     font-size: 14px;
     text-decoration: none;
-    & > a {
-      display: block;
-      text-decoration: none;
-      color: #fff;
-    }
+    display: block;
+    width: 180px;
+    margin: 0 auto;
     &:hover{
       background-color:#67c0f6;
     }

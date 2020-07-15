@@ -109,7 +109,7 @@ class Autofollow extends Command
         }else{
           \Log::debug('1日のアプリ全体としてのフォロー上限を上回っているので処理を停止します '. $one_day_system_counter_limit.'/990回');
           \Log::debug('    ');
-            exit();
+          exit();
         }
 
       \Log::debug('=====================================================================');

@@ -162,8 +162,6 @@ export default {
         this.systemMessage = response.data;
         // フラッシュメッセージを表示
         this.isShowMessage();
-        // // フォローしたユーザーの要素を削除
-        // this.follow_list_item.splice(index, 1);
         // 2秒後にメッセージを非表示にする
         setTimeout(this.isShowMessage, 2000);
         // フォロー済みのステータスを通知する
