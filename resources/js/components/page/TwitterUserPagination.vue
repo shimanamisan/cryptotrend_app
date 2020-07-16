@@ -1,21 +1,30 @@
 <template>
   <div>
     <transition name="flash">
-      <div class="u-flashmsg" v-show="flash_message_flg">
+      <div class="u-msg__flash" v-show="flash_message_flg">
         <ul v-for="(msg, index) in this.systemMessage" :key="index">
           <li>{{ msg }}</li>
         </ul>
       </div>
+    </transition>
+    <transition name="fade">
+      <Modal
+        v-show="open"
+        @close-event="open = !open"
+        @autofollow-event="sendAutoFollowRequest"
+        :autofollow_status="this.autoFollow_flg"
+        ref="fromParent"
+      />
     </transition>
     <section class="c-container c-container__twusr">
       <div class="p-twuser__header">
         <button
           class="c-btn c-btn__common c-btn__common--autofollow"
           :class="{ 'c-btn__disabled': !this.autoFollow_flg }"
-          @click="sendAutoFollowRequest"
+          @click="open = !open"
         >
-          <p v-if="parseBoolean">自動フォロー機能ON</p>
-          <p v-else>自動フォロー機能OFF</p>
+          <p v-if="parseBoolean">現在自動フォロー機能ON</p>
+          <p v-else>現在自動フォロー機能OFF</p>
         </button>
         <p class="p-twuser__header__text">
           {{ this.totalPage }}件中 {{ pageStart }} - {{ endPage }}件まで表示
@@ -27,13 +36,13 @@
       </div>
       <div
         class="p-twuser__card"
-        v-for="(tw_userItems, index) in getTwitterUserItems"
+        v-for="(tw_userItem, index) in getTwitterUserItems"
         :key="index"
       >
-        <template v-if="tw_userItems.isFollow">
+        <template v-if="tw_userItem.isFollow">
           <button
             class="c-btn c-btn__common c-btn__common--unfollow"
-            @click="sendUnFollowRequest(tw_userItems.id, index)"
+            @click="sendUnFollowRequest(tw_userItem.id, index)"
           >
             フォロー解除する
           </button>
@@ -41,30 +50,30 @@
         <template v-else>
           <button
             class="c-btn c-btn__common c-btn__common--follow"
-            @click="sendFollowRequest(tw_userItems.id, index)"
+            @click="sendFollowRequest(tw_userItem.id, index)"
           >
             フォローする
           </button>
         </template>
-        <div class="p-twuser__detail__name">{{ tw_userItems.user_name }}</div>
+        <div class="p-twuser__detail__name">{{ tw_userItem.user_name }}</div>
         <div class="p-twuser__detail__account">
-          ＠{{ tw_userItems.account_name }}
+          ＠{{ tw_userItem.account_name }}
         </div>
         <div class="p-twuser__detail__description">
-          {{ tw_userItems.description }}
+          {{ tw_userItem.description }}
         </div>
         <div class="p-twuser__detail__item">
           <p class="p-twuser__detail__item__count">
-            フォロー数:{{ tw_userItems.friends_count }}
+            フォロー数:{{ tw_userItem.friends_count }}
           </p>
           <p class="p-twuser__detail__item__count">
-            フォロワー数:{{ tw_userItems.followers_count }}
+            フォロワー数:{{ tw_userItem.followers_count }}
           </p>
         </div>
         <div class="p-twuser__detail">
           <p class="p-twuser__detail__tweet__title">最新ツイート</p>
           <div class="p-twuser__detail__tweet">
-            {{ tw_userItems.new_tweet }}
+            {{ tw_userItem.new_tweet }}
           </div>
         </div>
       </div>
@@ -93,11 +102,13 @@
 <script>
 import Vue from 'vue';
 import Paginate from 'vuejs-paginate';
+import Modal from '../module/Modal';
 // Vue.component('paginate', Paginate);
 export default {
   props: ['follow_list', 'total_page', 'user'],
   components: {
     Paginate,
+    Modal,
   },
   data() {
     return {
@@ -110,6 +121,7 @@ export default {
       // 自動フォロー中のフラグ(ユーザー情報より取得)
       autoFollow_flg: this.user.autofollow_status,
       followcounter: 0,
+      open: false,
     };
   },
   /********************************
@@ -141,13 +153,18 @@ export default {
       const response = await axios
         .post('/autofollow', { status: this.autoFollow_flg })
         .catch((error) => error.response || error);
+      if (response.status === 200) {
+        if (this.autoFollow_flg == 0) {
+          this.autoFollow_flg = 1;
+        } else {
+          this.autoFollow_flg = 0;
+        }
 
-      if (this.autoFollow_flg == 0) {
-        this.autoFollow_flg = 1;
+        this.sendingDone();
       } else {
-        this.autoFollow_flg = 0;
+        // 何か予期せぬErrorが発生したとき(500エラーなど)
+        alert('問題が発生しました。しばらくお待ち下さい。');
       }
-      console.log(response);
     },
     async sendFollowRequest(id, index) {
       // catch(error => error.response || error)で非同期通信が成功しても失敗してもresponseに結果を代入する
@@ -166,18 +183,14 @@ export default {
         setTimeout(this.isShowMessage, 2000);
         // フォロー済みのステータスを通知する
         this.$emit('is-follow', id);
-
       } else if (response.status === 403) {
         // ユーザーを既にフォローしていた時の処理
         this.systemMessage = response.data;
         this.isShowMessage();
         setTimeout(this.isShowMessage, 2000);
-
       } else {
         // 何か予期せぬErrorが発生したとき(500エラーなど)
-        this.systemMessage = response.data;
-        this.isShowMessage();
-        setTimeout(this.isShowMessage, 2000);
+        alert('問題が発生しました。しばらくお待ち下さい。');
       }
     },
     async sendUnFollowRequest(id, index) {
@@ -195,17 +208,13 @@ export default {
         setTimeout(this.isShowMessage, 2000);
         // フォロー済みのステータスを通知する
         this.$emit('is-unfollow', id);
-
       } else if (response.status === 403) {
         this.systemMessage = response.data;
         this.isShowMessage();
         setTimeout(this.isShowMessage, 2000);
-
       } else {
         // 何か予期せぬErrorが発生したとき(500エラーなど)
-        this.systemMessage = response.data;
-        this.isShowMessage();
-        setTimeout(this.isShowMessage, 2000);
+        alert('問題が発生しました。しばらくお待ち下さい。');
       }
     },
     followUserCounter() {
@@ -213,6 +222,9 @@ export default {
         return item.isFollow;
       });
       this.followcounter = counter.length;
+    },
+    sendingDone() {
+      this.$refs.fromParent.sendingHandler();
     },
   },
   /********************************

@@ -1,11 +1,12 @@
 <template>
   <div>
     <main class="l-main l-main__common">
+      <Loading v-show="loading" />
       <h1 class="p-mypage__title">マイページ</h1>
 
       <div class="c-container__mypage u-margin__bottom--lg">
         <transition name="flash">
-          <div class="u-flashmsg" v-show="flash_message_flg">
+          <div class="u-msg__flash" v-show="flash_message_flg">
             <p>{{ this.systemMessage }}</p>
           </div>
         </transition>
@@ -131,7 +132,11 @@
 </template>
 
 <script>
+import Loading from './module/Loading';
 export default {
+  components: {
+    Loading,
+  },
   data() {
     return {
       userId: '',
@@ -151,7 +156,8 @@ export default {
       flash_message_flg: false,
       systemMessage: '',
       // パスワード確認用モーダルの表示
-      passwordModalWindow: false
+      passwordModalWindow: false,
+      loading: false, // 非同期通信時ローディングを表示する
     };
   },
   computed: {},
@@ -159,7 +165,7 @@ export default {
     isShowMessage() {
       this.flash_message_flg = !this.flash_message_flg;
     },
-    isShowPasswordConfirmForm(){
+    isShowPasswordConfirmForm() {
       this.passwordModalWindow = !this.passwordModalWindow;
     },
     async getUserData() {
@@ -178,6 +184,7 @@ export default {
       }
     },
     async storUserData() {
+      this.loadingActive()
       const response = await axios
         .post('/mypage/userdata', {
           id: this.userId,
@@ -188,6 +195,7 @@ export default {
         })
         .catch((error) => error.response || error);
       if (response.status === 200) {
+        this.loadingActive()
         this.userId = response.data.user.id;
         this.userDataForm.nicname = response.data.user.name;
         this.userDataForm.email = response.data.user.email;
@@ -200,7 +208,7 @@ export default {
         // 2秒後にメッセージを非表示にする
         setTimeout(this.isShowMessage, 2000);
       } else if (response.status === 422) {
-        // console.log(response.data.errors);
+        this.loadingActive()
         this.errors_nicname = response.data.errors.name;
         this.errors_email = response.data.errors.email;
         this.errors_password = response.data.errors.password;
@@ -210,13 +218,14 @@ export default {
         // this.userDataForm.password_confirmation = null;
       } else {
         // 何か予期せぬErrorが発生したとき(500エラーなど)
+        this.loadingActive()
         this.systemMessage = 'エラーが発生しました。しばらくお待ち下さい';
         this.isShowMessage();
         setTimeout(this.isShowMessage, 2000);
       }
     },
     async deleteUser() {
-      if (confirm('退会します。よろしいですか？')) {
+      if (confirm('CryptoTrendを退会します。よろしいですか？')) {
         const response = await axios
           .post('/mypage/delete')
           .catch((error) => error.response || error);
@@ -246,6 +255,9 @@ export default {
       } else if (value === 'pass') {
         this.errors_password = null;
       }
+    },
+    loadingActive() {
+      this.loading = !this.loading;
     },
   },
   created() {

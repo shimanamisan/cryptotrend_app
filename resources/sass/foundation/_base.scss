@@ -12,6 +12,9 @@ body {
 
 .gray {
   background-color: $background-body-color;
+  &__fixe{
+    position: fixed;
+  }
 }
 
 p,

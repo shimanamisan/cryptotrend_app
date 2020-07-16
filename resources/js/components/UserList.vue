@@ -1,7 +1,6 @@
 <template>
   <main class="l-main l-main__common">
     <h1 class="p-twuser__title">関連アカウント一覧</h1>
-
     <Pagination
       :follow_list="this.follow_list_item"
       :user="this.user"
@@ -14,6 +13,7 @@
 
 <script>
 import Pagination from './page/TwitterUserPagination';
+
 export default {
   data() {
     return {
@@ -36,7 +36,7 @@ export default {
         if (item.id === id) {
           return Object.assign({}, item, { isFollow: true });
         }
-        return item
+        return item;
       });
       // let newData = data.map((item) => {
       //   if (item.id == id) {
@@ -56,8 +56,14 @@ export default {
         if (item.id === id) {
           return Object.assign({}, item, { isFollow: false });
         }
-        return item
+        return item;
       });
+    },
+    modalOpen() {
+      this.open = !this.open;
+    },
+    modalClose() {
+      this.open = !this.open;
     },
   },
   created() {

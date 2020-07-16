@@ -1,27 +1,41 @@
 <template>
   <div>
     <div class="l-main l-main__common">
+      <Loading v-show="loading" />
       <h1 class="p-coin__title">トレンドランキング</h1>
       <section class="c-container c-container__coin">
         <div class="p-coin__header">
-          <CoinSearch :coin-data="this.coni_data" 
-          @check-event="checkCoins" 
-          @clear-event="clearSearch"
+          <CoinSearch
+            :coin-data="this.coni_data"
+            @check-event="checkCoins"
+            @clear-event="clearSearch"
           />
 
           <ul class="p-coin__list p-coin__list__btn">
-            <li class="p-coin__item__btn">
-              <button class="c-btn c-btn__common" @click="getHourCoins">
+            <li>
+              <button
+                class="c-btn c-btn__common p-coin__item__btn"
+                :class="{ 'p-coin__item__btn--false': !isActive_hour }"
+                @click="getHourCoins"
+              >
                 過去1時間
               </button>
             </li>
-            <li class="p-coin__item__btn">
-              <button class="c-btn c-btn__common" @click="getDayCoins">
+            <li>
+              <button
+                class="c-btn c-btn__common p-coin__item__btn"
+                :class="{ 'p-coin__item__btn--false': !isActive_day }"
+                @click="getDayCoins"
+              >
                 過去1日
               </button>
             </li>
-            <li class="p-coin__item__btn">
-              <button class="c-btn c-btn__common" @click="getWeekCoins">
+            <li>
+              <button
+                class="c-btn c-btn__common p-coin__item__btn"
+                :class="{ 'p-coin__item__btn--false': !isActive_week }"
+                @click="getWeekCoins"
+              >
                 過去1週間
               </button>
             </li>
@@ -79,6 +93,7 @@
 
 <script>
 import CoinSearch from './CoinSearch';
+import Loading from './module/Loading';
 export default {
   data() {
     return {
@@ -135,18 +150,23 @@ export default {
       tweet_data: [], // トレンド表示用データ
       search_value: [], // チェックボックスで絞り込む為のデータ
       search_url: 'https://twitter.com/search?q=', // Twitterへのリンク
+      isActive_hour: false, // hour、day、weekのツイートなのか判断する
+      isActive_day: false, // hour、day、weekのツイートなのか判断する
+      isActive_week: false, // hour、day、weekのツイートなのか判断する
+      loading: false, // 非同期通信時ローディングを表示する
     };
   },
   components: {
     CoinSearch,
+    Loading,
   },
   methods: {
     // 子コンポーネントからチェックボックスの値を受け取り格納する
     checkCoins(value) {
       this.search_value = value;
     },
-    clearSearch(){
-      this.search_value = []
+    clearSearch() {
+      this.search_value = [];
     },
     // サーバーから受け取った値をソートし、displayプロパティを追加する
     addProperty(response) {
@@ -164,42 +184,82 @@ export default {
     },
     // 過去1時間のツイート数をDBから取得
     async getHourCoins() {
+      const HOUR = 'hour';
+      this.loadingActive();
       await axios
         .get('/coins/hour')
         .then((response) => {
           this.addProperty(response);
+          this.changeCoinFlg(HOUR);
         })
         .catch((error) => {
           alert(
             'エラーが発生しました。しばらくしてから、再度アクセスして下さい。'
           );
+        })
+        .then(() => {
+          this.loadingActive();
         });
     },
     // 過去1日のツイート数をDBから取得
     async getDayCoins() {
+      const DAY = 'day';
+      this.loadingActive();
       await axios
         .get('/coins/day')
         .then((response) => {
           this.addProperty(response);
+          this.changeCoinFlg(DAY);
         })
         .catch((error) => {
           alert(
             'エラーが発生しました。しばらくしてから、再度アクセスして下さい。'
           );
+        })
+        .then(() => {
+          this.loadingActive();
         });
     },
     // 過去1週間のツイート数をDBから取得
     async getWeekCoins() {
+      const WEEK = 'week';
+      this.loadingActive();
       await axios
         .get('/coins/week')
         .then((response) => {
           this.addProperty(response);
+          this.changeCoinFlg(WEEK);
         })
         .catch((error) => {
           alert(
             'エラーが発生しました。しばらくしてから、再度アクセスして下さい。'
           );
+        })
+        .then(() => {
+          this.loadingActive();
         });
+    },
+    changeCoinFlg(coin) {
+      switch (coin) {
+        case 'hour':
+          this.isActive_hour = !this.isActive_hour;
+          this.isActive_day = false;
+          this.isActive_week = false;
+          break;
+        case 'day':
+          this.isActive_hour = false;
+          this.isActive_day = !this.isActive_day;
+          this.isActive_week = false;
+          break;
+        case 'week':
+          this.isActive_hour = false;
+          this.isActive_day = false;
+          this.isActive_week = !this.isActive_week;
+          break;
+      }
+    },
+    loadingActive() {
+      this.loading = !this.loading;
     },
   },
   computed: {
