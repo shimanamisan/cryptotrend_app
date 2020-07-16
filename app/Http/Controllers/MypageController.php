@@ -42,6 +42,10 @@ class MypageController extends Controller
         $user = User::find($request->id);
         $data = $request->all();
 
+        // ニックネームが変更されていた場合
+
+        // メールアドレスが変更されていた場合
+
         // パスワードが新規登録の場合
         if (empty($user->password)) {
             
@@ -52,7 +56,6 @@ class MypageController extends Controller
 
             \Log::debug('パスワードを新規登録しました。');
 
-            return response()->json(['user' => $user, 'success' => 'パスワードを登録しました。']);
         } else {
 
             // パスワード更新時の処理
@@ -60,7 +63,7 @@ class MypageController extends Controller
             if (Hash::check($request->password, $user->password)) { // 第一引数にプレーンパスワード、第二引数にハッシュ化されたパスワード
                 //
                 \Log::debug('登録されているパスワードと同じでした。');
-                return response()->json(['user' => $user, 'success' => 'パスワードを変更しました。']);
+              
             } else {
                 // DBと違っていればパスワードを更新する
                 // リクエストフォームから受け取ったパスワードをハッシュ化
@@ -69,9 +72,11 @@ class MypageController extends Controller
                 $user->save();
                 \Log::debug('パスワードを更新しました');
 
-                return response()->json(['user' => $user, 'success' => 'パスワードを変更しました。']);
+               
             }
         }
+
+        return response()->json(['user' => $user, 'success' => 'アカウント情報を更新しました。']);
     }
 
     // 退会処理
@@ -88,6 +93,8 @@ class MypageController extends Controller
             ->first();
         // デリートフラグを立てる
         $userInfo->delete_flg = 1;
+        // followsテーブルのdelete_flgカラムも更新する
+        User::find($user->id)->follows()->update(['delete_flg' => 1]);
         // ログイン保持のトークンを空にする
         $userInfo->remember_token = null;
         // ステータスを保存する
@@ -96,6 +103,8 @@ class MypageController extends Controller
         session()->invalidate();
         // csrfトークンを再生成
         session()->regenerateToken();
+        // 退会後のフラッシュメッセージを格納
+        \Session::flash('withdraw_message', '退会しました。ご利用ありがとうございました。');
     
         return response()->json(['success'], 200);
     }

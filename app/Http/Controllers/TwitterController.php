@@ -29,7 +29,8 @@ class TwitterController extends Controller
         $tw_user_result = Twuser::orderBy('id', 'desc')->get();
         // dd($tw_user_result);
         // フォローテーブルのデータを取得
-        $follow_list_result = Follow::where('user_id', Auth::user()->id)->get();
+        $follow_list_result = Follow::where('user_id', Auth::user()->id)->where('delete_flg', 0)->get();
+        // dd($follow_list_result);
         
         // followsテーブルからのコレクションのオブジェクトが空で無ければ処理を実行
         if ($follow_list_result->isNotEmpty()) {
