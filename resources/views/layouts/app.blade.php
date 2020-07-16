@@ -54,6 +54,11 @@
         </ul>
       </nav>
     </header>
+    @if(Session::has('withdraw_message'))
+        <div class="u-msg__withdraw">
+            <p>{{ session('withdraw_message') }}</p>
+        </div>
+    @endif
 
 
   @yield('content')
