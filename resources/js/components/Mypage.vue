@@ -134,7 +134,8 @@
 
 <script>
 import Loading from './module/Loading';
-// import func from '../../../vue-temp/vue-editor-bridge';
+import { OK, UNPROCESSABLE_ENTITY, INTERNAL_SERVER_ERROR } from "./../util";
+
 export default {
   components: {
     Loading,
@@ -173,9 +174,9 @@ export default {
     async getUserData() {
       const response = await axios
         .get('/mypage/user')
-        .catch((error) => error.response || error);
+        // .catch((error) => error.response || error);
       // console.log(response.data);
-      if (response.status === 200) {
+      if (response.status === OK) {
         this.userId = response.data.id;
         this.userDataForm.name = response.data.name;
         this.userDataForm.email = response.data.email;
@@ -195,8 +196,8 @@ export default {
           password: this.userDataForm.password,
           password_confirmation: this.userDataForm.password_confirmation,
         })
-        .catch((error) => error.response || error);
-      if (response.status === 200) {
+        // .catch((error) => error.response || error);
+      if (response.status === OK) {
         this.loadingActive();
         this.userId = response.data.user.id;
         this.userDataForm.name = response.data.user.name;
@@ -209,7 +210,7 @@ export default {
         this.isShowMessage();
         // 2秒後にメッセージを非表示にする
         setTimeout(this.isShowMessage, 2000);
-      } else if (response.status === 422) {
+      } else if (response.status === UNPROCESSABLE_ENTITY) {
         this.loadingActive();
         this.errors_name = response.data.errors.name;
         this.errors_email = response.data.errors.email;
@@ -228,7 +229,7 @@ export default {
           .post('/mypage/delete')
           .catch((error) => error.response || error);
         // console.log(response);
-        if (response.status === 200) {
+        if (response.status === OK) {
           // 退会後ページを移動
           window.location = '/';
         } else {
