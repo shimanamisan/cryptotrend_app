@@ -3,12 +3,10 @@
 namespace App;
 
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
 use App\Notifications\PasswordResetNotification; // 追加
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
-// email認証用にimplements MustVerifyEmail を追記
-class User extends Authenticatable implements MustVerifyEmail
+class User extends Authenticatable
 {
     use Notifiable;
 
