@@ -10,7 +10,7 @@
     <transition name="fade">
       <Modal
         v-show="open"
-        @close-event="open = !open"
+        @close-event="isModalActive"
         @autofollow-event="sendAutoFollowRequest"
         :autofollow_status="this.autoFollow_flg"
         ref="fromParent"
@@ -21,7 +21,7 @@
         <button
           class="c-btn c-btn__common c-btn__common--autofollow"
           :class="{ 'c-btn__disabled': !this.autoFollow_flg }"
-          @click="open = !open"
+          @click="isModalActive"
         >
           <p v-if="parseBoolean">現在自動フォロー機能ON</p>
           <p v-else>現在自動フォロー機能OFF</p>
@@ -147,6 +147,19 @@ export default {
     },
     isAlreadyUserMessage() {
       this.already_follow_user = !this.already_follow_user;
+    },
+    isModalActive() {
+      this.open = !this.open;
+      let element = document.querySelector('.gray');
+      element.classList.toggle('gray__fix');
+      // console.log(source);
+      // if (source === null) {
+      //   let target = document.querySelector('.gray');
+      //   target.classList.add('gray__fix');
+      // } else {
+      //   console.log(source);
+      //   source.classList.remove('.gray__fix');
+      // }
     },
     async sendAutoFollowRequest() {
       // catch(error => error.response || error)で非同期通信が成功しても失敗してもresponseに結果を代入する
