@@ -54,11 +54,11 @@
         </ul>
       </nav>
     </header>
+    <div class="u-msg__withdraw js-flash-msg" style="display:none;">
     @if(Session::has('withdraw_message'))
-        <div class="u-msg__withdraw">
             <p>{{ session('withdraw_message') }}</p>
-        </div>
     @endif
+    </div>
 
 
   @yield('content')
