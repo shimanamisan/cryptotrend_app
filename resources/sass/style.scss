@@ -27,6 +27,8 @@
 @import "object/component/tabs";
 @import "object/component/pagination";
 @import "object/component/error";
+@import "object/component/loader";
+@import "object/component/fade";
 
 /*****************************
  project
@@ -42,6 +44,7 @@
 @import "object/component/project/ranking";
 @import "object/component/project/twuser";
 @import "object/component/project/mypage";
+@import "object/component/project/modal";
 
 /*****************************
  utility

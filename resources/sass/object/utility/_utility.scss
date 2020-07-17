@@ -74,15 +74,28 @@
   }
 }
 
-.u-flashmsg {
-  @include custumRadius(5px);
-  padding: 30px;
-  background-color: #62abf8;
-  color: #fff;
-  position: fixed;
-  z-index: 5;
-  top: 20%;
-  right: 5%;
+.u-msg {
+
+  &__withdraw{
+    @include custumRadius(5px);
+    padding: 30px;
+    background-color: #62abf8;
+    color: #fff;
+    position: fixed;
+    z-index: 5;
+    top: 20%;
+  }
+
+  &__flash{
+    @include custumRadius(5px);
+    padding: 30px;
+    background-color: #62abf8;
+    color: #fff;
+    position: fixed;
+    z-index: 5;
+    top: 20%;
+    right: 5%;
+  }
 }
 
 .flash-enter-active,

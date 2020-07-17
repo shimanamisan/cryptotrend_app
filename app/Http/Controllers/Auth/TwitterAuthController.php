@@ -64,7 +64,7 @@ class TwitterAuthController extends Controller
                                   ->where('delete_flg', 0)
                                   ->first();
                 // Twitter_id及びメールアドレスが登録されていなかったら未登録ユーザーとする
-                if (empty($twUserId) || empty($userInfo)) {
+                if (empty($twUserId) && empty($userInfo)) {
                     \Log::debug('emailかtwitter_idが無いのでなので未登録ユーザーです');
                     \Log::debug('   ');
                     // 画面遷移する前にログインフラグを削除
@@ -109,23 +109,28 @@ class TwitterAuthController extends Controller
                 // 自分のフォローしているユーザーを取得する
                 $follow_list = $this->fetchFollowTarget($user->id, $connection);
 
-                // 配列を比較し共通しているものを出力する
-                $follow_list_intersect = array_intersect($twitterUserList, $follow_list);
+                if (!empty($follow_list)) {
+                    \Log::debug('自分のフォローしているユーザーを取得しています');
 
-                // 重複しているユーザーがいれば、followsテーブルに登録する
-                if (!empty($follow_list_intersect)) {
-                    // dd($userInfo->id);
-                    foreach ($follow_list_intersect as $follow_user_id) {
-                        \Log::debug('DBと重複してるフォロー済みのユーザーをfollowsテーブルに登録しています  ユーザーID：'. $userInfo->id);
-                        Follow::updateOrCreate(
-                            ['user_id' => $userInfo->id, 'twuser_id' => $follow_user_id, 'delete_flg' => 0],
-                            [
-                        'user_id' => $userInfo->id,
-                        'twuser_id' => $follow_user_id
-                      ]
-                        );
+                    // 配列を比較し共通しているものを出力する
+                    $follow_list_intersect = array_intersect($twitterUserList, $follow_list);
+    
+                    // 重複しているユーザーがいれば、followsテーブルに登録する
+                    if (!empty($follow_list_intersect)) {
+                        // dd($userInfo->id);
+                        foreach ($follow_list_intersect as $follow_user_id) {
+                            \Log::debug('DBと重複してるフォロー済みのユーザーをfollowsテーブルに登録しています  ユーザーID：'. $userInfo->id);
+                            Follow::updateOrCreate(
+                                ['user_id' => $userInfo->id, 'twuser_id' => $follow_user_id, 'delete_flg' => 0],
+                                [
+                            'user_id' => $userInfo->id,
+                            'twuser_id' => $follow_user_id
+                          ]
+                            );
+                        }
                     }
                 }
+
 
                 // トレンド一覧画面へリダイレクト
                 \Log::debug(session()->all());
@@ -160,23 +165,28 @@ class TwitterAuthController extends Controller
                 // 自分のフォローしているユーザーを取得する
                 $follow_list = $this->fetchFollowTarget($user->id, $connection);
 
-                // 配列を比較し共通しているものを出力する
-                $follow_list_intersect = array_intersect($twitterUserList, $follow_list);
-
-                // 重複しているユーザーがいれば、followsテーブルに登録する
-                if (!empty($follow_list_intersect)) {
-                    // dd($userInfo->id);
-                    foreach ($follow_list_intersect as $follow_user_id) {
-                        \Log::debug('DBと重複してるフォロー済みのユーザーをfollowsテーブルに登録しています  ユーザーID：'. $userInfo->id);
-                        Follow::updateOrCreate(
-                            ['user_id' => $userInfo->id, 'twuser_id' => $follow_user_id, 'delete_flg' => 0],
-                            [
-                        'user_id' => $userInfo->id,
-                        'twuser_id' => $follow_user_id
-                      ]
-                        );
+                if (!empty($follow_list)) {
+                    \Log::debug('自分のフォローしているユーザーを取得しています');
+                    
+                    // 配列を比較し共通しているものを出力する
+                    $follow_list_intersect = array_intersect($twitterUserList, $follow_list);
+    
+                    // 重複しているユーザーがいれば、followsテーブルに登録する
+                    if (!empty($follow_list_intersect)) {
+                        // dd($userInfo->id);
+                        foreach ($follow_list_intersect as $follow_user_id) {
+                            \Log::debug('DBと重複してるフォロー済みのユーザーをfollowsテーブルに登録しています  ユーザーID：'. $userInfo->id);
+                            Follow::updateOrCreate(
+                                ['user_id' => $userInfo->id, 'twuser_id' => $follow_user_id, 'delete_flg' => 0],
+                                [
+                            'user_id' => $userInfo->id,
+                            'twuser_id' => $follow_user_id
+                          ]
+                            );
+                        }
                     }
                 }
+
     
                 Auth::login($userInfo);
 
@@ -200,7 +210,7 @@ class TwitterAuthController extends Controller
         }
     }
 
-    //
+    // Twitter認証で新規ユーザー登録の処理
     public function findCreateUser($user)
     {
         // 退会していないユーザーを検索
@@ -240,8 +250,17 @@ class TwitterAuthController extends Controller
         $result = $connection->get('friends/ids', [
           'user_id' => $twitter_id
           ])->ids;
-        //\Log::debug('取得結果 : ' .print_r($result, true));
-        return $result;
+
+        // 通信成功時、リクエスト制限が掛かっていない場合
+        if ($connection->getLastHttpCode() == 200) {
+            \Log::debug('ステータスコードが200で情報が取得できています。');
+            return $result;
+        } else {
+            \Log::debug('API制限に掛かっています。空の配列を返します。');
+            // 空の配列を返す
+            $result = [];
+            return $result;
+        }
     }
 
     // TwitterOAuthインスタンスを生成する

@@ -20,6 +20,10 @@
     &--submit {
       background-color: $btn_color-submit;
       color: #fff;
+      &:disabled{
+        background-color: rgba(14,19,24,.15);
+        cursor: not-allowed;
+      }
     }
   }
   &__title {
