@@ -15,7 +15,7 @@ class Kernel extends ConsoleKernel
    */
   protected $commands = [
     // コマンドを登録
-    Commands\GetCoinsTweet::class,
+    // Commands\GetCoinsTweet::class,
   ];
 
   /**

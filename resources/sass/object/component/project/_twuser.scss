@@ -1,6 +1,5 @@
 .p-twuser {
-
-  &__title{
+  &__title {
     margin: 0 auto;
     font-size: 3rem;
     text-align: center;
@@ -8,11 +7,19 @@
     border-bottom: 1px solid;
     width: 50%;
   }
+  &__gest {
+    padding-top: 48px;
+    border-bottom: none;
+    font-size: 2rem;
+    &__btn{
+      width: 30%;
+    }
+  }
   &__header {
     position: relative;
     width: 90%;
     margin: 16px auto;
-    text-align: end;
+    text-align: right;
     @include mq() {
       width: 100%;
       text-align: center;

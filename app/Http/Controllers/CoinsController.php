@@ -35,6 +35,8 @@ class CoinsController extends Controller
         ->join('hours', 'coins.id', '=', 'hours.coin_id')
         ->get();
 
+        // dd($coins);
+
         return $coins;
     }
 

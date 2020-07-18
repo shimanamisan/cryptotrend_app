@@ -1,11 +1,14 @@
-<!doctype html>
+<!DOCTYPE html>
 
 <html lang="ja">
+
   <head>
     <!-- metaタグなどを別ファイルに切り出し -->
     @yield('head')
   </head>
+  
 <body class="gray">
+
     <header class="l-header">
       <a class="p-header__logoLink" href="{{ route('home') }}">
         <img class="p-header__logo" src="{{ asset('storage') }}/img/logo_trim.png" alt />
@@ -54,11 +57,11 @@
         </ul>
       </nav>
     </header>
+    <div class="u-msg__withdraw js-flash-msg" style="display:none;">
     @if(Session::has('withdraw_message'))
-        <div class="u-msg__withdraw">
             <p>{{ session('withdraw_message') }}</p>
-        </div>
     @endif
+    </div>
 
 
   @yield('content')

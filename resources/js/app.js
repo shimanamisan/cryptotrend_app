@@ -5,11 +5,7 @@
  */
 
 require('./bootstrap')
-// axios use JSON BIGINT Parser
-// const JSONbig = require('json-bigint');
-// axios.defaults.transformResponse =  [function (data) {
-//     return JSONbig.parse(data);
-// }]
+require('./jquery') // jQueryで記述された処理を読み込む
 
 // window.Vue = require("vue");
 

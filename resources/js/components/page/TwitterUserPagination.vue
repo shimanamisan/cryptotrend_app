@@ -103,6 +103,7 @@
 import Vue from 'vue';
 import Paginate from 'vuejs-paginate';
 import Modal from '../module/Modal';
+import { OK, UNPROCESSABLE_ENTITY, INTERNAL_SERVER_ERROR } from "./../../util";
 // Vue.component('paginate', Paginate);
 export default {
   props: ['follow_list', 'total_page', 'user'],
@@ -165,8 +166,8 @@ export default {
       // catch(error => error.response || error)で非同期通信が成功しても失敗してもresponseに結果を代入する
       const response = await axios
         .post('/autofollow', { status: this.autoFollow_flg })
-        .catch((error) => error.response || error);
-      if (response.status === 200) {
+        // .catch((error) => error.response || error);
+      if (response.status === OK) {
         if (this.autoFollow_flg == 0) {
           this.autoFollow_flg = 1;
         } else {
@@ -183,11 +184,10 @@ export default {
       // catch(error => error.response || error)で非同期通信が成功しても失敗してもresponseに結果を代入する
       const response = await axios
         .post('/follow', { id: id })
-        .catch((error) => error.response || error);
+        // .catch((error) => error.response || error);
 
-      if (response.status === 200) {
+      if (response.status === OK) {
         // 通信が成功した時の処理
-
         // 返却されたメッセージを格納
         this.systemMessage = response.data;
         // フラッシュメッセージを表示
@@ -210,9 +210,9 @@ export default {
       // catch(error => error.response || error)で非同期通信が成功しても失敗してもresponseに結果を代入する
       const response = await axios
         .post('/unfollow', { id: id })
-        .catch((error) => error.response || error);
+        // .catch((error) => error.response || error);
       // 通信が成功した時の処理
-      if (response.status === 200) {
+      if (response.status === OK) {
         // 返却されたメッセージを格納
         this.systemMessage = response.data;
         // フラッシュメッセージを表示
@@ -294,4 +294,3 @@ export default {
 };
 </script>
 
-<style></style>

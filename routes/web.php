@@ -1,4 +1,4 @@
-<?php
+web<?php
 
 use Illuminate\Support\Facades\Auth;
 
@@ -13,13 +13,16 @@ use Illuminate\Support\Facades\Auth;
 |
 */
 
-Route::get('/', function () {
-    return view('home');
-})->name('home');
-
 // 認証系のルーティングそれに対応するコントローラがまとまっている
 // Illuminate\Routing\Routerクラスのauth()メソッドにルーティングが記述されている
 Auth::routes(); // email認証の機能を有効化
+
+// トップページのページの表示
+Route::get('/', 'IndexController@home')->name('home');
+// お問い合わせページの表示
+Route::get('/contact', 'IndexController@contact')->name('contact.index');
+// お問い合わせ内容の送信
+Route::post('/contact/confirm', 'IndexController@confirm')->name('contact.confirm');
 
 // Twitter経由でのログインを行う為のURI
 Route::get('login/twitter', 'Auth\TwitterAuthController@getTwitterLogin')->name('twitter.login');
@@ -27,11 +30,8 @@ Route::get('login/twitter', 'Auth\TwitterAuthController@getTwitterLogin')->name(
 Route::get('register/twitter', 'Auth\TwitterAuthController@getTwitterRegister')->name('twitter.register');
 // アプリ側から情報が返ってくるURL
 Route::get('auth/twitter/callback', 'Auth\TwitterAuthController@getTwitterCallback');
-// Twitterアカウントて新規登録する処理
-
 // 仮想通貨関連のニュースの取得
 Route::get('/news', 'NewsController@index')->name('getNews.index');
-
 // ログアウト
 Route::post('/logout', 'Auth\LoginController@logout')->name('logout');
 
@@ -43,16 +43,14 @@ Route::group(['middleware' => 'auth'], function () {
      **********************************************/
     // 仮想通貨関連のTwitterユーザーページを表示
     Route::get('/tweet-users', 'TwitterController@index')->name('userList.index');
-    // Ajax処理：DBに登録した関連ユーザーを表示する
-    // Route::get('/userlist', 'TwitterController@getTwitterUserList');
-    // // Ajax処理：認証済みのユーザーの情報を取得
-    // Route::get('/authuser', 'TwitterController@authUser');
-    // // Ajax処理：ユーザーをフォローする
+    // Ajax処理：ユーザーをフォローする
     Route::post('/follow', 'FollowController@follow');
     // // Ajax処理：フォローを外す
     Route::post('/unfollow', 'FollowController@unfollow');
     // Ajax処理：自動フォロー機能をONにする
     Route::post('/autofollow', 'FollowController@autoFollowFlg');
+    // Twitter未登録ユーザーをTwitterアカウント登録へ遷移させるための処理
+    Route::get('/userlist/redirect', 'FollowController@registerRedirect')->name('userList.redirect');
 
     /*****************************************
      * トレンド表示機能関連のルーティング
@@ -69,9 +67,6 @@ Route::group(['middleware' => 'auth'], function () {
     /*****************************************
      * プロフィール機能関連のルーティング
      *****************************************/
-    // プロフィール画面
-    // Route::patch('/mypage/{id}', 'MypageController@editProfile')->name('mypage.editProfile');
-    
     Route::get('/mypage', 'MypageController@index')->name('mypage.index');
     // Ajax処理：ユーザーデータの取得
     Route::get('/mypage/user', 'MypageController@getUserData');
