@@ -1,6 +1,6 @@
 .c-container {
-  height: 100%;
-  // 各画面で共通化できるスタイリング（後にリファクタしていく）
+  height: auto;
+
   &--common {
     @include custumShadow();
     @include custumRadius(5px);
@@ -16,6 +16,9 @@
     box-sizing: border-box;
     background-color: $background-auth;
     padding: 32px 42px;
+    &__contact{
+      width: 500px;
+    }
     @include mq() {
       width: 100%;
       padding: 32px 16px;

@@ -1,4 +1,4 @@
-<?php
+web<?php
 
 use Illuminate\Support\Facades\Auth;
 
@@ -13,13 +13,16 @@ use Illuminate\Support\Facades\Auth;
 |
 */
 
-Route::get('/', function () {
-    return view('home');
-})->name('home');
-
 // 認証系のルーティングそれに対応するコントローラがまとまっている
 // Illuminate\Routing\Routerクラスのauth()メソッドにルーティングが記述されている
 Auth::routes(); // email認証の機能を有効化
+
+// トップページのページの表示
+Route::get('/', 'IndexController@home')->name('home');
+// お問い合わせページの表示
+Route::get('/contact', 'IndexController@contact')->name('contact.index');
+// お問い合わせ内容の送信
+Route::post('/contact/confirm', 'IndexController@confirm')->name('contact.confirm');
 
 // Twitter経由でのログインを行う為のURI
 Route::get('login/twitter', 'Auth\TwitterAuthController@getTwitterLogin')->name('twitter.login');

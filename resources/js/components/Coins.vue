@@ -189,17 +189,17 @@ export default {
       await axios
         .get('/coins/hour')
         .then((response) => {
+          console.log(response)
           this.addProperty(response);
           this.changeCoinFlg(HOUR);
+          this.loadingActive();
         })
         .catch((error) => {
+          this.loadingActive();
           alert(
             'エラーが発生しました。しばらくしてから、再度アクセスして下さい。'
           );
         })
-        .then(() => {
-          this.loadingActive();
-        });
     },
     // 過去1日のツイート数をDBから取得
     async getDayCoins() {
@@ -208,6 +208,7 @@ export default {
       await axios
         .get('/coins/day')
         .then((response) => {
+
           this.addProperty(response);
           this.changeCoinFlg(DAY);
         })
@@ -307,4 +308,3 @@ export default {
 };
 </script>
 
-<style></style>

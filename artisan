@@ -50,4 +50,6 @@ $status = $kernel->handle(
 
 $kernel->terminate($input, $status);
 
+dd($status);
+
 exit($status);

@@ -19,7 +19,7 @@
     position: relative;
     width: 90%;
     margin: 16px auto;
-    text-align: end;
+    text-align: right;
     @include mq() {
       width: 100%;
       text-align: center;

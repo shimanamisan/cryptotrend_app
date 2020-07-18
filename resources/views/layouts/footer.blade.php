@@ -3,14 +3,14 @@
     <p class="p-footer__text">Copyright © CRYPTO TOREND All Rights Reserved</p>
     </div>
     <ul class="p-footer__list">
-    <li class="p-footer__item">
+    <!-- <li class="p-footer__item">
         <a class="p-footer__item--link" href="rule.html">利用規約</a>
     </li>
     <li class="p-footer__item">
         <a class="p-footer__item--link" href="policy.html">プライバシーポリシー</a>
-    </li>
+    </li> -->
     <li class="p-footer__item">
-        <a class="p-footer__item--link" href="contact.html">お問い合わせ</a>
+        <a class="p-footer__item--link" href="{{ route('contact.index') }}">お問い合わせ</a>
     </li>
     </ul>
 </footer>
