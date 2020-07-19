@@ -1,0 +1,10 @@
+.c-msg {
+    padding: 16px;
+    margin-bottom: 24px;
+    @include custumRadius(5px);
+    &__send{
+        background-color: #fffaf6;
+        border-color: #fa9f47;
+        color: #b24603;
+    }
+}

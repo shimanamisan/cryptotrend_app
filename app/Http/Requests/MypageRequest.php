@@ -24,9 +24,9 @@ class MypageRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|max:255',
+            'name' => 'required|max:30',
             'email' => 'required|string|email',
-            'password' => 'required|string|confirmed|min:8|max:255|regex:/^[a-zA-Z0-9]+$/'
+            'password' => 'required|string|confirmed|min:8|max:100|regex:/^[a-zA-Z0-9]+$/'
         ];
     }
 
@@ -34,7 +34,7 @@ class MypageRequest extends FormRequest
     {
         return [
             'email.email' => '有効なメールアドレスを指定してください。',
-            'regex' => '半角英数のみご利用いただけます。',
+            'password.regex' => '半角英数のみご利用いただけます。',
             'password.confirmed' => ':attributeと、:attribute再入力が一致していません。',
         ];
     }

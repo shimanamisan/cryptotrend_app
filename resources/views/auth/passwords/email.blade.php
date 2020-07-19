@@ -8,7 +8,7 @@
 <main class="l-main l-main__auth l-main__auth--reminder u-padding__top--lg">
       <div class="c-container__auth">
         @if (session('status'))
-            <div class="alert alert-success" role="alert">
+            <div class="c-msg c-msg__send" role="alert">
                 {{ session('status') }}
             </div>
         @endif
