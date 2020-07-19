@@ -16,8 +16,8 @@ class Twuser extends Model
         'followers_count',
     ];
 
-    // IDなどの数値も文字列化してVue側に渡す
-    // JS側がbigintではなくNumberとして解釈するのが原因のようだ
+    // IDなどの数値も文字列に変換してしてVue側に渡す
+    // JS側で桁数の多い Twitter_id が丸め込まれないようにする
     public $incrementing = false;
     /**
      * リレーションシップ followテーブル

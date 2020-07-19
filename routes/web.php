@@ -15,14 +15,11 @@ use Illuminate\Support\Facades\Auth;
 
 // 認証系のルーティングそれに対応するコントローラがまとまっている
 // Illuminate\Routing\Routerクラスのauth()メソッドにルーティングが記述されている
-Auth::routes(); // email認証の機能を有効化
+ // email認証の機能を有効化
 
 // トップページのページの表示
 Route::get('/', 'IndexController@home')->name('home');
-// お問い合わせページの表示
-Route::get('/contact', 'IndexController@contact')->name('contact.index');
-// お問い合わせ内容の送信
-Route::post('/contact/confirm', 'IndexController@confirm')->name('contact.confirm');
+
 
 // Twitter経由でのログインを行う為のURI
 Route::get('login/twitter', 'Auth\TwitterAuthController@getTwitterLogin')->name('twitter.login');
@@ -34,6 +31,13 @@ Route::get('auth/twitter/callback', 'Auth\TwitterAuthController@getTwitterCallba
 Route::get('/news', 'NewsController@index')->name('getNews.index');
 // ログアウト
 Route::post('/logout', 'Auth\LoginController@logout')->name('logout');
+
+// // お問い合わせページの表示
+// Route::get('/contact', 'IndexController@contact')->name('contact.index');
+// // お問い合わせ内容の送信
+// Route::post('/contact/confirm', 'IndexController@confirm')->name('contact.confirm');
+
+Auth::routes();
 
 // 認証後の画面
 Route::group(['middleware' => 'auth'], function () {
