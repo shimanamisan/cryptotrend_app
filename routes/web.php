@@ -1,4 +1,4 @@
-web<?php
+<?php
 
 use Illuminate\Support\Facades\Auth;
 
