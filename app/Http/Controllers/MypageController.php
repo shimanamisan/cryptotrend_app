@@ -124,7 +124,7 @@ class MypageController extends Controller
             // csrfトークンを再生成
             session()->regenerateToken();
             // 退会後のフラッシュメッセージを格納
-            \Session::flash('withdraw_message', '退会しました。ご利用ありがとうございました。');
+            \Session::flash('system_message', '退会しました。ご利用ありがとうございました。');
         
             return response()->json(['success'], 200);
         } catch (\Exception $e) {
