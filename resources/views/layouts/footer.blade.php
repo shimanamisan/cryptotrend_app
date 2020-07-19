@@ -9,8 +9,8 @@
     <li class="p-footer__item">
         <a class="p-footer__item--link" href="policy.html">プライバシーポリシー</a>
     </li> -->
-    <li class="p-footer__item">
+    <!-- <li class="p-footer__item">
         <a class="p-footer__item--link" href="{{ route('contact.index') }}">お問い合わせ</a>
     </li>
-    </ul>
+    </ul> -->
 </footer>
