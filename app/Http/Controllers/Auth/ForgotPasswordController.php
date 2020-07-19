@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers\Auth;
 
+use Illuminate\Validation\Rule; // 追加
 use Illuminate\Http\Request; // 追加
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Password; // 追加
+use Illuminate\Support\Facades\Validator; // 追加
 use Illuminate\Foundation\Auth\SendsPasswordResetEmails;
 
 class ForgotPasswordController extends Controller
@@ -27,13 +29,33 @@ class ForgotPasswordController extends Controller
     // **************************************************************/
     public function sendResetLinkEmail(Request $request)
     {
-        $this->validateEmail($request);
-        // emailを検索してきたときに空だった場合に、未登録ユーザーはパスワード変更メールを飛ばせないようにする
+        // 既存のコードをカスタマイズ
+        // $this->validateEmail($request);
 
+        // emailを検索してきたときに空だった場合に、未登録及び退会済ユーザーは
+        // バリデーションに引っかかるようにする
+        $this->validator($request->all())->validate();   
+        
         $response = $this->broker()->sendResetLink($request->only('email'));
 
         return $response == Password::RESET_LINK_SENT
             ? $this->sendResetLinkResponse($request, $response)
             : $this->sendResetLinkFailedResponse($request, $response);
+    }
+
+    protected function validator(array $data)
+    {
+        // カスタムエラーメッセージ
+        $message = [
+            'email' => '有効なメールアドレスを指定してください。',
+            'email.unique' => '退会済のユーザーです。',
+        ];
+
+        return Validator::make($data, [
+        
+            'email' => ['required', 'string', 'email', 'max:100',
+                        // usersテーブルで退会済みのユーザーを探す（deletef_flgが1のユーザー）
+                        Rule::unique('users', 'email')->where('delete_flg', 1)]
+        ], $message);
     }
 }
