@@ -53,7 +53,7 @@
         <div class="c-container__index">
           <div class="p-sitemap">
             <div class="p-sitemap__pic">
-              <img src="{{ asset('storage') }}/img/section01.png" alt />
+              <img src="{{ asset('images/top_figure_01.png') }}" alt />
             </div>
             <div class="p-sitemap__info">
               <h1 class="p-sitemap__title u-margin__bottom--lg u-padding__top--lg">SNSで話題の銘柄をウォッチ！</h1>
@@ -70,7 +70,7 @@
         <div class="c-container__index">
           <div class="p-sitemap p-sitemap--reverse">
             <div class="p-sitemap__pic">
-              <img src="{{ asset('storage') }}/img/section02.jpg" alt />
+              <img src="{{ asset('images/top_figure_02.png') }}" alt />
             </div>
             <div class="p-sitemap__info">
               <h1 class="p-sitemap__title u-margin__bottom--lg u-padding__top--lg">仮想通貨の最新ニュースをチェック！</h1>
@@ -86,7 +86,7 @@
         <div class="c-container__index">
           <div class="p-sitemap">
             <div class="p-sitemap__pic">
-              <img src="{{ asset('storage') }}/img/section03.jpg" alt />
+              <img src="{{ asset('images/top_figure_03.png') }}" alt />
             </div>
             <div class="p-sitemap__info">
               <h1 class="p-sitemap__title u-margin__bottom--lg u-padding__top--lg">気になるユーザーをフォロー！</h1>

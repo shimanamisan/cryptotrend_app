@@ -11,7 +11,7 @@
 
     <header class="l-header">
       <a class="p-header__logoLink" href="{{ route('home') }}">
-        <img class="p-header__logo" src="{{ asset('storage') }}/img/logo_trim.png" alt />
+        <img class="p-header__logo" src="{{ asset('images/header_logo.png') }}" alt />
       </a>
       <div class="p-header--spmenu">
         <span></span>
