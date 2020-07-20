@@ -12,19 +12,33 @@
     top: 30%;
     left: 10%;
     position: absolute;
+    @include sm(){
+      top: 38%;
+      left: 7%;
+    }
   }
   &__title {
     font-weight: 600;
     font-size: 48px;
     animation: c-fadein 0.9s ease forwards;
+    @include sm(){
+      font-size: 32px;
+      margin-bottom: 24px;
+    }
   }
   &__content {
     display: flex;
     justify-content: space-evenly;
     animation: c-fadein 0.9s ease forwards;
+    @include sm(){
+      display: block;
+    }
 
     &--text {
       line-height: 50px;
+      @include sm(){
+        margin-top: 16px
+      }
     }
     &--link {
       color: $link-color;
@@ -36,8 +50,12 @@
     &--title {
       text-align: center;
       font-size: 64px;
-      padding-top: 40px;
+      padding-top: 100px;
       font-weight: 600;
+      @include sm(){
+        font-size: 32px;
+        padding-top: 130px;
+      }
     }
 
     &--signup {

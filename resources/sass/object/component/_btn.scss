@@ -57,6 +57,9 @@
       float: left;
       right: 5%;
       border: none;
+      @include sm(){
+        right: 3%;
+      }
       cursor: pointer;
       &:hover {
         transition: 0.3s;
@@ -70,6 +73,9 @@
       float: left;
       right: 5%;
       cursor: pointer;
+      @include sm(){
+        right: 3%;
+      }
       &:hover {
         transition: 0.3s;
         background-color: rgba(39, 37, 37, 0.7);
@@ -80,7 +86,7 @@
       display: block;
       position: absolute;
       top: 2%;
-      @include mq() {
+      @include sm() {
         position: unset;
         margin: 16px auto;
       }

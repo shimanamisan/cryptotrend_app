@@ -2,7 +2,7 @@
   <div>
     <div class="l-main l-main__common">
       <Loading v-show="loading" />
-      <h1 class="p-coin__title">トレンドランキング</h1>
+      <h1 class="c-title">トレンドランキング</h1>
       <section class="c-container c-container__coin">
         <div class="p-coin__header">
           <CoinSearch

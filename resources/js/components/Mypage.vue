@@ -2,7 +2,7 @@
   <div>
     <main class="l-main l-main__common">
       <Loading v-show="loading" />
-      <h1 class="p-mypage__title">マイページ</h1>
+      <h1 class="c-title c-title__mypage">マイページ</h1>
 
       <div class="c-container__mypage u-margin__bottom--lg">
         <transition name="flash">

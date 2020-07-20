@@ -9,8 +9,9 @@
   width: 100%;
   z-index: $z-index_m;
   background: $background-header;
-  @include mq() {
+  @include sm() {
     padding-left: 16px;
     padding-right: 16px;
+    // position: fixed;
   }
 }

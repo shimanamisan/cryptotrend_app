@@ -6,10 +6,17 @@
     margin-bottom: 48px;
     border-bottom: 1px solid;
     width: 50%;
+    @include sm(){
+      width: 70%;
+      font-size: 1.8rem;
+    }
   }
 
   &__header {
     padding: 0 32px;
+    @include sm(){
+      padding: 0;
+    }
 
     &__title {
       text-align: center;
@@ -21,6 +28,10 @@
       display: flex;
       margin-bottom: 16px;
       line-height: 40px;
+      @include sm(){
+        display: block;
+        text-align: center;
+      }
     }
   }
 
@@ -29,6 +40,11 @@
     padding: 32px;
     box-sizing: border-box;
     @include custumRadius(5px);
+    @include sm(){
+      margin-top: 16px;
+      padding: 0;
+      overflow-y: scroll;
+    }
     &__link {
       color: #707070;
     }
@@ -73,6 +89,9 @@
     margin-bottom: 24px;
     display: flex;
     justify-content: center;
+    @include sm(){
+      flex-wrap:wrap;
+    }
     &__btn {
       justify-content: center;
     }
@@ -83,6 +102,9 @@
 
     &--inner {
       margin: 0 auto;
+      @include sm(){
+        width: 980px;
+      }
     }
 
     & tr {
@@ -90,6 +112,9 @@
       & > th,
       td {
         padding: 16px 24px;
+        @include sm(){
+          padding: 12px 18px;
+        }
         &:first-child {
           width: 10%;
         }

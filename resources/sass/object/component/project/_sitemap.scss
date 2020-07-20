@@ -1,13 +1,12 @@
 .p-sitemap {
   display: flex;
   justify-content: space-between;
-  @include mq() {
+  @include sm() {
     display: block;
   }
-
   &__info {
     width: calc(50% - 56px);
-    @include mq() {
+    @include sm() {
       width: 100%;
     }
   }
@@ -15,13 +14,19 @@
     font-weight: 600;
     font-size: 30px;
     text-align: center;
+    @include sm(){
+      font-size: 24px;
+    }
   }
   &__text {
     font-size: 24px;
+    @include sm(){
+      font-size: 18px;
+    }
   }
   &__pic {
     width: 50%;
-    @include mq() {
+    @include sm() {
       width: 100%;
     }
   }
@@ -34,6 +39,12 @@
       display: block;
       font-size: 24px;
       text-align: center;
+      @include sm(){
+        font-size: 16px;
+        &:nth-last-of-type(even){
+          margin-bottom: 18px;
+        }
+      }
     }
   }
 }

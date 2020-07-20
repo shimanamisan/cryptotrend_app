@@ -7,7 +7,7 @@
   padding-left: 32px;
   padding-right: 32px;
   width: 100%;
-  @include mq() {
+  @include sm() {
     display: block;
     padding-left: 16px;
     padding-right: 16px;

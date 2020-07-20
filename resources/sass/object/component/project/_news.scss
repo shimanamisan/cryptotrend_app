@@ -14,6 +14,9 @@
     &:nth-of-type(odd) {
       margin-right: 24px;
     }
+    @include sm(){
+      width: 100%;
+    }
   }
 
   &__inner {
@@ -24,7 +27,7 @@
     width: 980px;
     /* margin: 40px auto; */
 
-    @include mq() {
+    @include sm() {
       width: 100%;
     }
   }
@@ -38,18 +41,6 @@
     @include custumRadius(5px);
     padding: 15px 20px;
     background-color: $color-default;
-  }
-
-  &__title {
-    margin: 0 auto;
-    font-size: 3rem;
-    text-align: center;
-    margin-bottom: 48px;
-    border-bottom: 1px solid;
-    width: 50%;
-    @include mq() {
-      font-size: 1rem;
-    }
   }
 
   &__body {

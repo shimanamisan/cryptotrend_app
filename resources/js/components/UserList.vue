@@ -1,6 +1,6 @@
 <template>
   <main class="l-main l-main__common">
-    <h1 class="p-twuser__title">関連アカウント一覧</h1>
+    <h1 class="c-title c-title__twuser">関連アカウント一覧</h1>
     <Pagination
       :follow_list="this.follow_list_item"
       :user="this.user"

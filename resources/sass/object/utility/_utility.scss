@@ -2,6 +2,9 @@
   margin-top: 32px;
   margin-bottom: 32px;
   border-top: 1px solid #707070;
+  @include sm(){
+    width: 90%;
+  }
 
   &--or {
     display: block;
@@ -69,6 +72,9 @@
   &__top {
     &--lg {
       padding-top: 150px;
+      @include sm(){
+        padding-top: 80px;
+      }
     }
   }
 }
@@ -99,7 +105,9 @@
     z-index: 5;
     top: 20%;
     right: 5%;
-   
+    @include sm(){
+      padding: 16px;
+    }
   }
 }
 
