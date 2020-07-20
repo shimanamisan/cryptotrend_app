@@ -40,6 +40,7 @@ class FollowController extends Controller
 
         // 1日のフォロー上限を超えないように、現在のフォローした数を取得
         $follow_limit_count = Auth::user()->follow_limit_count;
+    
         // 個別フォロー時の上限をカウントする変数
         $person_follow_limit_count = Auth::user()->person_follow_limit_count;
         
