@@ -75,9 +75,18 @@ class MypageController extends Controller
                 // パスワード更新時の処理
                 // DBに登録されているハッシュ化されたパスワードと入力されたパスワードが一致するか確認
                 if (Hash::check($request->password, $user->password)) { // 第一引数にプレーンパスワード、第二引数にハッシュ化されたパスワード
-                    //
+                    // パスワードがDBのものと同じ場合は、違うパスワードを設定するようにメッセージを出す。
                     \Log::debug('登録されているパスワードと同じでした。');
                     \Log::debug('   ');
+
+                        $errors = ['errors' => 
+                        ['password' => 
+                            ['前回と違うパスワードを設定して下さい。']
+                        ]
+                    ];
+                    // ステータスコードとエラーメッセージを返す
+                    return response()->json($errors, 422);
+
                 } else {
                     // DBと違っていればパスワードを更新する
                     // リクエストフォームから受け取ったパスワードをハッシュ化
@@ -100,7 +109,6 @@ class MypageController extends Controller
     // 退会処理
     public function delete()
     {
-        
         try {
             // 認証済みユーザーを取得
             $user = Auth::user();

@@ -48,7 +48,7 @@ class ForgotPasswordController extends Controller
         // カスタムエラーメッセージ
         $message = [
             'email' => '有効なメールアドレスを指定してください。',
-            'email.unique' => '退会済のユーザーです。',
+            'email.unique' => 'ご登録情報がありません。',
         ];
 
         return Validator::make($data, [
