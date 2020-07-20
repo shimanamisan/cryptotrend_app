@@ -114,9 +114,6 @@ module.exports = {
                             },
                         },
                     },
-                    {
-                        loader: "eslint-loader",
-                    },
                 ],
             },
             {
@@ -132,9 +129,6 @@ module.exports = {
                             ],
                         },
                     },
-                    {
-                        loader: "eslint-loader",
-                    },
                 ],
             },
             {
@@ -144,17 +138,6 @@ module.exports = {
                 loader: "url-loader",
             },
         ],
-        // ESlintの設定
-        // {
-        //   test: /\.vue$/,
-        //   exclude: /node_modules/,
-        //   enforce: 'pre',
-        //   use: [
-        //       {
-        //           loader: 'eslint-loader',
-        //       },
-        //   ]
-        // },
     },
     // 各種プラグインを読み込む
     plugins: [
