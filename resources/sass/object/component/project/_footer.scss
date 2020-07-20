@@ -1,31 +1,31 @@
 .p-footer {
-  color: #fff;
-  height: 80px;
-  @include sm(){
-    display: flex;
-    align-items: center;
-  }
-  &__list {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+    color: #fff;
+    height: 80px;
     @include sm() {
-      display: block;
+        display: flex;
+        align-items: center;
     }
-  }
-  &__text {
-    font-size: 16px;
-    text-align: center;
-    line-height: 80px;
-    @include sm() {
-      line-height: normal;
+    &__list {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        @include sm() {
+            display: block;
+        }
     }
-  }
+    &__text {
+        font-size: 16px;
+        text-align: center;
+        line-height: 80px;
+        @include sm() {
+            line-height: normal;
+        }
+    }
 
-  &__item {
-    margin-right: 32px;
-    &--link {
-      color: #fff;
+    &__item {
+        margin-right: 32px;
+        &--link {
+            color: #fff;
+        }
     }
-  }
 }

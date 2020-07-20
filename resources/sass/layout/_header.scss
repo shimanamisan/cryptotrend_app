@@ -1,17 +1,16 @@
 .l-header {
-  height: 100px;
-  display: flex;
-  box-sizing: border-box;
-  padding-left: 32px;
-  padding-right: 32px;
-  justify-content: space-between;
-  align-items: center;
-  width: 100%;
-  z-index: $z-index_m;
-  background: $background-header;
-  @include sm() {
-    padding-left: 16px;
-    padding-right: 16px;
-    // position: fixed;
-  }
+    height: 100px;
+    display: flex;
+    box-sizing: border-box;
+    padding-left: 32px;
+    padding-right: 32px;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    z-index: $z-index_m;
+    background: $background-header;
+    @include sm() {
+        padding-left: 16px;
+        padding-right: 16px;
+    }
 }

@@ -1,8 +1,8 @@
 .u-btn {
-  width: 140px;
-  &__sm{
-    @include sm (){
-      padding: 8px 12px;
+    width: 140px;
+    &__sm {
+        @include sm() {
+            padding: 8px 12px;
+        }
     }
-  }
 }

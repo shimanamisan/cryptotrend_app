@@ -9,9 +9,15 @@
         font-size: 1.9rem;
         width: 80%;
     }
-    &__twuser{
-        @include sm(){
+    &__twuser {
+        @include sm() {
             font-size: 1.8rem;
+            width: 90%;
+        }
+    }
+    &__coins {
+        @include sm() {
+            font-size: 1.9rem;
             width: 90%;
         }
     }

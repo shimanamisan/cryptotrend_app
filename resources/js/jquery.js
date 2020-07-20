@@ -9,7 +9,7 @@ $(function () {
         setTimeout(function () {
             $jsFlashMsg.slideToggle("slow");
         }, 5000);
-    };
+    }
 
     /****************************************
 SPメニューを開閉するアクション
@@ -36,6 +36,6 @@ SPメニューを開閉するアクション
             return true;
         } else {
             return false;
-        };
+        }
     });
 });

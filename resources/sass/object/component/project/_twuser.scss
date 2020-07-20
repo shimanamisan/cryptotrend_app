@@ -1,70 +1,70 @@
 .p-twuser {
-  &__gest {
-    padding-top: 48px;
-    border-bottom: none;
-    font-size: 2rem;
-    &__btn{
-      width: 30%;
-    }
-  }
-  &__header {
-    position: relative;
-    width: 90%;
-    margin: 16px auto;
-    text-align: right;
-    @include sm() {
-      width: 100%;
-      text-align: center;
-    }
-  }
-  &__card {
-    position: relative;
-    width: 90%;
-    margin: 16px auto;
-    // margin-bottom: 24px;
-    padding: 32px;
-    box-sizing: border-box;
-    background-color: #fff;
-    @include custumShadow();
-    @include custumRadius(5px);
-    @include sm() {
-      width: 100%;
-      padding: 16px 12px;
-    }
-  }
-  &__detail {
-    padding: 8px;
-    border: 1px solid #707070;
-    @include custumRadius(5px);
-    &__account {
-      font-size: 0.9rem;
-      color: #999;
-      margin-bottom: 8px;
-    }
-    &__name {
-      font-size: 18px;
-      font-weight: 600;
-      @include sm(){
-        width: 55%;
-      }
-    }
-    &__item {
-      display: flex;
-      margin-bottom: 8px;
-      &__count {
-        display: block;
-        font-size: 0.9rem;
-        color: #999;
-        &:nth-child(even) {
-          margin-left: 12px;
+    &__gest {
+        padding-top: 48px;
+        border-bottom: none;
+        font-size: 2rem;
+        &__btn {
+            width: 30%;
         }
-      }
     }
-    &__tweet {
-      &__title {
-        font-size: 0.9rem;
-        color: #999;
-      }
+    &__header {
+        position: relative;
+        width: 90%;
+        margin: 16px auto;
+        text-align: right;
+        @include sm() {
+            width: 100%;
+            text-align: center;
+        }
     }
-  }
+    &__card {
+        position: relative;
+        width: 90%;
+        margin: 16px auto;
+        // margin-bottom: 24px;
+        padding: 32px;
+        box-sizing: border-box;
+        background-color: #fff;
+        @include custumShadow();
+        @include custumRadius(5px);
+        @include sm() {
+            width: 100%;
+            padding: 16px 12px;
+        }
+    }
+    &__detail {
+        padding: 8px;
+        border: 1px solid #707070;
+        @include custumRadius(5px);
+        &__account {
+            font-size: 0.9rem;
+            color: #999;
+            margin-bottom: 8px;
+        }
+        &__name {
+            font-size: 18px;
+            font-weight: 600;
+            @include sm() {
+                width: 55%;
+            }
+        }
+        &__item {
+            display: flex;
+            margin-bottom: 8px;
+            &__count {
+                display: block;
+                font-size: 0.9rem;
+                color: #999;
+                &:nth-child(even) {
+                    margin-left: 12px;
+                }
+            }
+        }
+        &__tweet {
+            &__title {
+                font-size: 0.9rem;
+                color: #999;
+            }
+        }
+    }
 }

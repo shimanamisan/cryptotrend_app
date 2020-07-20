@@ -4,8 +4,8 @@
  * building robust, powerful web applications using Vue and Laravel.
  */
 
-require('./bootstrap')
-require('./jquery') // jQueryで記述された処理を読み込む
+require("./bootstrap");
+require("./jquery"); // jQueryで記述された処理を読み込む
 
 // window.Vue = require("vue");
 
@@ -26,14 +26,14 @@ require('./jquery') // jQueryで記述された処理を読み込む
 // );
 
 // sass ファイル読み込み
-import '../sass/style.scss';
+import "../sass/style.scss";
 
-import Vue from 'vue';
+import Vue from "vue";
 
-import News from './components/News.vue'
-import UserList from './components/UserList.vue'
-import Mypage from './components/Mypage.vue'
-import Coins from './components/Coins.vue'
+import News from "./components/News.vue";
+import UserList from "./components/UserList.vue";
+import Mypage from "./components/Mypage.vue";
+import Coins from "./components/Coins.vue";
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -42,26 +42,19 @@ import Coins from './components/Coins.vue'
  */
 
 // console.logに#appが無いとエラーが出ないように変更
-(function(){
-
-  // #app idが付いた要素がない場合はVueインスタンスを生成しない
-  if(!document.querySelector('#app') ){
-
-    return null
-
-  }else{
-    
-    new Vue({
-      el: '#app',
-      components:{
-        News,
-        UserList,
-        Coins,
-        Mypage,
-      }
-    });
-  }
-
+(function () {
+    // #app idが付いた要素がない場合はVueインスタンスを生成しない
+    if (!document.querySelector("#app")) {
+        return null;
+    } else {
+        new Vue({
+            el: "#app",
+            components: {
+                News,
+                UserList,
+                Coins,
+                Mypage,
+            },
+        });
+    }
 })();
-
-

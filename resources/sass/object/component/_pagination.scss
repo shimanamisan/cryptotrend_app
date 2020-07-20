@@ -7,8 +7,8 @@
         width: 100%;
     }
 
-    &__distable{
-      display: none;
+    &__distable {
+        display: none;
     }
 
     &__item {
@@ -34,8 +34,8 @@
         }
         &--prev {
             display: block;
-            @include sm(){
-              margin-left: 0;
+            @include sm() {
+                margin-left: 0;
             }
         }
     }

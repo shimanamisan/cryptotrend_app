@@ -1,110 +1,110 @@
 .p-modal {
-  position: fixed;
-  left: 0;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  z-index: 5;
-  background-color: rgba(0, 0, 0, 0.3);
-  &__text{
-    margin-left: 10px;
-  }
-  &__wrap {
-    padding-top: 16px;
-    &__btn {
-      text-align: center;
-
-      &--in{
-        display: flex;
-      }
-    }
-  }
-  &__container {
     position: fixed;
-    left: 50%;
-    top: 50%;
-    width: 50%;
-    height: auto;
-    box-sizing: border-box;
-    padding: 40px;
-    z-index: 99;
-    overflow: auto;
-    @include custumRadius(8px);
-    transform: translate(-50%, -50%);
-    background-color: #fff;
-    @include sm(){
-      width: 95%;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 5;
+    background-color: rgba(0, 0, 0, 0.3);
+    &__text {
+        margin-left: 10px;
     }
-  }
-  &__body {
-    &__list {
-      margin-bottom: 8px;
-    }
-    &__section {
-      padding-top: 16px;
-    }
-  }
-  &__nav {
-    overflow: hidden;
-    &--close {
-      background-color: $btn_color;
-      color: #fff;
-      text-align: center;
-      line-height: 30px;
-      display: block;
-      width: 30px;
-      height: 30px;
-      cursor: pointer;
-      border-radius: 50%;
-      float: right;
-      letter-spacing: normal;
-      transition: all 0.3s;
-      &:hover {
-        transition: all 0.3s;
-        background-color: #5a5b79;
-      }
-    }
-  }
-  &__send {
-    margin:0 auto;
-    width: 20px;
-    height: 20px;
-    border-top: 3px solid #fff;
-    border-right: 3px solid #fff;
-    border-left: 3px solid #fff;
-    border-bottom: 3px solid #345676;
-    border-radius: 50%;
+    &__wrap {
+        padding-top: 16px;
+        &__btn {
+            text-align: center;
 
-    &--motion {
-      animation-name: spin;
-      animation-duration: 1.2s;
-      animation-iteration-count: infinite;
-      animation-timing-function: linear;
+            &--in {
+                display: flex;
+            }
+        }
     }
-  }
+    &__container {
+        position: fixed;
+        left: 50%;
+        top: 50%;
+        width: 50%;
+        height: auto;
+        box-sizing: border-box;
+        padding: 40px;
+        z-index: 99;
+        overflow: auto;
+        @include custumRadius(8px);
+        transform: translate(-50%, -50%);
+        background-color: #fff;
+        @include sm() {
+            width: 95%;
+        }
+    }
+    &__body {
+        &__list {
+            margin-bottom: 8px;
+        }
+        &__section {
+            padding-top: 16px;
+        }
+    }
+    &__nav {
+        overflow: hidden;
+        &--close {
+            background-color: $btn_color;
+            color: #fff;
+            text-align: center;
+            line-height: 30px;
+            display: block;
+            width: 30px;
+            height: 30px;
+            cursor: pointer;
+            border-radius: 50%;
+            float: right;
+            letter-spacing: normal;
+            transition: all 0.3s;
+            &:hover {
+                transition: all 0.3s;
+                background-color: #5a5b79;
+            }
+        }
+    }
+    &__send {
+        margin: 0 auto;
+        width: 20px;
+        height: 20px;
+        border-top: 3px solid #fff;
+        border-right: 3px solid #fff;
+        border-left: 3px solid #fff;
+        border-bottom: 3px solid #345676;
+        border-radius: 50%;
+
+        &--motion {
+            animation-name: spin;
+            animation-duration: 1.2s;
+            animation-iteration-count: infinite;
+            animation-timing-function: linear;
+        }
+    }
 }
 
 @keyframes spin {
-  0% {
-    transform: rotate(0deg);
-  }
+    0% {
+        transform: rotate(0deg);
+    }
 
-  100% {
-    transform: rotate(360deg);
-  }
+    100% {
+        transform: rotate(360deg);
+    }
 }
 
 @keyframes spinner_loading_text {
-  0% {
-    opacity: 1;
-    transform: translate(-50%, -50%) rotate(0deg);
-  }
-  50% {
-    opacity: 0;
-    transform: translate(-50%, -50%) rotate(180deg);
-  }
-  100% {
-    opacity: 1;
-    transform: translate(-50%, -50%) rotate(360deg);
-  }
+    0% {
+        opacity: 1;
+        transform: translate(-50%, -50%) rotate(0deg);
+    }
+    50% {
+        opacity: 0;
+        transform: translate(-50%, -50%) rotate(180deg);
+    }
+    100% {
+        opacity: 1;
+        transform: translate(-50%, -50%) rotate(360deg);
+    }
 }
