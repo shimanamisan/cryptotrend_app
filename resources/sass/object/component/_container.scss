@@ -1,80 +1,92 @@
 .c-container {
-  height: auto;
+    height: auto;
 
-  &--common {
-    @include custumShadow();
-    @include custumRadius(5px);
-    margin: 0 auto;
-    box-sizing: border-box;
-  }
-  // 認証系画面のスタイル
-  &__auth {
-    @include custumShadow();
-    @include custumRadius(5px);
-    width: 450px;
-    margin: 0 auto;
-    box-sizing: border-box;
-    background-color: $background-auth;
-    padding: 32px 42px;
-    &__contact{
-      width: 500px;
+    &--common {
+        @include custumShadow();
+        @include custumRadius(5px);
+        margin: 0 auto;
+        box-sizing: border-box;
     }
-    @include mq() {
-      width: 100%;
-      padding: 32px 16px;
+    // 認証系画面のスタイル
+    &__auth {
+        @include custumShadow();
+        @include custumRadius(5px);
+        width: 450px;
+        margin: 0 auto;
+        box-sizing: border-box;
+        background-color: $background-auth;
+        padding: 32px 42px;
+        &__contact {
+            width: 500px;
+        }
+        @include sm() {
+            width: 100%;
+            padding: 32px 16px;
+        }
     }
-  }
-  // トップページ用のスタイル
-  &__index {
-    width: 80%;
-    padding-top: 80px;
-    padding-bottom: 120px;
-    margin-left: auto;
-    margin-right: auto;
-  }
-  &__bg {
-    &:nth-child(odd) {
-      background-color: #fff;
-    }
-  }
 
-  // プロフィール用レイアウト
-  &__mypage {
-    position: relative;
-    width: 744px;
-    min-height: 390px;
-    margin: 0 auto;
-    padding: 48px 8px 32px;
-    box-sizing: border-box;
-    background-color: #fff;
-    @include custumShadow();
-    @include custumRadius(0 0 5px 5px);
-    clear: both;
-  }
-
-  // トレンド表示画面用レイアウト
-  &__coin {
-    width: 1200px;
-    margin: 0 auto;
-    clear: both;
-    @include mq() {
-      padding: 8px;
-      width: 100%;
+    // トップページ用のスタイル
+    &__index {
+        width: 80%;
+        padding-top: 80px;
+        padding-bottom: 120px;
+        margin-left: auto;
+        margin-right: auto;
+        @include sm() {
+            width: 100%;
+            padding-bottom: 80px;
+        }
     }
-  }
-
-  &__news {
-    width: 1200px;
-    margin: 0 auto;
-    display: flex;
-    flex-wrap: wrap;
-  }
-  &__twusr {
-    width: 1200px;
-    margin: 0 auto;
-    @include mq() {
-      padding: 8px;
-      width: 100%;
+    &__bg {
+        &:nth-child(odd) {
+            background-color: #fff;
+        }
     }
-  }
+
+    // プロフィール用レイアウト
+    &__mypage {
+        position: relative;
+        width: 744px;
+        min-height: 390px;
+        margin: 0 auto;
+        padding: 48px 8px 32px;
+        box-sizing: border-box;
+        background-color: #fff;
+        @include custumShadow();
+        @include custumRadius(0 0 5px 5px);
+        clear: both;
+        @include sm() {
+            width: 100%;
+        }
+    }
+
+    // トレンド表示画面用レイアウト
+    &__coin {
+        width: 1200px;
+        margin: 0 auto;
+        clear: both;
+        @include sm() {
+            width: 100%;
+        }
+    }
+
+    &__news {
+        width: 1200px;
+        margin: 0 auto;
+        display: flex;
+        flex-wrap: wrap;
+        @include sm() {
+            width: 100%;
+            display: block;
+        }
+    }
+
+    &__twusr {
+        width: 1200px;
+        margin: 0 auto;
+        @include sm() {
+            padding: 8px;
+            width: 100%;
+        }
+    }
 }

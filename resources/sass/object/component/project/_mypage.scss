@@ -1,124 +1,119 @@
 .p-mypage {
-  &__container {
-    width: 70%;
-    margin: 0 auto;
-  }
-  &__submitWrap {
-    margin-top: 12px;
-    display: flex;
-    justify-content: flex-end;
-  }
-  &__btn {
-    font-size: 12px;
-    padding: 10px 15px;
-    height: auto;
-    margin-left: 8px;
-    &--cancel {
-      background-color: #000;
-      color: #fff;
+    &__container {
+        width: 70%;
+        margin: 0 auto;
+        @include sm() {
+            width: 100%;
+        }
     }
-    &--submit {
-      background-color: $btn_color-submit;
-      color: #fff;
-      &:disabled{
-        background-color: rgba(14,19,24,.15);
-        cursor: not-allowed;
-      }
+    &__submitWrap {
+        margin-top: 12px;
+        display: flex;
+        justify-content: flex-end;
     }
-  }
-  &__title {
-    margin: 0 auto;
-    font-size: 3rem;
-    text-align: center;
-    margin-bottom: 48px;
-    border-bottom: 1px solid;
-    width: 50%;
-    @include mq() {
-      font-size: 1rem;
-    }
-  }
-  &__body {
-    display: flex;
-    justify-content: space-evenly;
-  }
-  &__text {
-    font-size: 12px;
-  }
-  &__content {
-    padding: 32px;
-    position: relative;
-    & > p {
-      text-align: center;
-      margin-bottom: 8px;
-    }
-    &--inwrap {
-      margin-top: 12px;
-      display: flex;
-      justify-content: flex-end;
+    &__btn {
+        font-size: 12px;
+        padding: 10px 15px;
+        height: auto;
+        margin-left: 8px;
+        &--cancel {
+            background-color: #000;
+            color: #fff;
+        }
+        &--submit {
+            background-color: $btn_color-submit;
+            color: #fff;
+            &:disabled {
+                background-color: rgba(14, 19, 24, 0.15);
+                cursor: not-allowed;
+            }
+        }
     }
     &__body {
-      width: 80%;
-      margin: 0 auto;
-      &:nth-last-child(1) {
-        margin-top: 16px;
-      }
+        display: flex;
+        justify-content: space-evenly;
     }
-  }
-
-  &__pic {
-    width: 100%;
-    height: 200px;
-    position: absolute;
-    top: 0;
-    left: 0;
-    opacity: 0;
-
-    &--ImgWrap {
-      display: block;
-      position: relative;
-      width: 200px;
-      height: 200px;
-      @include custumRadius(50%);
-      box-sizing: border-box;
-      text-align: center;
+    &__text {
+        font-size: 12px;
     }
-
-    &--drop {
-      border: none;
-      width: 100%;
-      height: 200px;
-      line-height: 200px;
-      position: absolute;
-      top: 0;
-      left: 0;
-      opacity: 0;
+    &__content {
+        padding: 32px;
+        position: relative;
+        @include sm() {
+            padding: 16px;
+        }
+        & > p {
+            text-align: center;
+            margin-bottom: 8px;
+        }
+        &--inwrap {
+            margin-top: 12px;
+            display: flex;
+            justify-content: flex-end;
+        }
+        &__body {
+            width: 80%;
+            margin: 0 auto;
+            &:nth-last-child(1) {
+                margin-top: 16px;
+            }
+        }
     }
 
-    &--output {
-      width: 100%;
-      height: 100%;
-      @include custumRadius(50%);
-    }
-  }
-  &__dltitle {
-    text-align: center;
-    margin-bottom: 15px;
-    font-weight: 600;
-  }
+    &__pic {
+        width: 100%;
+        height: 200px;
+        position: absolute;
+        top: 0;
+        left: 0;
+        opacity: 0;
 
-  &__dlcontent {
-    text-align: left;
-    &--common {
-      text-align: center;
-    }
-  }
+        &--ImgWrap {
+            display: block;
+            position: relative;
+            width: 200px;
+            height: 200px;
+            @include custumRadius(50%);
+            box-sizing: border-box;
+            text-align: center;
+        }
 
-  &__dlbtn {
-    margin: 24px 0;
-    font-weight: 600;
-    background-color: red;
-    color: #fff;
-    transition: 0.3s;
-    @include custumRadius(24px);
-  }
+        &--drop {
+            border: none;
+            width: 100%;
+            height: 200px;
+            line-height: 200px;
+            position: absolute;
+            top: 0;
+            left: 0;
+            opacity: 0;
+        }
+
+        &--output {
+            width: 100%;
+            height: 100%;
+            @include custumRadius(50%);
+        }
+    }
+    &__dltitle {
+        text-align: center;
+        margin-bottom: 15px;
+        font-weight: 600;
+    }
+
+    &__dlcontent {
+        text-align: left;
+        &--common {
+            text-align: center;
+        }
+    }
+
+    &__dlbtn {
+        margin: 24px 0;
+        font-weight: 600;
+        background-color: red;
+        color: #fff;
+        transition: 0.3s;
+        @include custumRadius(24px);
+    }
 }

@@ -1,81 +1,72 @@
 .p-news {
-  //   padding: 50px;
-  background: #fff;
-  position: relative;
+    //   padding: 50px;
+    background: #fff;
+    position: relative;
 
-  &__card {
-    width: 48%;
-    margin-bottom: 24px;
-    padding: 32px;
-    box-sizing: border-box;
-    background-color: #fff;
-    @include custumShadow();
-    @include custumRadius(5px);
-    &:nth-of-type(odd) {
-      margin-right: 24px;
+    &__card {
+        width: 48%;
+        margin-bottom: 24px;
+        padding: 32px;
+        box-sizing: border-box;
+        background-color: #fff;
+        @include custumShadow();
+        @include custumRadius(5px);
+        &:nth-of-type(odd) {
+            margin-right: 24px;
+        }
+        @include sm() {
+            width: 100%;
+        }
     }
-  }
 
-  &__inner {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -75%);
-    width: 980px;
-    /* margin: 40px auto; */
+    &__inner {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -75%);
+        width: 980px;
+        /* margin: 40px auto; */
 
-    @include mq() {
-      width: 100%;
+        @include sm() {
+            width: 100%;
+        }
     }
-  }
 
-  &__wrapp {
-    margin-bottom: $space_3l;
-    text-align: center;
-  }
-
-  &__nav {
-    @include custumRadius(5px);
-    padding: 15px 20px;
-    background-color: $color-default;
-  }
-
-  &__title {
-    margin: 0 auto;
-    font-size: 3rem;
-    text-align: center;
-    margin-bottom: 48px;
-    border-bottom: 1px solid;
-    width: 50%;
-    @include mq() {
-      font-size: 1rem;
+    &__wrapp {
+        margin-bottom: $space_3l;
+        text-align: center;
     }
-  }
 
-  &__body {
-    width: 80%;
-    margin: 0 auto;
-    overflow-y: scroll;
-    height: 130px;
-  }
-
-  &__item {
-    margin-bottom: $space_s;
-    display: flex;
-  }
-
-  &__date {
-    font-weight: bold;
-    margin-right: 10px;
-  }
-
-  &__link {
-    color: $font-color_default;
-    transition: all 0.3s;
-    &:hover{
-      font-weight: 600;
-      transition: all 0.3s;
-      cursor: pointer;
+    &__nav {
+        @include custumRadius(5px);
+        padding: 15px 20px;
+        background-color: $color-default;
     }
-  }
+
+    &__body {
+        width: 80%;
+        margin: 0 auto;
+        overflow-y: scroll;
+        height: 130px;
+    }
+
+    &__item {
+        margin-bottom: $space_s;
+        display: flex;
+    }
+
+    &__date {
+        font-weight: bold;
+        margin-right: 10px;
+    }
+
+    &__link {
+        color: $font-color_default;
+        transition: all 0.3s;
+        &:hover {
+            font-weight: 600;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+    }
 }

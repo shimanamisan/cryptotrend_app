@@ -22,7 +22,7 @@ class PasswordResetNotification extends Notification
     public function __construct($token)
     {
         // $tokenを追加
-        $this->token = $token; // $this->token = $tokenを追加
+        $this->token = $token;
     }
 
     /**
@@ -48,13 +48,9 @@ class PasswordResetNotification extends Notification
         $url = $toplevelURL . "/password/reset/{$this->token}";
 
         return (new MailMessage())
-            ->from('itsup-info@shimanamisan.com', config('app.name'))
-            ->subject($this->title)
-            ->line('下のボタンをクリックしてパスワードを再設定してください。')
-            ->action('パスワード再設定', $url)
-            ->line(
-                'もし心当たりがない場合は、本メッセージは破棄してください。'
-            );
+            ->from('itsup-info@shimanamisan.com') // 送信元アドレス
+            ->subject($this->title) // メールに表示されるタイトル
+            ->view('email.reset', ['result_url' => url($url)]); // URLを変数に入れてテンプレートに渡す
     }
 
     /**

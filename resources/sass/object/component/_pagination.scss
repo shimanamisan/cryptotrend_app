@@ -1,18 +1,42 @@
 .c-pagination {
-  display: flex;
-  margin: 0 auto;
-  width: 80%;
-  justify-content: center;
-
-  &__item {
-    background-color: #ffff;
-    @include custumRadius();
-    padding: 10px 15px;
-    margin-left: 12px;
-    position: relative;
-    overflow: hidden;
-    &--active {
-      background-color: #e4e4e4;
+    display: flex;
+    margin: 0 auto;
+    width: 80%;
+    justify-content: center;
+    @include sm() {
+        width: 100%;
     }
-  }
+
+    &__distable {
+        display: none;
+    }
+
+    &__item {
+        background-color: #ffff;
+        @include custumRadius();
+        padding: 10px 15px;
+        margin-left: 12px;
+        position: relative;
+        overflow: hidden;
+        @include sm() {
+            display: none;
+        }
+        &--active {
+            background-color: #e4e4e4;
+            display: block;
+            @include sm() {
+                width: 35%;
+                text-align: center;
+            }
+        }
+        &--next {
+            display: block;
+        }
+        &--prev {
+            display: block;
+            @include sm() {
+                margin-left: 0;
+            }
+        }
+    }
 }

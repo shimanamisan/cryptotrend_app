@@ -7,7 +7,7 @@
 @include('layouts.head')
 @section('content')
 <main class="l-main">
-      <section class="p-eyecatch">
+      <section class="p-eyecatch l-main__section">
         <div class="p-eyecatch__wrap">
           <h1 class="p-eyecatch__title">
             仮想通貨の最新情報は
@@ -34,7 +34,7 @@
           @endguest
         </div>
       </section>
-      <section class="c-container__index p-sitemap">
+      <section class="c-container__index p-sitemap l-main__section">
         <div class="p-sitemap__about">
           <h1 class="p-sitemap__title">CRYPTO TORENDとは？</h1>
 
@@ -49,7 +49,7 @@
           </div>
         </div>
       </section>
-      <section class="c-container__bg">
+      <section class="c-container__bg l-main__section">
         <div class="c-container__index">
           <div class="p-sitemap">
             <div class="p-sitemap__pic">
@@ -66,7 +66,7 @@
           </div>
         </div>
       </section>
-      <section class="c-container__bg">
+      <section class="c-container__bg l-main__section">
         <div class="c-container__index">
           <div class="p-sitemap p-sitemap--reverse">
             <div class="p-sitemap__pic">
@@ -82,7 +82,7 @@
           </div>
         </div>
       </section>
-      <section class="c-container__bg">
+      <section class="c-container__bg l-main__section">
         <div class="c-container__index">
           <div class="p-sitemap">
             <div class="p-sitemap__pic">
@@ -99,16 +99,24 @@
           </div>
         </div>
       </section>
-      <section class="p-eyecatch p-eyecatch__footer">
+      <section class="p-eyecatch p-eyecatch__footer l-main__section">
         <h1 class="p-eyecatch__footer--title">
           仮想通貨の最新情報は
           <br />CRYPTO TOREND
         </h1>
+        @guest
         <div class="p-eyecatch__footer--signup">
           <a href="{{ route('register') }}">
             <button class="c-btn c-btn__auth c-btn--radius u-btn">新規登録</button>
           </a>
         </div>
+        @else
+        <div class="p-eyecatch__footer--signup">
+          <a href="{{ route('getNews.index') }}">
+            <button class="c-btn c-btn__auth c-btn--radius">仮想通貨ニュースを見る</button>
+          </a>
+        </div>
+        @endguest
       </section>
     </main>
     @include('layouts.footer')

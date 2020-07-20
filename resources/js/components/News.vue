@@ -1,10 +1,13 @@
 <template>
-  <main class="l-main l-main__common">
-    <h1 class="p-news__title">仮想通貨ニュース</h1>
-    <div style="width: calc(1200px - 24px); margin: 30px auto;">
-      <Pagination :news_data="this.news_data" :total_page="this.totalPageNum" />
-    </div>
-  </main>
+    <main class="l-main l-main__common">
+        <h1 class="c-title">仮想通貨ニュース</h1>
+        <div>
+            <Pagination
+                :news_data="this.news_data"
+                :total_page="this.totalPageNum"
+            />
+        </div>
+    </main>
 </template>
 
 <script>

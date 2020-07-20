@@ -15,7 +15,7 @@
       <li
         v-for="(data, index) in this.coinData"
         :key="index"
-        class="c-btn__common p-coin__item"
+        class="c-btn__common p-coin__item p-coin__item__search"
       >
         <label :for="data.abbreviation">
           <input

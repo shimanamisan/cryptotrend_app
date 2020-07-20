@@ -111,6 +111,7 @@ class TwitterAuthController extends Controller
 
                 if (!empty($follow_list)) {
                     \Log::debug('自分のフォローしているユーザーを取得しています');
+                    \Log::debug('   ');
 
                     // 配列を比較し共通しているものを出力する
                     $follow_list_intersect = array_intersect($twitterUserList, $follow_list);
@@ -120,6 +121,7 @@ class TwitterAuthController extends Controller
                         // dd($userInfo->id);
                         foreach ($follow_list_intersect as $follow_user_id) {
                             \Log::debug('DBと重複してるフォロー済みのユーザーをfollowsテーブルに登録しています  ユーザーID：'. $userInfo->id);
+                            \Log::debug('   ');
                             Follow::updateOrCreate(
                                 ['user_id' => $userInfo->id, 'twuser_id' => $follow_user_id, 'delete_flg' => 0],
                                 [
@@ -128,6 +130,9 @@ class TwitterAuthController extends Controller
                           ]
                             );
                         }
+                    }else{
+                        \Log::debug('DBの仮想通貨関連のアカウントと一致するユーザーはいませんでした。');
+                        \Log::debug('   ');
                     }
                 }
 

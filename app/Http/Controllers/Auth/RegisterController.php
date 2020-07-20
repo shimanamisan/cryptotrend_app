@@ -58,12 +58,11 @@ class RegisterController extends Controller
         ];
 
         return Validator::make($data, [
-            'name' => ['required', 'string', 'max:255'],
-            // 'email' => ['required', 'string', 'email', 'max:255', 'unique:users',],
-            'email' => ['required', 'string', 'email', 'max:255',
+            'name' => ['required', 'string', 'max:30'],
+            'email' => ['required', 'string', 'email', 'max:100',
                         // ユーザーテーブルのdelete_flgが0のユーザーに対してemailの同値チェックを行う
                         Rule::unique('users', 'email')->where('delete_flg', 0)],
-            'password' => ['required', 'string', 'min:8', 'max:255', 'confirmed', 'regex:/^[a-zA-Z0-9]+$/'],
+            'password' => ['required', 'string', 'min:8', 'max:100', 'confirmed', 'regex:/^[a-zA-Z0-9]+$/'],
         ], $message);
     }
 

@@ -90,24 +90,14 @@ class LoginController extends Controller
     {
         $request->validate(
             [
-      $this->username() => 'required|string|email|max:255',
-      'password' => 'required|string',
+      $this->username() => 'required|string|email|max:100',
+      'password' => 'required|string|max:100|regex:/^[a-zA-Z0-9]+$/',
     ],
             [
-      'email.email' => '有効なメールアドレスを指定してください。'
+      'email.email' => '有効なメールアドレスを指定してください。',
+      'regex' => '半角英数のみご利用いただけます。',
     ]
         );
     }
 
-    // /******************************************************************
-    //  * RedirectsUsersトレイトのredirectPathメソッドをオーバーライド
-    // ******************************************************************/
-    // // AuthenticatesUsersトレイトで読み込まれているRedirectsUsersトレイトのredirectPathメソッドを上書き
-    // // ログイン後のリダイレクト先を変更
-    // // デフォルトだとリダイレクト先が/homeになっている
-    // public function redirectPath()
-    // {
-    //     return '/mypage';
-    //     //例）return 'costs/index';
-    // }
 }

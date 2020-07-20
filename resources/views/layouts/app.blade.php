@@ -7,18 +7,21 @@
     @yield('head')
   </head>
   
-<body class="gray">
+<body id="js-bg" class="bg-gray">
 
     <header class="l-header">
       <a class="p-header__logoLink" href="{{ route('home') }}">
         <img class="p-header__logo" src="{{ asset('images/header_logo.png') }}" alt />
       </a>
-      <div class="p-header--spmenu">
+
+      <!-- spメニュー -->
+      <div id="js-spmenu-trigger" class="p-header__burger">
         <span></span>
         <span></span>
         <span></span>
       </div>
-      <nav class="p-header p-header__nav p-header__nav--sp">
+
+      <nav id="js-spnav-trigger" class="p-header p-header__nav p-header__nav__sp">
         <ul class="p-header__list">
         @guest
           <li class="p-header__item">
@@ -51,15 +54,12 @@
             </form>
           </li>
           @endguest
-          <!-- <li class="p-header__item">
-            <a class="p-header__item--link" href>このサービスについて</a>
-          </li> -->
         </ul>
       </nav>
     </header>
-    <div class="u-msg__withdraw js-flash-msg" style="display:none;">
-    @if(Session::has('withdraw_message'))
-            <p>{{ session('withdraw_message') }}</p>
+    <div class="u-msg__system js-flash-msg" style="display:none;">
+    @if(Session::has('system_message'))
+            <p>{{ session('system_message') }}</p>
     @endif
     </div>
 

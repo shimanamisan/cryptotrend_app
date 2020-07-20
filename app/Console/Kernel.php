@@ -44,6 +44,9 @@ class Kernel extends ConsoleKernel
     $schedule->command('command:autofollow')
     ->daily();
 
+    // $schedule->command('command:clearcounter')
+    // ->daily();
+
     // $schedule->call(function () {
     //     logger()->info('クロージャーを使ってCronを動作させています');
     // });

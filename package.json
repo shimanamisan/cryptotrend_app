@@ -20,8 +20,6 @@
         "axios": "^0.19",
         "babel-loader": "^8.1.0",
         "bootstrap": "^4.0.0",
-        "browser-sync": "^2.26.7",
-        "browser-sync-webpack-plugin": "^2.2.2",
         "cross-env": "^7.0",
         "css-loader": "^3.6.0",
         "cssnano": "^4.1.10",
@@ -52,11 +50,6 @@
         "webpack-dev-server": "^3.11.0",
         "webpack-livereload-plugin": "^2.3.0"
     },
-    "browserslist": [
-        "last 1 version",
-        "> 1%",
-        "IE 10"
-    ],
     "dependencies": {
         "vuejs-paginate": "^2.1.0"
     }

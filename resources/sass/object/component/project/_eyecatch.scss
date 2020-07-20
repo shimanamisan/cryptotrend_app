@@ -1,48 +1,66 @@
 .p-eyecatch {
-  height: 100vh;
-  background-image: url(../images/top_eyecatch.png);
-  background-size: cover;
-  background-position: center center;
-  background-repeat: no-repeat;
-  position: relative;
-  // display: flex;
-  // justify-content: center;
-  // align-items: center;
-  &__wrap {
-    top: 30%;
-    left: 10%;
-    position: absolute;
-  }
-  &__title {
-    font-weight: 600;
-    font-size: 48px;
-    animation: c-fadein 0.9s ease forwards;
-  }
-  &__content {
-    display: flex;
-    justify-content: space-evenly;
-    animation: c-fadein 0.9s ease forwards;
+    height: 100vh;
+    background-image: url(../images/top_eyecatch.png);
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    position: relative;
+    // display: flex;
+    // justify-content: center;
+    // align-items: center;
+    &__wrap {
+        top: 30%;
+        left: 10%;
+        position: absolute;
+        @include sm() {
+            top: 38%;
+            left: 7%;
+        }
+    }
+    &__title {
+        font-weight: 600;
+        font-size: 48px;
+        animation: c-fadein 0.9s ease forwards;
+        @include sm() {
+            font-size: 32px;
+            margin-bottom: 24px;
+        }
+    }
+    &__content {
+        display: flex;
+        justify-content: space-evenly;
+        animation: c-fadein 0.9s ease forwards;
+        @include sm() {
+            display: block;
+        }
 
-    &--text {
-      line-height: 50px;
+        &--text {
+            line-height: 50px;
+            @include sm() {
+                margin-top: 16px;
+            }
+        }
+        &--link {
+            color: $link-color;
+        }
     }
-    &--link {
-      color: $link-color;
-    }
-  }
-  &__footer {
-    background-image: url(../images/footer_eyecatch.png);
+    &__footer {
+        background-image: url(../images/footer_eyecatch.png);
 
-    &--title {
-      text-align: center;
-      font-size: 64px;
-      padding-top: 40px;
-      font-weight: 600;
-    }
+        &--title {
+            text-align: center;
+            font-size: 64px;
+            padding-top: 100px;
+            font-weight: 600;
+            @include sm() {
+                font-size: 32px;
+                padding-top: 130px;
+            }
+        }
 
-    &--signup {
-      margin-top: 24px;
-      text-align: center;
+        &--signup {
+            margin-top: 24px;
+            text-align: center;
+        }
     }
-  }
 }

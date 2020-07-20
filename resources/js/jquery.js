@@ -1,29 +1,41 @@
 $(function () {
-  /****************************************
+    /****************************************
 フラッシュメッセージの表示
 *****************************************/
-  var $jsFlashMsg = $('.js-flash-msg');
-  var msg = $jsFlashMsg.text();
-  if(msg.replace(/^[\s　]+|[\s　]+$/g, "").length){
-    $jsFlashMsg.slideToggle('slow');
-    setTimeout(function(){
-      $jsFlashMsg.slideToggle('slow');
-    }, 5000);
-  }
-
-  /****************************************
-Twitterアカウントの新規登録画面へ遷移する
-*****************************************/
-  let $jsRedirect = $('#js-redirect');
-  $jsRedirect.on('click', function (e) {
-    e.preventDefault;
-    let checked = confirm(
-      'Twitterアカウントの登録画面へ移動します。\n よろしいですか？'
-    );
-    if (checked == true) {
-      return true;
-    } else {
-      return false;
+    let $jsFlashMsg = $(".js-flash-msg");
+    let msg = $jsFlashMsg.text();
+    if (msg.replace(/^[\s　]+|[\s　]+$/g, "").length) {
+        $jsFlashMsg.slideToggle("slow");
+        setTimeout(function () {
+            $jsFlashMsg.slideToggle("slow");
+        }, 5000);
     }
-  });
+
+    /****************************************
+SPメニューを開閉するアクション
+*****************************************/
+    // let $jsBg = $("#js-bg");
+    let $jsSpmenu = $("#js-spmenu-trigger");
+    let $jsSpNav = $("#js-spnav-trigger");
+    $jsSpmenu.on("click", function () {
+        $jsSpmenu.toggleClass("active"); // ハンバーガーメニューの描画を変えるクラス
+        $jsSpNav.toggleClass("p-header--isActive"); // SPメニューを横から表示するクラス
+        // $jsBg.toggleClass("bg-gray__fix"); // SPメニューを開いたら、背景をスクロールできないよう固定する
+    });
+
+    /****************************************************************************
+関連アカウント表示時に、Twitterアカウント未登録ユーザーを新規登録画面へ誘導する
+*****************************************************************************/
+    let $jsRedirect = $("#js-redirect");
+    $jsRedirect.on("click", function (e) {
+        e.preventDefault;
+        let checked = confirm(
+            "Twitterアカウントの登録画面へ移動します。\n よろしいですか？"
+        );
+        if (checked == true) {
+            return true;
+        } else {
+            return false;
+        }
+    });
 });

@@ -77,12 +77,12 @@
           <div class="u-wrapp">
               <a href="{{ route('twitter.register') }}" class="c-btn c-btn__twitter">Twitterで新規登録</a>
           </div>
-          <div class="p-form__signup--explanation">
+          <!-- <div class="p-form__signup--explanation">
             本サービスを登録することにより、<a href="" class="c-link--global"
               >利用規約</a
             >と<a href="" class="c-link--global">プライバシーポリシー</a
             >に同意したとみなされます。
-          </div>
+          </div> -->
         </div>
       </div>
       <div class="p-form__unit">

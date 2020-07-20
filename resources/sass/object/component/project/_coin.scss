@@ -1,103 +1,163 @@
 .p-coin {
-  &__title {
-    margin: 0 auto;
-    font-size: 3rem;
-    text-align: center;
-    margin-bottom: 48px;
-    border-bottom: 1px solid;
-    width: 50%;
-  }
-
-  &__header {
-    padding: 0 32px;
-
     &__title {
-      text-align: center;
+        margin: 0 auto;
+        font-size: 3rem;
+        text-align: center;
+        margin-bottom: 48px;
+        border-bottom: 1px solid;
+        width: 50%;
+        @include sm() {
+            width: 70%;
+            font-size: 1.8rem;
+        }
     }
 
-    &__container {
-      justify-items: center;
-      justify-content: center;
-      display: flex;
-      margin-bottom: 16px;
-      line-height: 40px;
-    }
-  }
+    &__header {
+        padding: 0 32px;
+        @include sm() {
+            padding: 0;
+        }
 
-  &__table {
-    margin: 0 auto;
-    padding: 32px;
-    box-sizing: border-box;
-    @include custumRadius(5px);
-    &__link {
-      color: #707070;
-    }
-  }
+        &__title {
+            text-align: center;
+            @include sm() {
+                letter-spacing: 0;
+            }
+        }
 
-  &__item {
-    margin-left: 8px;
-    padding: 8px;
-    background-color: $check_box_color_main;
-    border: none;
-    cursor: pointer;
-    &:hover {
-      border: none;
-      background-color: #8bc2c0;
-      transition: 0.3s;
-      opacity: 0.7;
+        &__container {
+            justify-items: center;
+            justify-content: center;
+            display: flex;
+            margin-bottom: 16px;
+            line-height: 40px;
+            @include sm() {
+                display: block;
+                text-align: center;
+            }
+        }
     }
-    @include custumRadius(5px);
-    & > label {
-      cursor: pointer;
-      display: block;
+
+    &__table {
+        margin: 0 auto;
+        padding: 32px;
+        box-sizing: border-box;
+        @include custumRadius(5px);
+        @include sm() {
+            margin-top: 16px;
+            padding: 0;
+            overflow-y: scroll;
+        }
+        &__link {
+            color: #707070;
+        }
     }
-    &__btn {
-      margin-left: 24px;
-      &--false {
-        background: #fff;
-        color: $btn_color;
-        border: 1px solid $btn_color;
+
+    &__item {
+        margin-left: 8px;
+        padding: 8px;
+        background-color: $check_box_color_main;
+        border: none;
+        cursor: pointer;
+        &__search {
+            @include sm() {
+                width: 100px;
+                margin-bottom: 5px;
+
+                &:nth-of-type(1) {
+                    margin-left: 0;
+                }
+                &:nth-of-type(4) {
+                    margin-left: 0;
+                }
+                &:nth-of-type(7) {
+                    margin-left: 0;
+                }
+                &:nth-of-type(10) {
+                    margin-left: 0;
+                }
+            }
+        }
         &:hover {
-          color: #fff;
-          background-color: $btn_color;
+            border: none;
+            background-color: #8bc2c0;
+            transition: 0.3s;
+            opacity: 0.7;
         }
-      }
-      &--clear {
-        padding: 10px 15px;
-        background-color: #000 !important;
-      }
-    }
-  }
-
-  &__list {
-    margin-bottom: 24px;
-    display: flex;
-    justify-content: center;
-    &__btn {
-      justify-content: center;
-    }
-  }
-
-  &__table {
-    text-align: center;
-
-    &--inner {
-      margin: 0 auto;
-    }
-
-    & tr {
-      font-size: 1.1rem;
-      & > th,
-      td {
-        padding: 16px 24px;
-        &:first-child {
-          width: 10%;
+        @include custumRadius(5px);
+        & > label {
+            cursor: pointer;
+            display: block;
         }
-      }
-
-      &:nth-of-type(odd) {
-        background-color: #fff;
-      }
+        &__time {
+            @include sm() {
+                margin-left: 8px;
+            }
+        }
+        &__btn {
+            margin-left: 24px;
+            @include sm() {
+              margin-left: 8px;
+          }
+     
+            &--false {
+                background: #fff;
+                color: $btn_color;
+                border: 1px solid $btn_color;
+                &:hover {
+                    color: #fff;
+                    background-color: $btn_color;
+                }
+            }
+            &--clear {
+                padding: 10px 15px;
+                background-color: #000 !important;
+                @include sm() {
+                    margin: 0 auto;
+                }
+            }
+        }
     }
-  }
+
+    &__list {
+        margin-bottom: 24px;
+        display: flex;
+        justify-content: center;
+        @include sm() {
+            flex-wrap: wrap;
+            justify-content: space-around;
+        }
+        &__btn {
+            justify-content: center;
+        }
+    }
+
+    &__table {
+        text-align: center;
+
+        &--inner {
+            margin: 0 auto;
+            @include sm() {
+                width: 980px;
+            }
+        }
+
+        & tr {
+            font-size: 1.1rem;
+            & > th,
+            td {
+                padding: 16px 24px;
+                @include sm() {
+                    padding: 12px 18px;
+                }
+                &:first-child {
+                    width: 10%;
+                }
+            }
+
+            &:nth-of-type(odd) {
+                background-color: #fff;
+            }
+        }
+    }
 }
