@@ -32,5 +32,12 @@ class AppServiceProvider extends ServiceProvider
         // マイグレーションにより生成されるデフォルトのインデックス用文字列長を
         // 明示的に設定する必要がる（MySQLは5.7未満で必要な設定）
         Schema::defaultStringLength(191);
+
+        /**
+         * .envファイルの(APP_ENV=production)のとき、強制https化
+         */
+        if(\App::environment('production')) {
+            \URL::forceScheme('https');
+        }
     }
 }
