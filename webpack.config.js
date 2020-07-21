@@ -6,7 +6,7 @@ const { VueLoaderPlugin } = require("vue-loader");
 const LiveReloadPlugin = require("webpack-livereload-plugin");
 // app.jsとapp.cssファイルに分割するためのプラグイン
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-// JSを圧縮するために必要
+// JSのコメントをビルド時に削除する
 const TerserPlugin = require("terser-webpack-plugin");
 // 別ファイルに出力したCSSファイルを圧縮するために必要
 const OptimizeCssAssetsPlugin = require("optimize-css-assets-webpack-plugin");
@@ -28,6 +28,10 @@ module.exports = {
     // development に設定するとソースマップ有効でJSファイルが出力される
     mode: MODE,
     watch: true,
+    performance: {
+        maxEntrypointSize: 500000,
+        maxAssetSize: 500000,
+    },
     // ${__dirname}が C:\Users\mikan\myVagrant\centos\project までのファイルパスになる
     // vagrantの共有フォルダからコードを書いているのでサーバ側のように/resourcesで始まるとディレクトリが見つからずエラーになる
     // babel-loader8 でasync/awaitを動作させるためには、@babel/polyfillが必要
@@ -41,7 +45,12 @@ module.exports = {
     },
     // 最適化オプションを上書き
     optimization: {
-        minimizer: [new TerserPlugin({}), new OptimizeCssAssetsPlugin({})],
+        minimizer: [
+            new TerserPlugin({
+                extractComments: "all",
+            }),
+            new OptimizeCssAssetsPlugin({}),
+        ],
     },
     module: {
         rules: [
@@ -145,7 +154,6 @@ module.exports = {
         new VueLoaderPlugin(),
         // LIVEリロードするためのプラグイン
         new LiveReloadPlugin(),
-        new TerserPlugin(),
         // jsファイルとcssファイルを分割するためのプラグイン
         new MiniCssExtractPlugin({
             // ファイルの出力先。エントリーポイントのjsディレクトリが基準となるので出力先には注意
