@@ -10,7 +10,7 @@
         "dev": "webpack --mode development --watch",
         "build": "webpack --mode production",
         "prettier": "prettier",
-        "postinstall": "webpack --mode production"
+        "heroku-postbuild": "webpack --mode production"
     },
     "engines": {
         "node": "12.16.2"
