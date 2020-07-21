@@ -12,6 +12,9 @@
         "prettier": "prettier",
         "postinstall": "npx webpack"
     },
+    "engines": {
+        "node": "12.16.2"
+    },
     "devDependencies": {
         "@babel/core": "^7.10.2",
         "@babel/polyfill": "^7.10.1",
