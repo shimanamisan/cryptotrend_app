@@ -16,6 +16,7 @@ class CreateSystemManagerTable extends Migration
         Schema::create('system_managers', function (Blueprint $table) {
             $table->increments('id');
             $table->string('one_day_system_counter');
+            $table->timestamp('one_day_system_follow_limit_time')->nullable()->comment('アプリ単位でフォロー上限の制限をかける際に、現在の時刻が入る');
             $table->timestamps();
         });
     }

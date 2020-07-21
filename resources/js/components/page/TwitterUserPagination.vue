@@ -1,5 +1,6 @@
 <template>
     <div>
+        <Loading v-show="loading" />
         <transition name="flash">
             <div class="u-msg__flash" v-show="flash_message_flg">
                 <ul v-for="(msg, index) in this.systemMessage" :key="index">
@@ -113,12 +114,14 @@
 import Vue from "vue";
 import Paginate from "vuejs-paginate";
 import Modal from "../module/Modal";
+import Loading from "../module/Loading";
 import { OK, UNPROCESSABLE_ENTITY, INTERNAL_SERVER_ERROR } from "./../../util"; // http通信のステータスコードの定数を読み込み
 export default {
     props: ["follow_list", "total_page", "user"],
     components: {
         Paginate,
         Modal,
+        Loading,
     },
     data() {
         return {
@@ -131,6 +134,7 @@ export default {
             autoFollow_flg: this.user.autofollow_status, // 自動フォロー中のフラグ(ユーザー情報より取得)
             followcounter: 0, // DBに保存されているユーザーを何人フォローしているかカウント
             open: false,
+            loading: false, // 非同期通信時ローディングを表示する
         };
     },
     /********************************
@@ -160,6 +164,7 @@ export default {
         },
         isModalActive() {
             this.open = !this.open;
+            // モーダル開閉時に、背景をスクロール出来ないように固定する
             let $jsBg = document.getElementById("js-bg");
             $jsBg.classList.toggle("bg-gray__fix");
         },
@@ -183,12 +188,12 @@ export default {
             }
         },
         async sendFollowRequest(id, index) {
-            // catch(error => error.response || error)で非同期通信が成功しても失敗してもresponseに結果を代入する
+            this.loadingActive(); // ローディング画面を表示
             const response = await axios.post("/follow", { id: id });
-            // .catch((error) => error.response || error);
 
             if (response.status === OK) {
                 // 通信が成功した時の処理
+                this.loadingActive();  // ローディング画面を非表示にする
                 // 返却されたメッセージを格納
                 this.systemMessage = response.data;
                 // フラッシュメッセージを表示
@@ -198,6 +203,7 @@ export default {
                 // フォロー済みのステータスを通知する
                 this.$emit("is-follow", id);
             } else if (response.status === 403) {
+                this.loadingActive(); // ローディング画面を非表示にする
                 // ユーザーを既にフォローしていた時の処理
                 this.systemMessage = response.data;
                 this.isShowMessage();
@@ -208,11 +214,11 @@ export default {
             }
         },
         async sendUnFollowRequest(id, index) {
-            // catch(error => error.response || error)で非同期通信が成功しても失敗してもresponseに結果を代入する
+            this.loadingActive(); // ローディング画面を表示
             const response = await axios.post("/unfollow", { id: id });
-            // .catch((error) => error.response || error);
             // 通信が成功した時の処理
             if (response.status === OK) {
+                this.loadingActive(); // ローディング画面を非表示にする
                 // 返却されたメッセージを格納
                 this.systemMessage = response.data;
                 // フラッシュメッセージを表示
@@ -222,8 +228,10 @@ export default {
                 // フォロー済みのステータスを通知する
                 this.$emit("is-unfollow", id);
             } else if (response.status === 403) {
-                this.systemMessage = response.data;
+                this.loadingActive(); // ローディング画面を非表示にする
+
                 this.isShowMessage();
+                this.systemMessage = response.data;
                 setTimeout(this.isShowMessage, 2000);
             } else {
                 // 何か予期せぬErrorが発生したとき(500エラーなど)
@@ -238,6 +246,9 @@ export default {
         },
         sendingDone() {
             this.$refs.fromParent.sendingHandler();
+        },
+        loadingActive() {
+            this.loading = !this.loading;
         },
     },
     /********************************
