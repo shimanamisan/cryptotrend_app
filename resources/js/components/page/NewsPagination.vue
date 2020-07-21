@@ -48,6 +48,9 @@ export default {
         };
     },
     props: ["news_data", "total_page"],
+    /********************************
+     * メソッド
+     ********************************/
     methods: {
         clickCallback(pageNum) {
             this.currentPage = pageNum;
@@ -64,6 +67,9 @@ export default {
             });
         },
     },
+    /********************************
+     * 算出プロパティ
+     ********************************/
     computed: {
         getnewsItems() {
             let current = this.currentPage * this.parPage;
