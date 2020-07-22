@@ -18,8 +18,4 @@ jobs:
           ftp-username: ${{ secrets.FTP_USERNAME }}
           ftp-password: ${{ secrets.FTP_PASSWORD }}
           git-ftp-args: --remote-root ${{ secrets.FTP_REMOTE_ROOT }}
-<<<<<<< HEAD
-          local-dir: /
-=======
           local-dir: ./
->>>>>>> a69561b2e13d4733ea5b4e16c7b1123fd18e5b4e
