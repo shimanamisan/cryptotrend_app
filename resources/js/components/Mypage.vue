@@ -237,7 +237,6 @@ export default {
             if (confirm("CryptoTrendを退会します。よろしいですか？")) {
                 const response = await axios
                     .post("/mypage/delete")
-                    .catch((error) => error.response || error);
                 // console.log(response);
                 if (response.status === OK) {
                     // 退会後ページを移動
@@ -283,7 +282,6 @@ export default {
                     val.password_confirmation !== undefined
                 ) {
                     this.sbumit_flg = false;
-                    console.log("全てのフォームが入力されています!");
                 } else {
                     this.sbumit_flg = true;
                 }

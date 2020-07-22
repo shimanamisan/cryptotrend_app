@@ -66,6 +66,10 @@
                 background-color: #62abf8;
                 border: none;
             }
+            &:disabled {
+                background-color: rgba(14, 19, 24, 0.15);
+                cursor: not-allowed;
+            }
         }
         &--unfollow {
             background-color: #000;
@@ -80,6 +84,11 @@
                 transition: 0.3s;
                 background-color: rgba(39, 37, 37, 0.7);
                 opacity: 1;
+            }
+            &:disabled {
+                background-color: rgba(14, 19, 24, 0.15);
+                border: none;
+                cursor: not-allowed;
             }
         }
         &--autofollow {

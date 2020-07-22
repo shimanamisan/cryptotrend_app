@@ -303,10 +303,6 @@ export default {
                     return this.search_value.indexOf(item.coin_name) > -1;
                 });
 
-                // console.log(tweet_data.filter((item) => {
-                //   // チェックボックスの値と同じものがあれば、その要素を返却
-                //   return this.search_value.indexOf(item.coin_name) > -1;
-                // }))
             } else {
                 // 何も選択されていない場合は、未処理のデータを返却
                 return (this.tweet_data = tweet_data);

@@ -45,6 +45,7 @@
                     <button
                         class="c-btn c-btn__common c-btn__common--unfollow u-btn__sm"
                         @click="sendUnFollowRequest(tw_userItem.id, index)"
+                        :disabled="isFollowActive"
                     >
                         フォロー解除する
                     </button>
@@ -53,6 +54,7 @@
                     <button
                         class="c-btn c-btn__common c-btn__common--follow u-btn__sm"
                         @click="sendFollowRequest(tw_userItem.id, index)"
+                        :disabled="isFollowActive"
                     >
                         フォローする
                     </button>
@@ -135,6 +137,7 @@ export default {
             followcounter: 0, // DBに保存されているユーザーを何人フォローしているかカウント
             open: false,
             loading: false, // 非同期通信時ローディングを表示する
+            isFollowActive: true, // 自動フォロー有効時はフォローボタンを非活性化する
         };
     },
     /********************************
@@ -193,7 +196,7 @@ export default {
 
             if (response.status === OK) {
                 // 通信が成功した時の処理
-                this.loadingActive();  // ローディング画面を非表示にする
+                this.loadingActive(); // ローディング画面を非表示にする
                 // 返却されたメッセージを格納
                 this.systemMessage = response.data;
                 // フラッシュメッセージを表示
@@ -244,11 +247,21 @@ export default {
             });
             this.followcounter = counter.length;
         },
+        // 親コンポーネントからモーダルを閉じる処理を呼ぶ
         sendingDone() {
             this.$refs.fromParent.sendingHandler();
         },
         loadingActive() {
             this.loading = !this.loading;
+        },
+        // 初回ページ読み込み時に、自動フォローフラグの判定を実施する
+        // その後の変更は、ウォッチャーで行う
+        getAutoFollowFlg() {
+            if (this.autoFollow_flg === 0) {
+                this.isFollowActive = false;
+            } else {
+                this.isFollowActive = true;
+            }
         },
     },
     /********************************
@@ -297,10 +310,21 @@ export default {
                 this.followUserCounter();
             },
         },
+        autoFollow_flg: {
+            handler: function (val, oldval) {
+                if (this.autoFollow_flg === 0) {
+                    this.isFollowActive = false;
+                    console.log("0?");
+                } else {
+                    this.isFollowActive = true;
+                }
+            },
+        },
     },
     created() {
         this.paginationNumber();
         this.followUserCounter();
+        this.getAutoFollowFlg();
     },
 };
 </script>
