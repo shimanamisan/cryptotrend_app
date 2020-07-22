@@ -42,6 +42,12 @@
     &--lg {
       margin-bottom: 48px;
     }
+    &--G{
+      margin-bottom: 80px;
+      @include sm(){
+        margin-bottom: 48px;
+      }
+    }
   }
 }
 
@@ -65,6 +71,7 @@
     &--lg {
       margin-top: 48px;
     }
+
   }
 }
 

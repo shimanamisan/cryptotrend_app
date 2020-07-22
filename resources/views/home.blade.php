@@ -8,7 +8,7 @@
 @section('content')
 <main class="l-main">
       <section class="p-eyecatch l-main__section">
-        <div class="p-eyecatch__wrap">
+        <div class="p-eyecatch__wrap js-scroll">
           <h1 class="p-eyecatch__title">
             仮想通貨の最新情報は
             <br />CRYPTO TOREND
@@ -34,8 +34,8 @@
           @endguest
         </div>
       </section>
-      <section class="c-container__index p-sitemap l-main__section">
-        <div class="p-sitemap__about">
+      <section id="js-animation" class="c-container__index p-sitemap l-main__section">
+        <div  class="p-sitemap__about js-scroll">
           <h1 class="p-sitemap__title">CRYPTO TORENDとは？</h1>
 
           <hr class="u-line" />
@@ -51,12 +51,12 @@
       </section>
       <section class="c-container__bg l-main__section">
         <div class="c-container__index">
-          <div class="p-sitemap">
+          <div class="p-sitemap js-scroll">
             <div class="p-sitemap__pic">
               <img src="{{ asset('images/top_figure_01.png') }}" alt />
             </div>
             <div class="p-sitemap__info">
-              <h1 class="p-sitemap__title u-margin__bottom--lg u-padding__top--lg">SNSで話題の銘柄をウォッチ！</h1>
+              <h1 class="p-sitemap__title u-margin__bottom--G u-padding__top--lg">SNSで話題の銘柄をウォッチ！</h1>
               <p class="p-sitemap__text">
                 Twitterで今話題の銘柄は何なのか？
                 タイムラインに投稿されている、各銘柄ごとのツイート数を集計し、
@@ -68,12 +68,12 @@
       </section>
       <section class="c-container__bg l-main__section">
         <div class="c-container__index">
-          <div class="p-sitemap p-sitemap--reverse">
+          <div class="p-sitemap p-sitemap--reverse js-scroll">
             <div class="p-sitemap__pic">
               <img src="{{ asset('images/top_figure_02.png') }}" alt />
             </div>
             <div class="p-sitemap__info">
-              <h1 class="p-sitemap__title u-margin__bottom--lg u-padding__top--lg">仮想通貨の最新ニュースをチェック！</h1>
+              <h1 class="p-sitemap__title u-margin__bottom--G u-padding__top--lg">仮想通貨の最新ニュースをチェック！</h1>
               <p class="p-sitemap__text">
                 仮想通貨関連のニュースのキーワードを元に、Googleニュースをまとめています。
                 自分で検索する手間が省けるので、すぐに最新ニュースをチェックすることが出来ます。
@@ -84,12 +84,12 @@
       </section>
       <section class="c-container__bg l-main__section">
         <div class="c-container__index">
-          <div class="p-sitemap">
+          <div class="p-sitemap js-scroll">
             <div class="p-sitemap__pic">
               <img src="{{ asset('images/top_figure_03.png') }}" alt />
             </div>
             <div class="p-sitemap__info">
-              <h1 class="p-sitemap__title u-margin__bottom--lg u-padding__top--lg">気になるユーザーをフォロー！</h1>
+              <h1 class="p-sitemap__title u-margin__bottom--G u-padding__top--lg">気になるユーザーをフォロー！</h1>
               <p class="p-sitemap__text">
                 仮想通貨関連の情報を発信しているユーザーをフォローすることが出来ます！
                 自動フォロー機能を有効することによって、一覧表示されているユーザーを自動でフォローすることが出来ます。

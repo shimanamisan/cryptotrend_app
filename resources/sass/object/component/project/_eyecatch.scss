@@ -13,14 +13,13 @@
         left: 10%;
         position: absolute;
         @include sm() {
-            top: 38%;
+            top: 34%;
             left: 7%;
         }
     }
     &__title {
         font-weight: 600;
         font-size: 48px;
-        animation: c-fadein 0.9s ease forwards;
         @include sm() {
             font-size: 32px;
             margin-bottom: 24px;
@@ -29,7 +28,6 @@
     &__content {
         display: flex;
         justify-content: space-evenly;
-        animation: c-fadein 0.9s ease forwards;
         @include sm() {
             display: block;
         }

@@ -1,7 +1,13 @@
+.c-anime {
+    &__fadein {
+        animation: c-fadein 2.0s ease forwards;
+    }
+}
+
 @keyframes c-fadein {
     0% {
         opacity: 0;
-        transform: translate(0, 50px);
+        transform: translate(0, 100px);
     }
 
     100% {

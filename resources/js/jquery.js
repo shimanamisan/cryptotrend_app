@@ -38,4 +38,30 @@ SPメニューを開閉するアクション
             return false;
         }
     });
+    /****************************************
+スクロールアニメーション
+*****************************************/
+    window.onload = function () {
+        scroll_animation();
+    };
+
+    $(window).scroll(function () {
+        scroll_animation();
+    });
+
+    function scroll_animation() {
+        let $fadeNode = $(".js-scroll");
+        $fadeNode.each(function () {
+            // $fadeNodeの要素の位置を取得
+            let elementTop = $(this).offset().top;
+            // 画面一番上からのスクロール量を取得
+            let scroll = $(window).scrollTop();
+            // 画面の高さを取得
+            let windowHeight = $(window).height();
+            console.log(elementTop)
+            if (scroll > elementTop - windowHeight) {
+                $(this).addClass("c-anime__fadein");
+            }
+        });
+    }
 });
