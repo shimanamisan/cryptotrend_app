@@ -194,7 +194,7 @@ class GetCoinsTweet extends Command
             $search_request_limit_count = 0;
         }
 
-        \Log::debug('ここの処理は最後かな？');
+        \Log::debug('ここの処理は最後');
         \Log::debug('  ');
 
     }

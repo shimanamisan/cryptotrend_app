@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use App\Twuser;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
+use Abraham\TwitterOAuth\TwitterOAuth; // 追加
 
 class GetTwitterUsers extends Command
 {
@@ -41,6 +42,8 @@ class GetTwitterUsers extends Command
     {
         // 関連キーワードがユーザー名又はプロフィールに記載しているユーザーを取得
 
+        // インスタンスを生成
+        $connection = $this->twitterOauth();
         // 新規登録カウント
         $newCounter = 0;
         // 既存登録数のカウント
@@ -74,7 +77,7 @@ class GetTwitterUsers extends Command
                     ];
         
             // 仮想通貨に関するユーザーを検索
-            $search_result = \Twitter::get('users/search', $options);
+            $search_result = $connection->get('users/search', $options);
             // DBから返却されたコレクションが空だったら初期処理として新規登録します
             if ($dbresult->isEmpty()) {
                 \Log::debug('twitter_usersテーブルが空なので初期登録処理を実行します。：');
@@ -164,5 +167,22 @@ class GetTwitterUsers extends Command
                 }
             }
         }
+    }
+
+    public function twitterOauth()
+    {
+        \Log::debug('=== インスタンスを生成します === ');
+
+        // ヘルパー関数のconfigメソッドを通じて、config/services.phpのtwitterトークン用の設定を参照
+        $config = config('services.twitter');
+
+        $api_key = $config['client_id'];
+        $api_key_secret = $config['client_secret'];
+        $access_token = $config['access_token'];
+        $access_token_secret = $config['access_token_secret'];
+        // インスタンスを生成
+        $connection  = new TwitterOAuth($api_key, $api_key_secret, $access_token, $access_token_secret);
+    
+        return $connection;
     }
 }
