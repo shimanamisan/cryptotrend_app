@@ -198,7 +198,6 @@ export default {
             await axios
                 .get("/coins/hour")
                 .then((response) => {
-                    console.log(response);
                     this.addProperty(response);
                     this.changeCoinFlg(HOUR);
                     this.loadingActive();
@@ -219,15 +218,15 @@ export default {
                 .then((response) => {
                     this.addProperty(response);
                     this.changeCoinFlg(DAY);
+                    this.loadingActive();
                 })
                 .catch((error) => {
+                    this.loadingActive();
                     alert(
                         "エラーが発生しました。しばらくしてから、再度アクセスして下さい。"
                     );
                 })
-                .then(() => {
-                    this.loadingActive();
-                });
+
         },
         // 過去1週間のツイート数をDBから取得
         async getWeekCoins() {
@@ -238,15 +237,14 @@ export default {
                 .then((response) => {
                     this.addProperty(response);
                     this.changeCoinFlg(WEEK);
+                    this.loadingActive();
                 })
                 .catch((error) => {
+                    this.loadingActive();
                     alert(
                         "エラーが発生しました。しばらくしてから、再度アクセスして下さい。"
                     );
                 })
-                .then(() => {
-                    this.loadingActive();
-                });
         },
         changeCoinFlg(coin) {
             switch (coin) {
