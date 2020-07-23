@@ -23,6 +23,27 @@
 }
 
 .u-margin {
+  &__top {
+    &--ss {
+      margin-top: 8px;
+    }
+    &--s {
+      margin-top: 16px;
+    }
+    &--m {
+      margin-top: 24px;
+    }
+    &--l {
+      margin-top: 32px;
+    }
+    &--xl {
+      margin-top: 40px;
+    }
+    &--lg {
+      margin-top: 48px;
+    }
+  }
+
   &__bottom {
     &--ss {
       margin-bottom: 8px;
@@ -48,30 +69,6 @@
         margin-bottom: 48px;
       }
     }
-  }
-}
-
-.u-margin {
-  &__top {
-    &--ss {
-      margin-top: 8px;
-    }
-    &--s {
-      margin-top: 16px;
-    }
-    &--m {
-      margin-top: 24px;
-    }
-    &--l {
-      margin-top: 32px;
-    }
-    &--xl {
-      margin-top: 40px;
-    }
-    &--lg {
-      margin-top: 48px;
-    }
-
   }
 }
 

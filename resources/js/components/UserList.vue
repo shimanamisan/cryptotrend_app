@@ -30,6 +30,7 @@ export default {
             // Twitterユーザーの総数を割り出す
             this.totalPageNum = this.follow_list.length;
         },
+        // フォロー済みか否か判定するプロパティを追加する
         addFollowState(id) {
             let data = this.follow_list_item;
             this.follow_list_item = data.map((item) => {
@@ -50,6 +51,7 @@ export default {
             // その他が undefined 担っている
             // this.follow_list_item = newData;
         },
+        // フォローしていないユーザーか否か判定するプロパティを追加
         removeFollowState(id) {
             let data = this.follow_list_item;
             this.follow_list_item = data.map((item) => {

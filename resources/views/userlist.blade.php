@@ -18,11 +18,11 @@
 @else
 
 <main class="l-main l-main__common">
-    <h1 class="p-twuser__title">関連アカウント一覧</h1>
+    <h1 class="c-title c-title__twuser">関連アカウント一覧</h1>
     <section class="c-container c-container__twusr">
-        <h2 class="p-twuser__title p-twuser__gest">こちらのページはTwitterアカウントを登録することでご利用頂けます。</h2>
+        <h2 class="c-title__twuser__guest">こちらのページはTwitterアカウントを登録することでご利用頂けます。</h2>
         <div class="u-wrapp">
-         
+         <p class="u-margin__bottom--xl">※登録されているメールアドレスと、Twitterアカウントのメールアドレスが異なる場合、Twitterアカウントの情報で新規登録されます。</p>
         <a id="js-redirect" href="{{ route('userList.redirect') }}" 
         class="c-btn c-btn__twitter p-twuser__gest__btn"
         >Twitterアカウントを登録する</a>

@@ -34,7 +34,7 @@
                 <p class="p-twuser__header__text">
                     {{ this.followcounter }}人フォロー済
                 </p>
-                <p>※1日に個別にフォロー/フォロー解除出来るのは20人が上限です</p>
+                <p>※1日に個別にフォロー/フォロー解除出来るのは30人が上限です</p>
             </div>
             <div
                 class="p-twuser__card"
@@ -277,6 +277,7 @@ export default {
         },
         getPageCount() {
             // 取得してきたユーザー情報の総数 ÷ 表示させるページネーション数
+            console.log(this.follow_list.length)
             return Math.ceil(this.follow_list.length / this.parPage);
         },
         pageStart() {
@@ -314,7 +315,6 @@ export default {
             handler: function (val, oldval) {
                 if (this.autoFollow_flg === 0) {
                     this.isFollowActive = false;
-                    console.log("0?");
                 } else {
                     this.isFollowActive = true;
                 }
