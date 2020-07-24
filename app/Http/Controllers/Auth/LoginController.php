@@ -94,10 +94,8 @@ class LoginController extends Controller
       'password' => 'required|string|max:100|regex:/^[a-zA-Z0-9]+$/',
     ],
             [
-      'email.email' => '有効なメールアドレスを指定してください。',
       'regex' => '半角英数のみご利用いただけます。',
     ]
         );
     }
-
 }

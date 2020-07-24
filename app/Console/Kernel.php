@@ -26,17 +26,15 @@ class Kernel extends ConsoleKernel
    */
   protected function schedule(Schedule $schedule)
   {
-    $schedule->command('command:getcoin week')
-    ->dailyAt('23:50');
-
-    $schedule->command('command:getcoin week')
-    ->dailyAt('3:50');
-
     $schedule->command('command:getcoin hour')
-    ->dailyAt('1:50');
+    ->dailyAt('0:15');
 
     $schedule->command('command:getcoin day')
-    ->dailyAt('2:50');
+    ->dailyAt('0:30');
+
+    $schedule->command('command:getcoin week')
+    ->dailyAt('1:00');
+
 
     $schedule->command('command:getticker')
     ->everyThirtyMinutes();
@@ -64,18 +62,6 @@ class Kernel extends ConsoleKernel
     //   // 15分毎に処理が走るメソッド
     //   ->everyThirtyMinutes();
 
-    // $schedule
-    //   ->call(function () {
-    //     TwitterController::userList();
-    //   })
-    //   // 夜中の12に時に処理が走るメソッド
-    //   // ->daily();
-    //   // 5分後に処理が走るメソッド
-    //   // ->everyFiveMinutes();
-    //   // 毎分に処理が走るメソッド
-    //   // ->everyMinute();
-    //   // 15分毎に処理が走るメソッド
-    //   ->everyThirtyMinutes();
   }
 
   /**

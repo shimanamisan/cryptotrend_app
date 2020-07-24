@@ -13,7 +13,7 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
             SystemManagerTableSeeder::class,
-            CoinPriceSeed::class,
+            // CoinPriceSeed::class,
         ]);
     }
 }

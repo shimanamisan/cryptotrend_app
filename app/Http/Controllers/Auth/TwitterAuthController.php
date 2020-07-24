@@ -50,7 +50,9 @@ class TwitterAuthController extends Controller
             // ユーザーデータの取得とアクセストークンの取得
             $user = Socialite::driver('twitter')->user();
         
-            // ログイン画面からリダイレクトしてきたときの処理
+            /****************************************************
+             *ログイン画面からリダイレクトしてきたときの処理
+            *****************************************************/
             if (session()->has('login_flg')) {
                 \Log::debug('ログイン時の処理です');
                 \Log::debug('   ');
@@ -59,10 +61,12 @@ class TwitterAuthController extends Controller
                 $userInfo = User::where('email', $user->getEmail())
                                   ->where('delete_flg', 0)
                                   ->first();
+                
                 // twitter_idも同様に格納
                 $twUserId = User::where('my_twitter_id', $user->getId())
                                   ->where('delete_flg', 0)
                                   ->first();
+                
                 // Twitter_id及びメールアドレスが登録されていなかったら未登録ユーザーとする
                 if (empty($twUserId) && empty($userInfo)) {
                     \Log::debug('emailかtwitter_idが無いのでなので未登録ユーザーです');
@@ -103,46 +107,55 @@ class TwitterAuthController extends Controller
                 // DBに登録している仮想通貨関連のアカウントを取得
                 $twitterUserList = $this->getTwitterUser();
 
-                // TwitterOAuthをインスタンス化
-                $connection = $this->newConnection($user->token, $user->tokenSecret);
-
-                // 自分のフォローしているユーザーを取得する
-                $follow_list = $this->fetchFollowTarget($user->id, $connection);
-
-                if (!empty($follow_list)) {
-                    \Log::debug('自分のフォローしているユーザーを取得しています');
+                if (empty($twitterUserList)) {
+                    \Log::debug('DBに登録している仮想通貨関連のアカウントがありませんでした。');
                     \Log::debug('   ');
-
-                    // 配列を比較し共通しているものを出力する
-                    $follow_list_intersect = array_intersect($twitterUserList, $follow_list);
+                } else {
+                   
+                    // TwitterOAuthをインスタンス化
+                    $connection = $this->newConnection($user->token, $user->tokenSecret);
     
-                    // 重複しているユーザーがいれば、followsテーブルに登録する
-                    if (!empty($follow_list_intersect)) {
-                        // dd($userInfo->id);
-                        foreach ($follow_list_intersect as $follow_user_id) {
-                            \Log::debug('DBと重複してるフォロー済みのユーザーをfollowsテーブルに登録しています  ユーザーID：'. $userInfo->id);
-                            \Log::debug('   ');
-                            Follow::updateOrCreate(
-                                ['user_id' => $userInfo->id, 'twuser_id' => $follow_user_id, 'delete_flg' => 0],
-                                [
-                            'user_id' => $userInfo->id,
-                            'twuser_id' => $follow_user_id
-                          ]
-                            );
-                        }
-                    }else{
-                        \Log::debug('DBの仮想通貨関連のアカウントと一致するユーザーはいませんでした。');
+                    // 自分のフォローしているユーザーを取得する
+                    $follow_list = $this->fetchFollowTarget($user->id, $connection);
+    
+                    // フォローしているユーザーがいない場合や
+                    // DBに登録されているユーザーがいなければ処理を行わない
+                    if (!empty($follow_list)) {
+                        \Log::debug('自分のフォローしているユーザーを取得しています');
                         \Log::debug('   ');
+    
+                        // 配列を比較し共通しているものを出力する
+                        $follow_list_intersect = array_intersect($twitterUserList, $follow_list);
+        
+                        // 重複しているユーザーがいれば、followsテーブルに登録する
+                        if (!empty($follow_list_intersect)) {
+                            // dd($userInfo->id);
+                            foreach ($follow_list_intersect as $follow_user_id) {
+                                \Log::debug('DBと重複してるフォロー済みのユーザーをfollowsテーブルに登録しています  ユーザーID：'. $userInfo->id);
+                                \Log::debug('   ');
+                                Follow::updateOrCreate(
+                                    ['user_id' => $userInfo->id, 'twuser_id' => $follow_user_id, 'delete_flg' => 0],
+                                    [
+                                'user_id' => $userInfo->id,
+                                'twuser_id' => $follow_user_id
+                              ]
+                                );
+                            }
+                        } else {
+                            \Log::debug('DBの仮想通貨関連のアカウントと一致するユーザーはいませんでした。');
+                            \Log::debug('   ');
+                        }
                     }
                 }
-
 
                 // トレンド一覧画面へリダイレクト
                 \Log::debug(session()->all());
                 return redirect()->to('/coins');
             } else {
 
-                // login_flgが空だったら新規登録画面からリダイレクトしてきたものと判定
+            /**********************************************************************
+             * login_flgが空だったら新規登録画面からリダイレクトしてきたものと判定
+            ***********************************************************************/
                 \Log::debug('新規登録画面の処理です');
                 \Log::debug('   ');
 
@@ -163,55 +176,70 @@ class TwitterAuthController extends Controller
                 ****************************************************************************/
                 // DBに登録している仮想通貨関連のアカウントを取得
                 $twitterUserList = $this->getTwitterUser();
-
-                // TwitterOAuthをインスタンス化
-                $connection = $this->newConnection($user->token, $user->tokenSecret);
-
-                // 自分のフォローしているユーザーを取得する
-                $follow_list = $this->fetchFollowTarget($user->id, $connection);
-
-                if (!empty($follow_list)) {
-                    \Log::debug('自分のフォローしているユーザーを取得しています');
-                    
-                    // 配列を比較し共通しているものを出力する
-                    $follow_list_intersect = array_intersect($twitterUserList, $follow_list);
+               
+                // DBに登録されている仮想通貨関連のアカウントが空だったら以降の処理は行わない
+                if (empty($twitterUserList)) {
+                    \Log::debug('DBに登録している仮想通貨関連のアカウントがありませんでした');
+                    \Log::debug('   ');
+                } else {
+                    // TwitterOAuthをインスタンス化
+                    $connection = $this->newConnection($user->token, $user->tokenSecret);
     
-                    // 重複しているユーザーがいれば、followsテーブルに登録する
-                    if (!empty($follow_list_intersect)) {
-                        // dd($userInfo->id);
-                        foreach ($follow_list_intersect as $follow_user_id) {
-                            \Log::debug('DBと重複してるフォロー済みのユーザーをfollowsテーブルに登録しています  ユーザーID：'. $userInfo->id);
-                            Follow::updateOrCreate(
-                                ['user_id' => $userInfo->id, 'twuser_id' => $follow_user_id, 'delete_flg' => 0],
-                                [
-                            'user_id' => $userInfo->id,
-                            'twuser_id' => $follow_user_id
-                          ]
-                            );
+                    // 自分のフォローしているユーザーを取得する
+                    $follow_list = $this->fetchFollowTarget($user->id, $connection);
+
+                    // フォローしているユーザーがいない場合は以降の処理は行わない
+                    if (!empty($follow_list)) {
+                        \Log::debug('自分のフォローしているユーザーを取得しています');
+       
+                        // 配列を比較し共通しているものを出力する
+                        $follow_list_intersect = array_intersect($twitterUserList, $follow_list);
+
+                        // 重複しているユーザーがいれば、followsテーブルに登録する
+                        if (!empty($follow_list_intersect)) {
+                            foreach ($follow_list_intersect as $follow_user_id) {
+                                \Log::debug('DBと重複してるフォロー済みのユーザーをfollowsテーブルに登録しています  ユーザーID：'. $userInfo->id);
+                                Follow::updateOrCreate(
+                                    ['user_id' => $userInfo->id, 'twuser_id' => $follow_user_id, 'delete_flg' => 0],
+                                    [
+                                    'user_id' => $userInfo->id,
+                                    'twuser_id' => $follow_user_id
+                                    ]
+                                );
+                            }
                         }
                     }
                 }
-
-    
+                
                 Auth::login($userInfo);
-
+                
                 // 画面遷移する前にログインフラグを削除
                 session()->forget('login_flg');
                 // トレンド一覧画面へリダイレクト
-                return redirect()->to('/mypage');
+                return redirect()->to('/coins');
             }
         } catch (\Exception $e) {
             \Log::debug('ログインに失敗しました。例外の処理に入っています。' . $e->getMessage());
+            \Log::debug('スタックトレース：' . $e->getTraceAsString());
             \Log::debug('   ');
-            // 画面遷移する前にログインフラグを削除
-            session()->forget('login_flg');
-            // ログインしていたらログアウトする
-            Auth::logout();
-            session()->invalidate();
-            session()->regenerateToken();
-            
-            // エラーならログイン画面へリダイレクト
-            return redirect('/login')->with('error_message', 'ログインに失敗しました。');
+
+            // ログイン画面から例外処理が発生したらログイン画面に戻る
+            if (session()->has('login_flg')) {
+                
+                // 画面遷移する前にログインフラグを削除
+                session()->forget('login_flg');
+                session()->invalidate();
+                session()->regenerateToken();
+                
+                return redirect('/login')->with('error_message', 'ログインに失敗しました。');
+            } else {
+                session()->forget('login_flg');
+                session()->invalidate();
+                session()->regenerateToken();
+                
+                // 新規登録画面から例外処理が発生したらログイン画面に戻る
+                return redirect('/register')->with('error_message', '新規登録に失敗しました。しばらくお待ち下さい。');
+            }
         }
     }
 
@@ -222,7 +250,6 @@ class TwitterAuthController extends Controller
         $userInfo = User::where('email', $user->getEmail())
         ->where('delete_flg', 0)
         ->first();
-
         // メールアドレスで登録済みのユーザーで、新規でTwitter認証をしてきている場合
         if (!empty($userInfo)) {
             $userInfo->fill([
@@ -230,6 +257,9 @@ class TwitterAuthController extends Controller
                 'twitter_token' => $user->token,
                 'twitter_token_secret' => $user->tokenSecret,
             ]);
+
+            \Log::debug('メールアドレスで登録済みのユーザー若しくは既にTwitterアカウントで登録済みのユーザーが新規登録ボタンをクリックしたときの処理');
+            \Log::debug('   ');
 
             $userInfo->save();
             return $userInfo;
@@ -243,6 +273,9 @@ class TwitterAuthController extends Controller
             'twitter_token' => $user->token,
             'twitter_token_secret' => $user->tokenSecret,
         ]);
+
+        \Log::debug('未登録ユーザーだったときの処理');
+        \Log::debug('   ');
 
         return $newUser;
     }
@@ -259,10 +292,11 @@ class TwitterAuthController extends Controller
         // 通信成功時、リクエスト制限が掛かっていない場合
         if ($connection->getLastHttpCode() == 200) {
             \Log::debug('ステータスコードが200で情報が取得できています。');
+            \Log::debug('   ');
             return $result;
         } else {
             \Log::debug('API制限に掛かっています。空の配列を返します。');
-            // 空の配列を返す
+            \Log::debug('   ');
             $result = [];
             return $result;
         }
@@ -272,7 +306,7 @@ class TwitterAuthController extends Controller
     public function newConnection($twitter_user_token, $twitter_user_token_secret)
     {
         \Log::debug('=== インスタンスを生成します === ');
-
+        \Log::debug('   ');
         // ヘルパー関数のconfigメソッドを通じて、config/services.phpのtwitterの登録した中身を参照
         $config = config('services.twitter');
         // APIキーを格納
@@ -290,13 +324,23 @@ class TwitterAuthController extends Controller
     // DBからTwitterユーザー情報を取得する
     public function getTwitterUser()
     {
-        // DBより仮想通貨関連のアカウントを取得
-        $dbresult = Twuser::all();
 
-        foreach ($dbresult as $item) {
-            $twitterUserList[] = $item->id;
+            // DBより仮想通貨関連のアカウントを取得
+        $dbresult = Twuser::all();
+        // dd($dbresult);
+        if ($dbresult->isNotEmpty()) {
+            foreach ($dbresult as $item) {
+                $twitterUserList[] = $item->id;
+            }
+            \Log::debug('DBに登録されているユーザーを返しています。');
+            \Log::debug('   ');
+            // DBに登録されているユーザーを返す
+            return $twitterUserList;
+        } else {
+            \Log::debug('空のコレクションを配列に変換して返却。');
+            \Log::debug('   ');
+            // 空のコレクションを配列に変換して返却
+            return $dbresult->toArray();
         }
-      
-        return $twitterUserList;
     }
 }
