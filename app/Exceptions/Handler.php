@@ -3,6 +3,7 @@
 namespace App\Exceptions;
 
 use Exception;
+use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface; // ★追記
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 
 class Handler extends ExceptionHandler
@@ -52,4 +53,12 @@ class Handler extends ExceptionHandler
     {
         return parent::render($request, $exception);
     }
+
+    // 表示させるエラーページを変更するために、getHttpExceptionViewメソッドをオーバーライドする
+    protected function getHttpExceptionView(HttpExceptionInterface $e)
+    {
+        // return "errors::{$e->getStatusCode()}";
+        return "errors.exception";
+    }
+    
 }
