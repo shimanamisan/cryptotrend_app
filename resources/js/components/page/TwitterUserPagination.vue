@@ -176,7 +176,6 @@ export default {
             const response = await axios.post("/autofollow", {
                 status: this.autoFollow_flg,
             });
-            // .catch((error) => error.response || error);
             if (response.status === OK) {
                 if (this.autoFollow_flg == 0) {
                     this.autoFollow_flg = 1;
@@ -187,6 +186,7 @@ export default {
                 this.sendingDone();
             } else {
                 // 何か予期せぬErrorが発生したとき(500エラーなど)
+                this.sendingDone();
                 alert("問題が発生しました。しばらくお待ち下さい。");
             }
         },
@@ -213,6 +213,7 @@ export default {
                 setTimeout(this.isShowMessage, 2000);
             } else {
                 // 何か予期せぬErrorが発生したとき(500エラーなど)
+                this.loadingActive(); // ローディング画面を非表示にする
                 alert("問題が発生しました。しばらくお待ち下さい。");
             }
         },
@@ -238,6 +239,7 @@ export default {
                 setTimeout(this.isShowMessage, 2000);
             } else {
                 // 何か予期せぬErrorが発生したとき(500エラーなど)
+                this.loadingActive(); // ローディング画面を非表示にする
                 alert("問題が発生しました。しばらくお待ち下さい。");
             }
         },
@@ -277,7 +279,6 @@ export default {
         },
         getPageCount() {
             // 取得してきたユーザー情報の総数 ÷ 表示させるページネーション数
-            console.log(this.follow_list.length)
             return Math.ceil(this.follow_list.length / this.parPage);
         },
         pageStart() {
