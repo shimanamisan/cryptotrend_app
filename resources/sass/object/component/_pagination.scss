@@ -11,13 +11,21 @@
         display: none;
     }
 
+    &__link {
+        padding: 10px 15px;
+        display: block;
+        &:focus{
+            outline: none;
+        }
+    }
+
     &__item {
         background-color: #ffff;
         @include custumRadius();
-        padding: 10px 15px;
         margin-left: 12px;
         position: relative;
         overflow: hidden;
+ 
         @include sm() {
             display: none;
         }

@@ -93,6 +93,11 @@
     z-index: 5;
     width: 100%;
     top: 0;
+    @include sm(){
+      width: auto;
+      padding: 8px;
+      font-size: 24px;
+    }
     &--active {
       transform: translateX(-150%);
       transition: all 0.5s;
