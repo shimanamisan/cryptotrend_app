@@ -1,4 +1,7 @@
 .c-link {
+    &__global{
+        color:#2980b9;
+    }
     &__common {
         color: $font-color_default;
         text-decoration: none;

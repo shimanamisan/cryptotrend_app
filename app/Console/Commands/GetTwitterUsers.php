@@ -51,6 +51,7 @@ class GetTwitterUsers extends Command
 
         \Log::debug('===== ツイート取得バッチを開始します：' . date('Y年m月d日') . '=====');
         \Log::debug('    ');
+
         // DBに登録されているユーザーを取得
         $TwitterUser = new Twuser();
         $dbresult = $TwitterUser->all();
@@ -124,6 +125,7 @@ class GetTwitterUsers extends Command
                             ++$alreadyCounter;
                             \Log::debug("DBに存在していたユーザーです。既存ユーザーカウンター：{$alreadyCounter}");
                             \Log::debug('    ');
+
                             $twitter_user = [
                                 'id' => $search_result_item->id,
                                 'user_name' => $search_result_item->name,

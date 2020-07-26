@@ -41,15 +41,10 @@ class GetCoinsTweet extends Command
      *
      * @return mixed
      */
-    // public function handle()
-    // {
-    //     $date = $this->argument('datetime');
-    //     logger()->info('hello'. $date);
-    // }
 
     // search/tweetsのリクエストの上限は、15分毎450回（アプリケーション認証時）
     const SEARCH_REQUEST_LIMIT = 450;
-    // 
+    //
     const REQUEST_LIMIT＿MINUTES = 15;
 
     public function handle(Coin $coin)
@@ -92,8 +87,7 @@ class GetCoinsTweet extends Command
         \Log::debug('  ');
 
         // search_keyに格納した銘柄ごとにツイートを取得する
-        for($i = 0; $i < count($search_key); $i++){
-            
+        for ($i = 0; $i < count($search_key); $i++) {
             $params = [
                 'q' => $search_key[$i],
                 'count' => 100,
@@ -107,16 +101,15 @@ class GetCoinsTweet extends Command
             \Log::debug('  ');
 
             // ツイートを取得してく
-            for($k = 0; $k < self::SEARCH_REQUEST_LIMIT; $k++){
-            // for($k = 0; $k < self::SEARCH_REQUEST_LIMIT; $k++){
+            for ($k = 0; $k < self::SEARCH_REQUEST_LIMIT; $k++) {
+                // for($k = 0; $k < self::SEARCH_REQUEST_LIMIT; $k++){
             
-                try{
+                try {
                     // アプリケーション認証
                     $connection = $this->twitterOauth2();
                     // オブジェクト形式で返ってくる
                     $response_result = $connection->get('search/tweets', $params);
-                    
-                }catch(TwitterOAuthException $e){
+                } catch (TwitterOAuthException $e) {
                     \Log::debug('============ 例外が発生しました ============');
                     \Log::debug($e->getMessage());
                     \Log::debug($e->getTrace());
@@ -128,7 +121,7 @@ class GetCoinsTweet extends Command
                 }
 
                 // エラーハンドリング
-                if($connection->getLastHttpCode() !== 200){
+                if ($connection->getLastHttpCode() !== 200) {
                     // サーバ側でエラーが発生若しくはAPI制限がかかったら処理を停止する
                     // 15分間待機して処理を継続する
                     \Log::debug('サーバ側でエラー若しくはAPI制限に掛かりました。処理を待機します');
@@ -137,37 +130,35 @@ class GetCoinsTweet extends Command
                     sleep(900);
                     continue;
                 }
-                    // リクエストをカウント
-                    ++$search_request_limit_count;
-                    \Log::debug('リクエスト数をカウントしています：'. $search_request_limit_count .' 回');
+                // リクエストをカウント
+                ++$search_request_limit_count;
+                \Log::debug('リクエスト数をカウントしています：'. $search_request_limit_count .' 回');
     
-                    // オブジェクトを配列に変換
-                    // $result_arr = (array)$response_result;
-                    $result_arr = json_decode(json_encode($response_result), true);
+                // オブジェクトを配列に変換
+                // $result_arr = (array)$response_result;
+                $result_arr = json_decode(json_encode($response_result), true);
     
-                        // ツイート本文を抽出
-                        for($h = 0; $h < count($result_arr['statuses']); $h++){
-                            
-                            $tweet_text[] = $result_arr['statuses'][$h]['text'];
-                        }
+                // ツイート本文を抽出
+                for ($h = 0; $h < count($result_arr['statuses']); $h++) {
+                    $tweet_text[] = $result_arr['statuses'][$h]['text'];
+                }
                         
-                        // next_resultsがなければ処理を終了
-                        if(empty($result_arr['search_metadata']['next_results'])){
-                            \Log::debug('検索結果が空になったので次の処理へ移ります');
-                            \Log::debug('  ');
-                            // リクエストをリセット
-                            $search_request_limit_count = 0;
-                            break;
-                        }
+                // next_resultsがなければ処理を終了
+                if (empty($result_arr['search_metadata']['next_results'])) {
+                    \Log::debug('検索結果が空になったので次の処理へ移ります');
+                    \Log::debug('  ');
+                    // リクエストをリセット
+                    $search_request_limit_count = 0;
+                    break;
+                }
         
-                        // パラメータの先頭の？を除去（次のページの）
-                        $next_results = preg_replace('/^\?/', '', $result_arr['search_metadata']['next_results']);
+                // パラメータの先頭の？を除去（次のページの）
+                $next_results = preg_replace('/^\?/', '', $result_arr['search_metadata']['next_results']);
 
-                        \Log::debug($next_results);
+                \Log::debug($next_results);
                         
-                        // パラメータに変換
-                        parse_str($next_results, $params);
-
+                // パラメータに変換
+                parse_str($next_results, $params);
             }
            
             \Log::debug($search_key[$i]. ' の結果をDBへ保存します これは添字です '. $i . ' DB登録に使用する際は+1して使用して下さい');
@@ -176,12 +167,12 @@ class GetCoinsTweet extends Command
             // 銘柄の集計結果
             $trend_count = count($tweet_text);
             // 添字なのでDB保存用に+1しておく
-            ++$i; 
+            ++$i;
             $coinObj = $coin->find($i);
             
             // カウントしたツイートをDBへ保存
             // 1時間、1日、1週間のツイート取得で処理を分ける
-            $this->saveTrends($coinObj, $i, $trend_count ,$date);
+            $this->saveTrends($coinObj, $i, $trend_count, $date);
 
             // カウントしたままだと次の通貨を飛ばしてしまうのでデクリメントしておく
             --$i;
@@ -196,7 +187,6 @@ class GetCoinsTweet extends Command
 
         \Log::debug('ここの処理は最後');
         \Log::debug('  ');
-
     }
 
     // アプリケーション単位で認証する（ベアラートークンの取得）
@@ -217,7 +207,7 @@ class GetCoinsTweet extends Command
         $_bearer_token = $connection->oauth2('oauth2/token', array('grant_type' => 'client_credentials'));
 
         // ベアラートークンをセット
-        if(isset($_bearer_token->access_token)){
+        if (isset($_bearer_token->access_token)) {
             $connection->setBearer($_bearer_token->access_token);
         }
 
@@ -225,10 +215,10 @@ class GetCoinsTweet extends Command
     }
 
     // データ保存時の処理を開始日時で分ける
-    private function saveTrends($coinObj, $i, $trend_count ,$date)
+    private function saveTrends($coinObj, $i, $trend_count, $date)
     {
         // hour か day か week が入ってくる。それによりDBへ保存する処理を分ける
-        switch($date){
+        switch ($date) {
 
             case 'hour':
                 // updateOrCreateメソッド：第一引数に指定したカラムに値が存在していれば更新し、無ければ新規登録する
@@ -237,7 +227,8 @@ class GetCoinsTweet extends Command
                     [
                         'tweet' => $trend_count,
                         'updated_at' => Carbon::now()
-                    ]);
+                    ]
+                );
                     \Log::debug('1時間あたりのツイート数を計測したデータを保存しました');
                     \Log::debug('  ');
                 break ;
@@ -248,7 +239,8 @@ class GetCoinsTweet extends Command
                     [
                         'tweet' => $trend_count,
                         'updated_at' => Carbon::now()
-                    ]);
+                    ]
+                );
                     \Log::debug('1日あたりのツイート数を計測したデータを保存しました');
                     \Log::debug('  ');
                 break;
@@ -259,7 +251,8 @@ class GetCoinsTweet extends Command
                     [
                         'tweet' => $trend_count,
                         'updated_at' => Carbon::now()
-                    ]);
+                    ]
+                );
                     \Log::debug('1週間あたりのツイート数を計測したデータを保存しました');
                     \Log::debug('  ');
                 break ;
@@ -272,9 +265,8 @@ class GetCoinsTweet extends Command
 
     // データ取得用の日時を返す関数
     private function getSearchDate($date)
-    {   
-        
-        switch($date){
+    {
+        switch ($date) {
             case 'hour':
                 return  $before_hour = date('Y-m-d_H:i:s', strtotime('-1 hour', time()))."_JST"; //カウント開始の時間
 

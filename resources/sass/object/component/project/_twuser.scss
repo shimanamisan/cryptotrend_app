@@ -7,7 +7,6 @@
             width: 30%;
             @include sm() {
                 width: 100%;
-              
             }
         }
     }
@@ -40,6 +39,10 @@
         padding: 8px;
         border: 1px solid #707070;
         @include custumRadius(5px);
+        &__description {
+            text-overflow: ellipsis;
+            overflow: hidden;
+        }
         &__account {
             font-size: 0.9rem;
             color: #999;
@@ -48,8 +51,9 @@
         &__name {
             font-size: 18px;
             font-weight: 600;
+            width: 80%;
             @include sm() {
-                width: 55%;
+                width: 65%;
             }
         }
         &__item {

@@ -40,8 +40,6 @@ class NewsController extends Controller
 
         $items = simplexml_load_file($API_BASE_URL)->channel->item;
 
-        Log::debug("取得した記事の数：" . count($items));
-
         //記事のタイトルとURLを取り出して配列に格納
         for ($i = 0; $i < count($items); $i++) {
             $list[$i]['title'] = mb_convert_encoding(
