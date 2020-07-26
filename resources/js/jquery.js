@@ -41,10 +41,6 @@ SPメニューを開閉するアクション
     /****************************************
 スクロールアニメーション
 *****************************************/
-    window.onload = function () {
-        scroll_animation();
-    };
-
     $(window).scroll(function () {
         scroll_animation();
     });
