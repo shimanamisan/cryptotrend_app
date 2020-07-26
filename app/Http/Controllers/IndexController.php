@@ -11,7 +11,6 @@ class IndexController extends Controller
     // トップページの表示
     public function home()
     {
-        return view('home');
+        return view('index');
     }
-
 }

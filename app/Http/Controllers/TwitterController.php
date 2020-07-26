@@ -47,15 +47,14 @@ class TwitterController extends Controller
                     }
                 }
             }
-                // 結合先
+            // 結合先
                 $source = $tw_user_result->toArray(); // コレクションを配列へ変換
                 // 結合元(destinationをsourceに結合する)
                 $destination = $new_tw_user;
-                // 配列の差分を結合する、既存のデータに isFollow = true が追加されたデータが取得できる
-                $result = array_merge($source, $destination);
+            // 配列の差分を結合する、既存のデータに isFollow = true が追加されたデータが取得できる
+            $result = array_merge($source, $destination);
             
-                $follow_list = json_encode($source);
-
+            $follow_list = json_encode($source);
         } else {
             // 空だった場合はまだフォローしているユーザーがまだいないので、アプリ側で登録したユーザーをそのまま表示する
             $source = $tw_user_result;
@@ -63,7 +62,7 @@ class TwitterController extends Controller
             $follow_list = json_encode($source);
         }
 
-        return view('userList', compact('follow_list', 'user'));
+        return view('userlist', compact('follow_list', 'user'));
     }
 
     // アプリケーション単位で認証する（ベアラートークンの取得）
