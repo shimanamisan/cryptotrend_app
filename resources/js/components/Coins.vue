@@ -276,17 +276,15 @@ export default {
         // 各銘柄の最終更新日時を取得する
         getUpdated() {
             // 配列の個数を取得
-            const latest_data = this.tweet_data.length;
-            // 配列の中の最後尾のデータが最も更新日時が新しいので、その日時を取得する
+            // 配列の先頭のデータを取得する
             var filter_data = this.tweet_data.filter((item, index) => {
                 // 要素のIDと比較して一致していれば、その要素1つを返す
-                return item.id == latest_data;
+                return item.id == 1;
             });
             // 更新日時を格納した新しい配列を生成する
             var result = filter_data.map((element) => {
                 return element.updated_at;
             });
-
             return result[0];
         },
         filterCoins() {
