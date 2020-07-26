@@ -23,7 +23,7 @@
         <h2 class="c-title__twuser__guest">こちらのページはTwitterアカウントを登録することでご利用頂けます。</h2>
         <div class="u-wrapp">
          <p class="u-margin__bottom--xl">※登録されているメールアドレスと、Twitterアカウントのメールアドレスが異なる場合、Twitterアカウントの情報で新規登録されます。</p>
-        <a id="js-redirect" href="{{ route('userList.redirect') }}" 
+        <a id="js-redirect" href="{{ route('userlist.redirect') }}" 
         class="c-btn c-btn__twitter p-twuser__gest__btn"
         >Twitterアカウントを登録する</a>
    
