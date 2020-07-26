@@ -8,73 +8,69 @@ use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
 class Kernel extends ConsoleKernel
 {
-  /**
-   * The Artisan commands provided by your application.
-   *
-   * @var array
-   */
-  protected $commands = [
+    /**
+     * The Artisan commands provided by your application.
+     *
+     * @var array
+     */
+    protected $commands = [
     // コマンドを登録
     // Commands\GetCoinsTweet::class,
   ];
 
-  /**
-   * Define the application's command schedule.
-   *
-   * @param  \Illuminate\Console\Scheduling\Schedule  $schedule
-   * @return void
-   */
-  protected function schedule(Schedule $schedule)
-  {
-    $schedule->command('command:getcoin hour')
-    ->dailyAt('0:15');
+    /**
+     * Define the application's command schedule.
+     *
+     * @param  \Illuminate\Console\Scheduling\Schedule  $schedule
+     * @return void
+     */
+    protected function schedule(Schedule $schedule)
+    {
+        // 過去1時間の各銘柄に関するツイートを取得
+        $schedule->command('command:getcoin hour')
+        // 1時間おきに実行する
+        ->hourly()->everyThirtyMinutes();
 
-    $schedule->command('command:getcoin day')
-    ->dailyAt('0:30');
+        // 過去1日の各銘柄に関するツイートを取得
+        $schedule->command('command:getcoin day')
+        // 毎日深夜12時に実行する
+        ->daily()->everyThirtyMinutes();
 
-    $schedule->command('command:getcoin week')
-    ->dailyAt('1:00');
+        // 過去1週間の各銘柄に関するツイートを取得
+        $schedule->command('command:getcoin week')
+        // 毎日深夜3時に実行する
+        ->dailyAt('3:00')->everyThirtyMinutes();
 
+        // CoincheckAPIからビットコインの価格を取得する
+        $schedule->command('command:getticker')
+        // 30分毎に実行する
+        ->everyThirtyMinutes();
 
-    $schedule->command('command:getticker')
-    ->everyThirtyMinutes();
+        // 仮想通貨関連のアカウント情報を取得する
+        $schedule->command('command:gettwitterusers')
+        // 1日1回、深夜1時に実行する
+        ->dailyAt('1:00')->withoutOverlapping();
 
-    $schedule->command('command:autofollow')
-    ->daily();
+        // 自動フォローを行う処理
+        $schedule->command('command:autofollow')
+        // 30分毎に処理を実行し、前の処理が終わっていない（多重起動）場合は処理を実行しない
+        ->everyThirtyMinutes()->withoutOverlapping();
 
-    // $schedule->command('command:clearcounter')
-    // ->daily();
+        // // 退会済のユーザーのフォローデータ削除する
+        // $schedule->command('command:clearwithdraw')
+        // // 毎月1日の深夜12時に実行する
+        // ->monthly()->withoutOverlapping();
+    }
 
-    // $schedule->call(function () {
-    //     logger()->info('クロージャーを使ってCronを動作させています');
-    // });
+    /**
+     * Register the commands for the application.
+     *
+     * @return void
+     */
+    protected function commands()
+    {
+        $this->load(__DIR__ . '/Commands');
 
-    // $schedule
-    //   ->call(function () {
-    //     TwitterController::userList();
-    //   })
-    //   // 夜中の12に時に処理が走るメソッド
-    //   // ->daily();
-    //   // 5分後に処理が走るメソッド
-    //   // ->everyFiveMinutes();
-    //   // 毎分に処理が走るメソッド
-    //   // ->everyMinute();
-    //   // 15分毎に処理が走るメソッド
-    //   ->everyThirtyMinutes();
-
-  }
-
-  /**
-   * Register the commands for the application.
-   *
-   * @return void
-   */
-  protected function commands()
-  {
-    $this->load(__DIR__ . '/Commands');
-
-    require base_path('routes/console.php');
-  }
-
-  
+        require base_path('routes/console.php');
+    }
 }

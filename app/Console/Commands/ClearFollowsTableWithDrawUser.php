@@ -2,7 +2,7 @@
 
 namespace App\Console\Commands;
 
-use App\User;
+use App\Follow;
 use Illuminate\Console\Command;
 
 class ClearFollowsTableWithDrawUser extends Command
@@ -12,7 +12,8 @@ class ClearFollowsTableWithDrawUser extends Command
      *
      * @var string
      */
-    protected $signature = 'command:clearwithdraw {user_id}';
+    protected $signature = 'command:clearwithdraw';
+    // protected $signature = 'command:clearwithdraw {user_id}';
 
     /**
      * The console command description.
@@ -36,18 +37,16 @@ class ClearFollowsTableWithDrawUser extends Command
      *
      * @return mixed
      */
-    public function handle(User $user)
+    public function handle(Follow $follow)
     {
-        // バッチ処理で実行する際の引数を受け取る
-        $user_id = $this->argument('user_id');
-
-        try{
+        try {
+            $count = count($follow->all()->where('delete_flg', 1));
             // delete_flgが立っているユーザーを削除
-            $user->find($user_id)->follows()->delete(['delete_flg' => 1]);
+            $follow->where('delete_flg', 1)->delete();
 
-            \Log::debug('退会したユーザー関連の情報を削除しました。ユーザーID： '. $user_id);
+            \Log::debug('退会したユーザー関連の情報を削除しました。削除したレコード数：'. $count);
             \Log::debug('   ');
-        }catch(\Exception $e){
+        } catch (\Exception $e) {
             \Log::debug('例外が発生しました。処理を停止します。  '. $e->getMessage());
             exit();
         }
