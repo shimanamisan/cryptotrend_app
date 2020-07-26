@@ -27,10 +27,7 @@ module.exports = {
     // モード値を production に設定すると最適化された状態で、
     // development に設定するとソースマップ有効でJSファイルが出力される
     mode: MODE,
-    performance: {
-        maxEntrypointSize: 500000,
-        maxAssetSize: 500000,
-    },
+    performance: { hints: false },
     // ${__dirname}が C:\Users\mikan\myVagrant\centos\project までのファイルパスになる
     // vagrantの共有フォルダからコードを書いているのでサーバ側のように/resourcesで始まるとディレクトリが見つからずエラーになる
     // babel-loader8 でasync/awaitを動作させるためには、@babel/polyfillが必要
