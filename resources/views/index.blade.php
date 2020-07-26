@@ -8,7 +8,7 @@
 @section('content')
 <main class="l-main">
       <section class="p-eyecatch l-main__section">
-        <div class="p-eyecatch__wrap js-scroll">
+        <div class="p-eyecatch__wrap c-anime__fadein">
           <h1 class="p-eyecatch__title">
             仮想通貨の最新情報は
             <br />CRYPTO TOREND
@@ -34,7 +34,7 @@
           @endguest
         </div>
       </section>
-      <section id="js-animation" class="c-container__index p-sitemap l-main__section">
+      <section class="c-container__index p-sitemap l-main__section">
         <div  class="p-sitemap__about js-scroll">
           <h1 class="p-sitemap__title">CRYPTO TORENDとは？</h1>
 
