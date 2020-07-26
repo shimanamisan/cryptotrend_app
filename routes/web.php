@@ -27,8 +27,6 @@ Route::get('login/twitter', 'Auth\TwitterAuthController@getTwitterLogin')->name(
 Route::get('register/twitter', 'Auth\TwitterAuthController@getTwitterRegister')->name('twitter.register');
 // アプリ側から情報が返ってくるURL
 Route::get('auth/twitter/callback', 'Auth\TwitterAuthController@getTwitterCallback');
-// 仮想通貨関連のニュースの取得
-Route::get('/news', 'NewsController@index')->name('getNews.index');
 // ログアウト
 Route::post('/logout', 'Auth\LoginController@logout')->name('logout');
 
@@ -41,6 +39,9 @@ Auth::routes();
 
 // 認証後の画面
 Route::group(['middleware' => 'auth'], function () {
+
+    // 仮想通貨関連のニュースの取得
+    Route::get('/news', 'NewsController@index')->name('getNews.index');
 
     /**********************************************
      * ユーザーフォロー機能関連のルーティング
@@ -81,5 +82,5 @@ Route::group(['middleware' => 'auth'], function () {
 });
 
 // 開発時テスト用ルーティング
-Route::get('/applimit', 'TestController@applimit'); // アプリケーション認証のAPI制限のカウント数の一覧を取得する
-Route::get('/userlimit', 'TestController@userlimit'); // ログインしているユーザーのAPI制限のカウント数の一覧を取得する
+// Route::get('/applimit', 'TestController@applimit'); // アプリケーション認証のAPI制限のカウント数の一覧を取得する
+// Route::get('/userlimit', 'TestController@userlimit'); // ログインしているユーザーのAPI制限のカウント数の一覧を取得する
