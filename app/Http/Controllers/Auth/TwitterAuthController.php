@@ -66,10 +66,15 @@ class TwitterAuthController extends Controller
                 $twUserId = User::where('my_twitter_id', $user->getId())
                                   ->where('delete_flg', 0)
                                   ->first();
+
+                // 退会済みのTwitterアカウントか検索
+                $deleteUser = User::where('my_twitter_id', $user->getId())
+                                  ->where('delete_flg', 1)
+                                  ->first();
                 
                 // Twitter_id及びメールアドレスが登録されていなかったら未登録ユーザーとする
-                if (empty($twUserId) && empty($userInfo)) {
-                    \Log::debug('emailかtwitter_idが無いのでなので未登録ユーザーです');
+                if (empty($twUserId) || empty($userInfo) || !empty($deleteUser)) {
+                    \Log::debug('退会済みのTwitterアカウントか、emailかtwitter_idが無いのでなので未登録ユーザーです');
                     \Log::debug('   ');
                     // 画面遷移する前にログインフラグを削除
                     session()->forget('login_flg');
@@ -83,8 +88,6 @@ class TwitterAuthController extends Controller
                     'twitter_token' => $user->token,
                     'twitter_token_secret' => $user->tokenSecret,
                 ]);
-
-                // dd($userInfo);
 
                 $userInfo->save();
 
@@ -325,7 +328,7 @@ class TwitterAuthController extends Controller
     public function getTwitterUser()
     {
 
-            // DBより仮想通貨関連のアカウントを取得
+        // DBより仮想通貨関連のアカウントを取得
         $dbresult = Twuser::all();
         // dd($dbresult);
         if ($dbresult->isNotEmpty()) {

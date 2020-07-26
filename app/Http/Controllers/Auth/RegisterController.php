@@ -42,6 +42,15 @@ class RegisterController extends Controller
         $this->middleware('guest');
     }
 
+    public function showRegistrationForm()
+    {
+        // Twitter認証のログイン処理時に、ログイン・新規登録判定用のセッションを
+        // 新規登録画面表示時に、残っていないようにする。
+        session()->forget('login_flg');
+
+        return view('auth.register');
+    }
+
     /**
      * Get a validator for an incoming registration request.
      *
@@ -64,7 +73,14 @@ class RegisterController extends Controller
             'password' => ['required', 'string', 'min:8', 'max:100', 'confirmed', 'regex:/^[a-zA-Z0-9]+$/'],
         ], $message);
     }
-
+    
+    // RedirectsUsersトレイトのredirectPathメソッドを上書き
+    public function redirectPath()
+    {
+        return '/mypage';
+        //例）return 'costs/index';
+    }
+    
     /**
      * Create a new user instance after a valid registration.
      *
@@ -78,12 +94,5 @@ class RegisterController extends Controller
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
         ]);
-    }
-
-    // RedirectsUsersトレイトのredirectPathメソッドを上書き
-    public function redirectPath()
-    {
-        return '/mypage';
-        //例）return 'costs/index';
     }
 }
