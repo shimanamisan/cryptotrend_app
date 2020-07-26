@@ -39,17 +39,6 @@ export default {
                 }
                 return item;
             });
-            // let newData = data.map((item) => {
-            //   if (item.id == id) {
-            //     item.isFollow = true;
-            //   }
-            //   return item;
-            // });
-            // 駄目なパターン
-            // プロパティに1つ1つ返してないので、item.id == id だった要素のみ変数に入れて
-            // それをまるごとプロパティに返しているので、item.id == id だった要素のみしか入っていない
-            // その他が undefined 担っている
-            // this.follow_list_item = newData;
         },
         // フォローしていないユーザーか否か判定するプロパティを追加
         removeFollowState(id) {
