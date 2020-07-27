@@ -49,6 +49,9 @@ class GetCoinsTweet extends Command
 
     public function handle(Coin $coin)
     {
+        \Log::debug('====================================================');
+        \Log::debug('仮想通貨に関するツイート取得用のバッチ : 開始');
+        \Log::debug('====================================================');
 
         // バッチ処理で実行する際の引数を受け取る
         $date = $this->argument('datetime');
@@ -161,7 +164,7 @@ class GetCoinsTweet extends Command
                 parse_str($next_results, $params);
             }
            
-            \Log::debug($search_key[$i]. ' の結果をDBへ保存します これは添字です '. $i . ' DB登録に使用する際は+1して使用して下さい');
+            \Log::debug($search_key[$i]. ' の結果をDBへ保存します。');
 
             // 各銘柄ごとにツイート数をカウントしてDBへ保存する
             // 銘柄の集計結果
@@ -185,8 +188,9 @@ class GetCoinsTweet extends Command
             $search_request_limit_count = 0;
         }
 
-        \Log::debug('ここの処理は最後');
-        \Log::debug('  ');
+        \Log::debug('=============================');
+        \Log::debug('終了');
+        \Log::debug('=============================');
     }
 
     // アプリケーション単位で認証する（ベアラートークンの取得）

@@ -40,7 +40,9 @@ class GetTwitterUsers extends Command
      */
     public function handle()
     {
-        // 関連キーワードがユーザー名又はプロフィールに記載しているユーザーを取得
+        \Log::debug('====================================================');
+        \Log::debug('関連キーワードを呟いているユーザーを取得 : 開始');
+        \Log::debug('====================================================');
 
         // インスタンスを生成
         $connection = $this->twitterOauth();
@@ -48,10 +50,6 @@ class GetTwitterUsers extends Command
         $newCounter = 0;
         // 既存登録数のカウント
         $alreadyCounter = 0;
-
-        \Log::debug('===== ツイート取得バッチを開始します：' . date('Y年m月d日') . '=====');
-        \Log::debug('    ');
-
         // DBに登録されているユーザーを取得
         $TwitterUser = new Twuser();
         $dbresult = $TwitterUser->all();
@@ -169,6 +167,10 @@ class GetTwitterUsers extends Command
                 }
             }
         }
+
+        \Log::debug('=============================');
+        \Log::debug('終了');
+        \Log::debug('=============================');
     }
 
     public function twitterOauth()

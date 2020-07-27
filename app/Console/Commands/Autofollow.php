@@ -55,9 +55,9 @@ class Autofollow extends Command
     // 自動フォロー機能呼び出し
     public function handle()
     {
-        \Log::info('=====================================================================');
-        \Log::info('AutoFollow : 開始');
-        \Log::info('=====================================================================');
+        \Log::debug('=====================================================================');
+        \Log::debug('AutoFollow : 開始');
+        \Log::debug('=====================================================================');
 
         // DBからautofollowカラムが1且つ退会済みでないユーザーを取得
         // getメソッドで取得しているので返り値はコレクションクラスが返ってくる
@@ -170,6 +170,7 @@ class Autofollow extends Command
                     $SystemManager->one_day_system_counter = 0;
                     $SystemManager->update();
                     $one_day_system_counter = $SystemManager->one_day_system_counter;
+                    $system_follow_release_time = $SystemManager->system_follow_release_time;
                     Log::debug('24時間経過しました。新たに制限解除用の時刻を格納し、カウンターをリセットします。');
                     Log::debug('    ');
                 }
@@ -202,6 +203,7 @@ class Autofollow extends Command
                     $user->day_follow_limit_count = 0;
                     $user->update();
                     $day_follow_limit_count = $user->day_follow_limit_count;
+                    $day_follow_release_time = $user->day_follow_release_time;
                     Log::debug('24時間経過しました。新たに制限解除用の時刻を格納し、カウンターをリセットします。');
                     Log::debug('    ');
                 }
@@ -232,6 +234,7 @@ class Autofollow extends Command
                     $user->day_follow_quarter_limit_count = 0;
                     $user->update();
                     $day_follow_quarter_limit_count = $user->day_follow_quarter_limit_count;
+                    $day_follow_quarter_release_time = $user->day_follow_quarter_release_time;
                     Log::debug('15分経過しました。新たに制限解除用の時刻を格納し、カウンターをリセットします。');
                     Log::debug('    ');
                 }
