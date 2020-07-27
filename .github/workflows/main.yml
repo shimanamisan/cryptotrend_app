@@ -23,5 +23,9 @@ jobs:
       - name: htaccess production
         shell: bash
         run: |
-          cd crypto-trend2020.shimanamisan.com/public
-          touch test.text
+          pwd
+          cp .htaccess .htaccess_dev
+          cp .htaccess_deploy .htaccess
+          cd ..
+          pwd
+        working-directory: ./public
