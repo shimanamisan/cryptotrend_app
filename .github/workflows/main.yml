@@ -23,5 +23,5 @@ jobs:
       - name: htaccess production
         shell: bash
         run: |
-          cd crypto-trend2020.shimanamisan.com/public
+          cd /home/users/0/penne.jp-shimanamisan/web/crypto-trend2020.shimanamisan.com/public
           touch test.text
