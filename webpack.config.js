@@ -21,7 +21,7 @@ const mydir = path.resolve(__dirname);
 console.log("ファイルパスを確認しています：" + mydir);
 
 // ソースマップの利用有無(productionのときはソースマップを利用しない)
-const enabledSourceMap = MODE === "development";
+const enabledSourceMap = MODE === "production";
 
 module.exports = {
     // モード値を production に設定すると最適化された状態で、
