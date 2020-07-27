@@ -15,7 +15,7 @@
           </h1>
           @guest
           <div class="p-eyecatch__content">
-            <a href="{{ route('register') }}">
+            <a href="{{ route('register') }}" class="p-eyecatch__content--link">
               <button class="c-btn c-btn__auth c-btn--radius u-btn">新規登録</button>
             </a>
             <div class="p-eyecatch__content--text">
@@ -24,7 +24,7 @@
           </div>
           @else
           <div class="p-eyecatch__content">
-            <a href="{{ route('conins.index') }}">
+            <a href="{{ route('conins.index') }}" class="p-eyecatch__content--link">
               <button class="c-btn c-btn__auth c-btn--radius u-btn">トレンドを見る</button>
             </a>
             <div class="p-eyecatch__content--text">
@@ -56,7 +56,7 @@
               <img src="{{ asset('images/top_figure_01.png') }}" alt />
             </div>
             <div class="p-sitemap__info">
-              <h1 class="p-sitemap__title u-margin__bottom--G u-padding__top--lg">SNSで話題の銘柄をウォッチ！</h1>
+              <h1 class="p-sitemap__title u-margin__bottom--G p-sitemap__pd__top--lg">SNSで話題の銘柄をウォッチ！</h1>
               <p class="p-sitemap__text">
                 Twitterで今話題の銘柄は何なのか？
                 タイムラインに投稿されている、各銘柄ごとのツイート数を集計し、
@@ -73,7 +73,7 @@
               <img src="{{ asset('images/top_figure_02.png') }}" alt />
             </div>
             <div class="p-sitemap__info">
-              <h1 class="p-sitemap__title u-margin__bottom--G u-padding__top--lg">仮想通貨の最新ニュースをチェック！</h1>
+              <h1 class="p-sitemap__title u-margin__bottom--G p-sitemap__pd__top--lg">最新ニュースをチェック！</h1>
               <p class="p-sitemap__text">
                 仮想通貨関連のニュースのキーワードを元に、Googleニュースをまとめています。
                 自分で検索する手間が省けるので、すぐに最新ニュースをチェックすることが出来ます。
@@ -89,7 +89,7 @@
               <img src="{{ asset('images/top_figure_03.png') }}" alt />
             </div>
             <div class="p-sitemap__info">
-              <h1 class="p-sitemap__title u-margin__bottom--G u-padding__top--lg">気になるユーザーをフォロー！</h1>
+              <h1 class="p-sitemap__title u-margin__bottom--G p-sitemap__pd__top--lg">気になるユーザーをフォロー！</h1>
               <p class="p-sitemap__text">
                 仮想通貨関連の情報を発信しているユーザーをフォローすることが出来ます！
                 自動フォロー機能を有効することによって、一覧表示されているユーザーを自動でフォローすることが出来ます。

@@ -72,17 +72,6 @@
   }
 }
 
-.u-padding {
-  &__top {
-    &--lg {
-      padding-top: 150px;
-      @include sm(){
-        padding-top: 80px;
-      }
-    }
-  }
-}
-
 .u-msg {
   &__system {
     padding: 32px;

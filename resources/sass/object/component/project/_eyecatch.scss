@@ -5,15 +5,12 @@
     background-position: center center;
     background-repeat: no-repeat;
     position: relative;
-    // display: flex;
-    // justify-content: center;
-    // align-items: center;
     &__wrap {
         top: 30%;
         left: 10%;
         position: absolute;
         @include sm() {
-            top: 34%;
+            top: 24%;
             left: 7%;
         }
     }
@@ -24,18 +21,32 @@
             font-size: 32px;
             margin-bottom: 24px;
         }
+        @include ss() {
+            font-size: 30px;
+            margin-bottom: 30px;
+        }
     }
     &__content {
-        display: flex;
-        justify-content: space-evenly;
+        display: block;
         @include sm() {
             display: block;
+        }
+        &--link {
+            float: left;
+            margin-right: 30px;
+            @include sm() {
+                float: none;
+                margin-left: 0px;
+            }
         }
 
         &--text {
             line-height: 50px;
             @include sm() {
                 margin-top: 16px;
+            }
+            @include ss(){
+                font-size: 14px;
             }
         }
         &--link {
