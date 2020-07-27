@@ -140,7 +140,7 @@ class Autofollow extends Command
 
                 // 現在の時間を格納
                 $now_time = Carbon::now();
-                dd($now_time);
+            
                 // 全てフォローしてリストが空だったら処理を停止
                 if (empty($follow_target_list)) {
                     \Log::debug('フォローリストが空なので、このユーザーの処理を停止します。');
@@ -244,33 +244,21 @@ class Autofollow extends Command
                
                 /****************************************
                  * フォローを実施する処理
-                ******************************************/
-                $result = $connection->post('friendships/create', [
-                            'user_id' => $follow_target_id
-                            ]);
-
-                // もしフォローした際に code:108 message:Cannot finde specifide user.と返ってきた場合は、Twitterアプリ側でユーザーが存在していない
-                // ものとみなして、DBに登録している twusersテーブルに登録している twitter_id (idカラム) を削除する
-                // 外部キーを設定しているので、followsテーブルからも削除される
-                if (!empty($result->errors[0]->code)) {
-                    dd($result);
-                    Twuser::where('id', $follow_target_id)->delete();
-                    Log::debug('有効なユーザーではなかったので、Twuserテーブルから削除します。  ' .$follow_target_id);
-                    Log::debug('    ');
-                    Log::debug('有効でないTwitter_idを削除したので、リクエストをカウントして、この処理を一度スキップします。');
-                    Log::debug('    ');
-                    // APIへのリクエスト後、リミット数をカウント
-                    ++$day_follow_quarter_limit_count; // 15/15分フォロー制限用のカウント
-                    ++$day_follow_limit_count; // 1日395フォロー制限用のカウント
-                    ++$one_day_system_counter; // 1日1000フォロー制限用のカウント（アプリ全体）
-                    $user->day_follow_quarter_limit_count = $day_follow_quarter_limit_count;
-                    $user->day_follow_limit_count = $day_follow_limit_count;
-                    $user->update();
-                    $SystemManager->one_day_system_counter = $one_day_system_counter;
-                    $SystemManager->update();
-                    continue;
-                }
-            
+                // ******************************************/
+                // $result = $connection->post('friendships/create', [
+                //             'user_id' => $follow_target_id
+                //             ]);
+                
+                // // エラーハンドリング
+                // if ($connection->getLastHttpCode() == 200) {
+                // } else {
+                //     \Log::debug('リクエスト時にエラーが発生しています。');
+                //     \Log::debug('エラー内容を取得します '. print_r($result, true));
+                //     \Log::debug('   ');
+                //     \Log::debug('以降の処理を停止します。');
+                //     exit();
+                // }
+                    
                 // APIへのリクエスト後、リミット数をカウント
                 ++$day_follow_quarter_limit_count; // 15/15分フォロー制限用のカウント
                 ++$day_follow_limit_count; // 1日395フォロー制限用のカウント
@@ -289,7 +277,7 @@ class Autofollow extends Command
                 Log::debug('    ');
     
                 // followsテーブルへ登録
-                $this->addFollowTable($auto_follow_run_user_item->id, $follow_target_id);
+                // $this->addFollowTable($auto_follow_run_user_item->id, $follow_target_id);
 
                 \Log::debug('フォローする間隔を3秒あける');
                 \Log::debug('    ');

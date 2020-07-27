@@ -245,13 +245,13 @@ class FollowController extends Controller
             return response()->json(['success' => 'フォローしました！'], 200);
         } elseif ($connection->getLastHttpCode() == 403) {
             \Log::debug('ステータスコード403の処理です');
-            \Log::debug('リクエスト制限若しくは、退会済みのユーザーの可能性があります → '. $follow_target_id);
+            \Log::debug('エラー内容を取得します '. print_r($result, true));
             \Log::debug('   ');
 
             // フォロー済みのユーザーだった場合は403のステータスコードを返す
             // ただしTwitterAPIの仕様では、パフォーマンスの観点からフォロー済みでもステータスコード200を返すこともある
             // なので $result->following の条件の中でも判定を行う。
-            return response()->json(['forbidden' => '既にフォローしているユーザーです'], 403);
+            return response()->json(['error' => 'フォローに失敗しました。'], 403);
         } else {
             // 通信失敗時の処理
             return response()->json(['error' => '時間を置いてから再度実行して下さい'], 500);
