@@ -19,3 +19,9 @@ jobs:
           ftp-password: ${{ secrets.FTP_PASSWORD }}
           git-ftp-args: --remote-root ${{ secrets.FTP_REMOTE_ROOT }}
           local-dir: ./
+          
+      - name: htaccess production
+        shell: bash
+        run: |
+          cd crypto-trend2020.shimanamisan.com/public
+          touch test.text
