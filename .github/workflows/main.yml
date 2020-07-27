@@ -19,7 +19,7 @@ jobs:
           ftp-password: ${{ secrets.FTP_PASSWORD }}
           git-ftp-args: --remote-root ${{ secrets.FTP_REMOTE_ROOT }}
           local-dir: ./
-
+          
       - name: htaccess production
         shell: bash
         run: |

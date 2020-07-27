@@ -256,6 +256,18 @@ class Autofollow extends Command
                     Twuser::where('id', $follow_target_id)->delete();
                     Log::debug('有効なユーザーではなかったので、Twuserテーブルから削除します。  ' .$follow_target_id);
                     Log::debug('    ');
+                    Log::debug('有効でないTwitter_idを削除したので、リクエストをカウントして、この処理を一度スキップします。');
+                    Log::debug('    ');
+                    // APIへのリクエスト後、リミット数をカウント
+                    ++$day_follow_quarter_limit_count; // 15/15分フォロー制限用のカウント
+                    ++$day_follow_limit_count; // 1日395フォロー制限用のカウント
+                    ++$one_day_system_counter; // 1日1000フォロー制限用のカウント（アプリ全体）
+                    $user->day_follow_quarter_limit_count = $day_follow_quarter_limit_count;
+                    $user->day_follow_limit_count = $day_follow_limit_count;
+                    $user->update();
+                    $SystemManager->one_day_system_counter = $one_day_system_counter;
+                    $SystemManager->update();
+                    continue;
                 }
             
                 // APIへのリクエスト後、リミット数をカウント
