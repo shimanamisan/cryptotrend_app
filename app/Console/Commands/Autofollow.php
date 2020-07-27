@@ -258,7 +258,7 @@ class Autofollow extends Command
                     Log::debug('    ');
                     Log::debug('有効でないTwitter_idを削除したので、リクエストをカウントして、この処理を一度スキップします。');
                     Log::debug('    ');
-                     // APIへのリクエスト後、リミット数をカウント
+                    // APIへのリクエスト後、リミット数をカウント
                     ++$day_follow_quarter_limit_count; // 15/15分フォロー制限用のカウント
                     ++$day_follow_limit_count; // 1日395フォロー制限用のカウント
                     ++$one_day_system_counter; // 1日1000フォロー制限用のカウント（アプリ全体）
