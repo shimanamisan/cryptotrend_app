@@ -23,5 +23,5 @@ jobs:
       - name: htaccess production
         shell: bash
         run: |
-          touch test.text
+          pwd
         working-directory: ./public
