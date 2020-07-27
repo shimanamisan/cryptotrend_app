@@ -140,7 +140,7 @@ class Autofollow extends Command
 
                 // 現在の時間を格納
                 $now_time = Carbon::now();
-                
+                dd($now_time);
                 // 全てフォローしてリストが空だったら処理を停止
                 if (empty($follow_target_list)) {
                     \Log::debug('フォローリストが空なので、このユーザーの処理を停止します。');
@@ -253,6 +253,7 @@ class Autofollow extends Command
                 // ものとみなして、DBに登録している twusersテーブルに登録している twitter_id (idカラム) を削除する
                 // 外部キーを設定しているので、followsテーブルからも削除される
                 if (!empty($result->errors[0]->code)) {
+                    dd($result);
                     Twuser::where('id', $follow_target_id)->delete();
                     Log::debug('有効なユーザーではなかったので、Twuserテーブルから削除します。  ' .$follow_target_id);
                     Log::debug('    ');

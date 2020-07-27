@@ -134,7 +134,7 @@ class TwitterAuthController extends Controller
                         if (!empty($follow_list_intersect)) {
                             // dd($userInfo->id);
                             foreach ($follow_list_intersect as $follow_user_id) {
-                                \Log::debug('DBと重複してるフォロー済みのユーザーをfollowsテーブルに登録しています  ユーザーID：'. $userInfo->id);
+                                \Log::debug('DBと重複してるフォロー済みのユーザーをfollowsテーブルに登録しています  TwitterID：'. $follow_user_id. '  UserID：'. $userInfo->id);
                                 \Log::debug('   ');
                                 Follow::updateOrCreate(
                                     ['user_id' => $userInfo->id, 'twuser_id' => $follow_user_id, 'delete_flg' => 0],
@@ -201,7 +201,7 @@ class TwitterAuthController extends Controller
                         // 重複しているユーザーがいれば、followsテーブルに登録する
                         if (!empty($follow_list_intersect)) {
                             foreach ($follow_list_intersect as $follow_user_id) {
-                                \Log::debug('DBと重複してるフォロー済みのユーザーをfollowsテーブルに登録しています  ユーザーID：'. $userInfo->id);
+                                \Log::debug('DBと重複してるフォロー済みのユーザーをfollowsテーブルに登録しています  TwitterID：'. $follow_user_id. '  UserID：'. $userInfo->id);
                                 Follow::updateOrCreate(
                                     ['user_id' => $userInfo->id, 'twuser_id' => $follow_user_id, 'delete_flg' => 0],
                                     [
