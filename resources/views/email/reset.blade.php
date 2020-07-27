@@ -20,7 +20,7 @@
 <p>
 *****************************************************<br>
 CryptoTrend カスタマーセンター<br>
-URL：http://host.cryptotrend/<br>
-Email：itsup-info@cryptotrend.com<br>
+URL：https://crypto-trend2020.shimanamisan.com<br>
+Email：cryptotrend-info@shimanamisan.com<br>
 *****************************************************<br>
 </p>
