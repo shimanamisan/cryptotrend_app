@@ -20,12 +20,8 @@ jobs:
           git-ftp-args: --remote-root ${{ secrets.FTP_REMOTE_ROOT }}
           local-dir: ./
           
-      - name: htaccess production
-        shell: bash
-        run: |
-          pwd
-          cp .htaccess .htaccess_dev
-          cp .htaccess_deploy .htaccess
-          cd ..
-          pwd
+      - name: Run htaccess.sh
+        run: | 
+          chmod 777 htaccess.sh
+          ./htaccess.sh
         working-directory: ./public
