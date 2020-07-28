@@ -275,6 +275,7 @@ class Autofollow extends Command
                     // followsテーブルへ登録
                     $this->addFollowTable($auto_follow_run_user_item->id, $follow_target_id);
                 } elseif ($result->errors[0]->code === 108) {
+                    // フォローした際のエラーコードが、Twitter上に存在しないユーザーという意味であれば、DBに登録しているユーザーを削除する
                     \Log::debug('Twitter上に存在しないユーザーです。Twitter_ID：'. $follow_target_id);
                     \Log::debug('エラー内容を取得します '. print_r($result, true));
                     \Log::debug('   ');
@@ -287,11 +288,11 @@ class Autofollow extends Command
                     \Log::debug('   ');
                     exit();
                 } else {
+                    // APIエラーが発生した場合は処理を停止する
                     \Log::debug('リクエスト時にエラーが発生しています。Twitter_ID：'. $follow_target_id);
-                    \Log::debug('エラー内容を取得します '. print_r($result, true));
+                    \Log::debug('エラー内容を取得して処理を停止します。 '. print_r($result, true));
                     \Log::debug('   ');
-                    \Log::debug('次のユーザーの処理に移行します。');
-                    break;
+                    exit();
                 }
 
                 \Log::debug('フォローする間隔を3秒あける');
