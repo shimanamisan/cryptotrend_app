@@ -23,9 +23,5 @@ jobs:
       - name: htaccess production
         shell: bash
         run: |
-          pwd
-          cp .htaccess .htaccess_dev
-          cp .htaccess_deploy .htaccess
-          cd ..
-          pwd
+          .htaccess.sh
         working-directory: ./public
