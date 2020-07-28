@@ -26,6 +26,7 @@
               name="name"
               value="{{ old('name') }}"
             />
+            <span class="p-form__info--pass">※30文字以内で入力して下さい</span>
             @error('name')
             <div class="c-error">
               {{ $message }}

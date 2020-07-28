@@ -29,6 +29,7 @@
                                 placeholder="your nicname"
                                 @focus="clearError('name')"
                             />
+                            <span class="p-form__info--pass">※30文字以内で入力して下さい</span>
                             <div v-if="errors_name" class="c-error">
                                 <ul v-if="errors_name">
                                     <li v-for="msg in errors_name" :key="msg">
