@@ -276,8 +276,8 @@ class Autofollow extends Command
                     \Log::debug('リクエスト時にエラーが発生しています。');
                     \Log::debug('エラー内容を取得します '. print_r($result, true));
                     \Log::debug('   ');
-                    \Log::debug('処理をスキップします。');
-                    continue;
+                    \Log::debug('30分待機します。。。');
+                    sleep(1800);
                 }
 
                 \Log::debug('フォローする間隔を3秒あける');
