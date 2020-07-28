@@ -143,18 +143,48 @@ class GetTwitterUsers extends Command
                             ++$newCounter;
                             \Log::debug("DBに存在していなかったユーザーです。新規ユーザーカウンター：{$newCounter}");
                             \Log::debug('    ');
-        
-                            $twitter_user = [
-                                'id' => $search_result_item->id,
-                                'user_name' => $search_result_item->name,
-                                'account_name' => $search_result_item->screen_name,
-                                'new_tweet' => $search_result_item->status->text,
-                                'description' => $search_result_item->description,
-                                'friends_count' => $search_result_item->friends_count,
-                                'followers_count' => $search_result_item->followers_count,
-                                'created_at' => Carbon::now(),
-                                'updated_at' => Carbon::now(),
-                            ];
+
+                            // description が191文字を超える場合はDBへ登録出来ないので、文字数をカウントして超えていた場合は
+                            // 文字数をカットする
+                            $text = $search_result_item->description;
+                            $text_count = mb_strlen($text);
+
+                            if ($text_count >= 191) {
+                                \Log::debug("descriptionの文字数が191文字を超えています。文字列を切り取ります。文字数：{$text_count}");
+                                \Log::debug('    ');
+                                $newDescription = mb_substr($text, 0, 190);
+
+                                $after_text = mb_strlen($newDescription);
+                                \Log::debug("切り取り後の文字数です：{$after_text}");
+                                \Log::debug('    ');
+                                
+                                $twitter_user = [
+                                    'id' => $search_result_item->id,
+                                    'user_name' => $search_result_item->name,
+                                    'account_name' => $search_result_item->screen_name,
+                                    'new_tweet' => $search_result_item->status->text,
+                                    'description' => $newDescription,
+                                    'friends_count' => $search_result_item->friends_count,
+                                    'followers_count' => $search_result_item->followers_count,
+                                    'created_at' => Carbon::now(),
+                                    'updated_at' => Carbon::now(),
+                                ];
+                            } else {
+                                \Log::debug('descriptionの文字数は超えていません。');
+                                \Log::debug('    ');
+                                $twitter_user = [
+                                    'id' => $search_result_item->id,
+                                    'user_name' => $search_result_item->name,
+                                    'account_name' => $search_result_item->screen_name,
+                                    'new_tweet' => $search_result_item->status->text,
+                                    'description' => $search_result_item->description,
+                                    'friends_count' => $search_result_item->friends_count,
+                                    'followers_count' => $search_result_item->followers_count,
+                                    'created_at' => Carbon::now(),
+                                    'updated_at' => Carbon::now(),
+                                ];
+                            }
+                           
                             $TwitterUser->insert($twitter_user);
                             \Log::debug('新規登録しました。新規登録したID：'. $search_user_id);
                             \Log::debug('    ');

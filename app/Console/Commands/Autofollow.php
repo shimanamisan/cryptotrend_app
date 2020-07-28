@@ -240,9 +240,9 @@ class Autofollow extends Command
                 }
                 // 15/15分制限以内か判定
                 if ($day_follow_quarter_limit_count >= self::AUTO_FOLLOW_QUARTER_LIMIT) {
-                    Log::debug('15/15分リクエスト制限を超えました。処理を停止して次のユーザーへ移行します。');
+                    Log::debug('15/15分リクエスト制限を超えました。処理を停止します。');
                     Log::debug('    ');
-                    break;
+                    exit();
                 }
                
                 /****************************************
@@ -276,8 +276,8 @@ class Autofollow extends Command
                     \Log::debug('リクエスト時にエラーが発生しています。');
                     \Log::debug('エラー内容を取得します '. print_r($result, true));
                     \Log::debug('   ');
-                    \Log::debug('30分待機します。。。');
-                    sleep(1800);
+                    \Log::debug('処理を停止します。');
+                    exit();
                 }
 
                 \Log::debug('フォローする間隔を3秒あける');
