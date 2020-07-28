@@ -295,6 +295,7 @@ class Autofollow extends Command
                     exit();
                 }
 
+
                 \Log::debug('フォローする間隔を3秒あける');
                 \Log::debug('    ');
                 sleep(3);
