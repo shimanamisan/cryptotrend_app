@@ -240,9 +240,10 @@ class Autofollow extends Command
                 }
                 // 15/15分制限以内か判定
                 if ($day_follow_quarter_limit_count >= self::AUTO_FOLLOW_QUARTER_LIMIT) {
-                    Log::debug('15/15分リクエスト制限を超えました。処理を停止します。');
+                    Log::debug('15/15分リクエスト制限を超えました。次のユーザーへ移行します。');
+                    // Log::debug('15/15分リクエスト制限を超えました。処理を停止します。');
                     Log::debug('    ');
-                    exit();
+                    break;
                 }
                
                 /****************************************
@@ -251,33 +252,46 @@ class Autofollow extends Command
                 $result = $connection->post('friendships/create', [
                             'user_id' => $follow_target_id
                             ]);
+
+                // APIへのリクエスト後、リミット数をカウント
+                ++$day_follow_quarter_limit_count; // 15/15分フォロー制限用のカウント
+                ++$day_follow_limit_count; // 1日395フォロー制限用のカウント
+                ++$one_day_system_counter; // 1日1000フォロー制限用のカウント（アプリ全体）
+                $user->day_follow_quarter_limit_count = $day_follow_quarter_limit_count;
+                $user->day_follow_limit_count = $day_follow_limit_count;
+                $user->update();
+                $SystemManager->one_day_system_counter = $one_day_system_counter;
+                $SystemManager->update();
+
+                Log::debug('15/15分フォロー制限用のカウント  ' .$day_follow_quarter_limit_count);
+                Log::debug('    ');
+                Log::debug('1日395フォロー制限用のカウント  ' .$day_follow_limit_count);
+                Log::debug('    ');
+                Log::debug('1日1000フォロー制限用のカウント（アプリ全体）  ' .$one_day_system_counter);
+                Log::debug('    ');
                 
                 // エラーハンドリング
                 if ($connection->getLastHttpCode() == 200) {
-                    // APIへのリクエスト後、リミット数をカウント
-                    ++$day_follow_quarter_limit_count; // 15/15分フォロー制限用のカウント
-                    ++$day_follow_limit_count; // 1日395フォロー制限用のカウント
-                    ++$one_day_system_counter; // 1日1000フォロー制限用のカウント（アプリ全体）
-                    $user->day_follow_quarter_limit_count = $day_follow_quarter_limit_count;
-                    $user->day_follow_limit_count = $day_follow_limit_count;
-                    $user->update();
-                    $SystemManager->one_day_system_counter = $one_day_system_counter;
-                    $SystemManager->update();
-
-                    Log::debug('15/15分フォロー制限用のカウント  ' .$day_follow_quarter_limit_count);
-                    Log::debug('    ');
-                    Log::debug('1日395フォロー制限用のカウント  ' .$day_follow_limit_count);
-                    Log::debug('    ');
-                    Log::debug('1日1000フォロー制限用のカウント（アプリ全体）  ' .$one_day_system_counter);
-                    Log::debug('    ');
                     // followsテーブルへ登録
                     $this->addFollowTable($auto_follow_run_user_item->id, $follow_target_id);
-                } else {
-                    \Log::debug('リクエスト時にエラーが発生しています。');
+                } elseif ($result->errors[0]->code === 108) {
+                    \Log::debug('Twitter上に存在しないユーザーです。Twitter_ID：'. $follow_target_id);
                     \Log::debug('エラー内容を取得します '. print_r($result, true));
                     \Log::debug('   ');
-                    \Log::debug('処理を停止します。');
+                    \Log::debug('存在しないユーザーをDB上から削除します');
+
+                    // Twitterから存在していないユーザーの情報をDBから削除する
+                    Twuser::where('id', $follow_target_id)->delete();
+
+                    \Log::debug('削除後、一度処理を停止します。');
+                    \Log::debug('   ');
                     exit();
+                } else {
+                    \Log::debug('リクエスト時にエラーが発生しています。Twitter_ID：'. $follow_target_id);
+                    \Log::debug('エラー内容を取得します '. print_r($result, true));
+                    \Log::debug('   ');
+                    \Log::debug('次のユーザーの処理に移行します。');
+                    break;
                 }
 
                 \Log::debug('フォローする間隔を3秒あける');
@@ -299,9 +313,11 @@ class Autofollow extends Command
     public function fetchFollowTarget($twitter_id, $connection)
     {
         // 15分毎15リクエストが上限です
+        
         $result = $connection->get('friends/ids', [
             'user_id' => $twitter_id
             ])->ids;
+        
         //\Log::debug('取得結果 : ' .print_r($result, true));
         return $result;
     }
