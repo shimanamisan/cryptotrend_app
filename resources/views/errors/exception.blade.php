@@ -8,9 +8,7 @@
 
 @php
 $status_code = $exception->getStatusCode();
-$message = $exception->getMessage();
 
-if (! $message) {
     switch ($status_code) {
         case 400:
             $message = 'Bad Request';
@@ -43,7 +41,7 @@ if (! $message) {
             $message = 'エラー';
             break;
     }
-}
+
 @endphp
 
 <div class="l-main l-main__common">
