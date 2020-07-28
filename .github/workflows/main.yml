@@ -23,5 +23,5 @@ jobs:
       - name: htaccess production
         shell: bash
         run: |
-          .htaccess.sh
+          htaccess.sh
         working-directory: ./public
