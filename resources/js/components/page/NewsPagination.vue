@@ -74,10 +74,6 @@ export default {
         getnewsItems() {
             let current = this.currentPage * this.parPage;
             let start = current - this.parPage;
-            console.log(
-                "カレントページ：" + current + "スタートページ：" + start
-            );
-
             return this.newsItems.slice(start, current);
         },
         getPageCount() {

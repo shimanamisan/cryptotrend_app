@@ -54,7 +54,6 @@ SPメニューを開閉するアクション
             let scroll = $(window).scrollTop();
             // 画面の高さを取得
             let windowHeight = $(window).height();
-            console.log(elementTop)
             if (scroll > elementTop - windowHeight) {
                 $(this).addClass("c-anime__fadein");
             }

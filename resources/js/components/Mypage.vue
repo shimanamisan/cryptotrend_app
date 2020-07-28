@@ -205,7 +205,6 @@ export default {
                 password: this.userDataForm.password,
                 password_confirmation: this.userDataForm.password_confirmation,
             });
-            // .catch((error) => error.response || error);
             if (response.status === OK) {
                 this.loadingActive();
                 this.userId = response.data.user.id;
@@ -214,6 +213,7 @@ export default {
                 this.userDataForm.password = "";
                 this.userDataForm.password_confirmation = "";
                 this.systemMessage = response.data.success;
+                this.isset_pass = true;
 
                 // フラッシュメッセージを表示
                 this.isShowMessage();
@@ -235,8 +235,7 @@ export default {
         },
         async deleteUser() {
             if (confirm("CryptoTrendを退会します。よろしいですか？")) {
-                const response = await axios
-                    .post("/mypage/delete")
+                const response = await axios.post("/mypage/delete");
                 // console.log(response);
                 if (response.status === OK) {
                     // 退会後ページを移動
