@@ -61,13 +61,13 @@
               ><span>パスワードをお忘れですか？</span></a
             >
           </form>
-          <hr class="u-line" />
+          <!-- <hr class="u-line" />
           <span class="u-line--or">または</span>
           <div class="u-wrapp">
          
               <a href="{{ route('twitter.login') }}" class="c-btn c-btn__twitter">Twitterでログイン</a>
         
-          </div>
+          </div> -->
         </div>
       </div>
     </main>

@@ -36,6 +36,15 @@
     &__text {
         font-size: 12px;
     }
+    &__form{
+        display: flex;
+        &__icon{
+            align-self: center;
+            width: 20px;
+            height: 20px;
+            margin-left: -28px;
+        }
+    }
     &__content {
         padding: 32px;
         position: relative;
@@ -96,14 +105,12 @@
         margin-bottom: 15px;
         font-weight: 600;
     }
-
     &__dlcontent {
         text-align: left;
         &--common {
             text-align: center;
         }
     }
-
     &__dlbtn {
         margin: 24px 0;
         font-weight: 600;

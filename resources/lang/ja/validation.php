@@ -165,5 +165,6 @@ return [
         'email' => 'メールアドレス',
         'password' => 'パスワード',
         'name' => 'ニックネーム',
+        'old_password' => '現在のパスワード'
     ],
 ];

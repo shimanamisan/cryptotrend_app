@@ -3,13 +3,7 @@
         <main class="l-main l-main__common">
             <Loading v-show="loading" />
             <h1 class="c-title c-title__mypage">マイページ</h1>
-            <transition name="fade">
-                <PasswordConfirmModal
-                    v-show="open"
-                    @close-event="isModalActive"
-                    ref="fromParent"
-                />
-            </transition>
+
             <div class="c-container__mypage u-margin__bottom--lg">
                 <transition name="flash">
                     <div class="u-msg__flash" v-show="flash_message_flg">
@@ -25,24 +19,19 @@
                         <div
                             class="p-mypage__content__body u-margin__bottom--m"
                         >
-                            <label for="name">ニックネーム
-                                <div>
-
-                                </div>
-                            <input
-                                id="name"
-                                class="c-form__input js-mypage-disabled-click"
-                                :class="{ 'c-error__input': errors_name }"
-                                type="text"
-                                v-model="userDataForm.name"
-                                placeholder="your nicname"
-                                @focus="clearError('name')"
-                                @click="isModalActive"
-                                :disabled="formActive_flg"
-                            />
-                            <div>
-
-                            </div>
+                            <label for="name"
+                                >ニックネーム
+                                <input
+                                    id="name"
+                                    class="c-form__input js-mypage-disabled-click"
+                                    :class="{
+                                        'c-error__input': errors_name,
+                                    }"
+                                    type="text"
+                                    v-model="userDataForm.name"
+                                    placeholder="your nicname"
+                                    @focus="clearError('name')"
+                                />
                             </label>
                             <span class="p-form__info--pass"
                                 >※30文字以内で入力して下さい</span
@@ -60,6 +49,7 @@
                             class="p-mypage__content__body u-margin__bottom--m"
                         >
                             <label for="email">メールアドレス</label>
+
                             <input
                                 id="email"
                                 class="c-form__input js-mypage-disabled-click"
@@ -68,12 +58,38 @@
                                 v-model="userDataForm.email"
                                 placeholder="email@example.com"
                                 @focus="clearError('email')"
-                                @click="isModalActive"
-                                :disabled="formActive_flg"
                             />
+
                             <div v-if="errors_email" class="c-error">
                                 <ul v-if="errors_email">
                                     <li v-for="msg in errors_email" :key="msg">
+                                        {{ msg }}
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div
+                            class="p-mypage__content__body u-margin__bottom--m"
+                        >
+                            <label for="old_password">現在のパスワード</label>
+                            <input
+                                id="old_password"
+                                class="c-form__input js-mypage-disabled-click"
+                                :class="{
+                                    'c-error__input': errors_old_password,
+                                }"
+                                type="password"
+                                v-model="userDataForm.old_password"
+                                placeholder="現在のパスワード"
+                                @focus="clearError('old_pass')"
+                            />
+                            <div v-if="errors_old_password" class="c-error">
+                                <ul v-if="errors_old_password">
+                                    <li
+                                        v-for="msg in errors_old_password"
+                                        :key="msg"
+                                    >
                                         {{ msg }}
                                     </li>
                                 </ul>
@@ -92,8 +108,6 @@
                                 v-model="userDataForm.password"
                                 placeholder="パスワード"
                                 @focus="clearError('pass')"
-                                @click="isModalActive"
-                                :disabled="formActive_flg"
                             />
                             <div v-if="errors_password" class="c-error">
                                 <ul v-if="errors_password">
@@ -105,15 +119,6 @@
                                     </li>
                                 </ul>
                             </div>
-                            <template v-if="!this.isset_pass">
-                                <span class="p-mypage__text"
-                                    >※半角英数で8文字以上ご使用下さい</span
-                                >
-                                <br />
-                                <span class="p-mypage__text"
-                                    >※パスワードを追加するとメールアドレスでログイン出来ます。Twitterアカウントでもログイン出来ます。</span
-                                >
-                            </template>
                         </div>
                         <div
                             class="p-mypage__content__body u-margin__bottom--m"
@@ -127,8 +132,6 @@
                                 type="password"
                                 placeholder="パスワードの確認"
                                 v-model="userDataForm.password_confirmation"
-                                @click="isModalActive"
-                                :disabled="formActive_flg"
                             />
 
                             <div class="p-mypage__content--inwrap">
@@ -174,13 +177,11 @@
 
 <script>
 import Loading from "./module/Loading";
-import PasswordConfirmModal from "./module/PasswordConfirmModal";
 import { OK, UNPROCESSABLE_ENTITY, INTERNAL_SERVER_ERROR } from "./../util";
 
 export default {
     components: {
         Loading,
-        PasswordConfirmModal,
     },
     data() {
         return {
@@ -189,22 +190,21 @@ export default {
             userDataForm: {
                 name: this.user,
                 email: this.email,
+                old_password: this.old_password,
                 password: this.password,
                 password_confirmation: this.password_confirmation,
             },
             errors_name: "", // バリデーションメッセージを格納する
             errors_email: "", // バリデーションメッセージを格納する
+            errors_old_password: "", // バリデーションメッセージを格納する
             errors_password: "", // バリデーションメッセージを格納する
             systemMessage: "", // エラーメッセージ全般を格納する
-            isset_pass: false, // パスワードが登録されているユーザーか判定するフラグ
             flash_message_flg: false, // 登録後のメッセージ表示フラグ
             checkPassword: false, // 既存パスワードの確認が完了しているか判定するフラグ
             loading: false, // 非同期通信時ローディングを表示する
             sbumit_flg: true, // 送信ボタンを活性化・非活性化させるための判定用フラグ
             formActive_flg: true, // 既存パスワードの確認が出来ていないと、フォームを活性化させない
             open: false, // モーダル表示用フラグ
-            close_key: "/public/images/svg/mypage_close_key.svg",
-            open_key: "/public/images/svg/mypage_open_key.svg"
         };
     },
     computed: {},
@@ -214,9 +214,7 @@ export default {
             this.flash_message_flg = !this.flash_message_flg;
         },
         // モーダルを表示・非表示させる
-        isModalActive(event) { 
-
-            
+        isModalActive(event) {
             this.open = !this.open;
             // モーダル開閉時に、背景をスクロール出来ないように固定する
             let $jsBg = document.getElementById("js-bg");
@@ -225,14 +223,10 @@ export default {
         // ユーザー情報を取得する
         async getUserData() {
             const response = await axios.get("/mypage/user");
-            // .catch((error) => error.response || error);
-            // console.log(response.data);
             if (response.status === OK) {
                 this.userId = response.data.id;
                 this.userDataForm.name = response.data.name;
                 this.userDataForm.email = response.data.email;
-                this.userDataForm.password = response.data.password;
-                this.isset_pass = response.data.isset_pass;
             } else {
                 alert("エラーが発生しました。しばらくお待ち下さい");
             }
@@ -244,6 +238,7 @@ export default {
                 id: this.userId,
                 name: this.userDataForm.name,
                 email: this.userDataForm.email,
+                old_password: this.userDataForm.old_password,
                 password: this.userDataForm.password,
                 password_confirmation: this.userDataForm.password_confirmation,
             });
@@ -252,10 +247,10 @@ export default {
                 this.userId = response.data.user.id;
                 this.userDataForm.name = response.data.user.name;
                 this.userDataForm.email = response.data.user.email;
+                this.userDataForm.old_password = "";
                 this.userDataForm.password = "";
                 this.userDataForm.password_confirmation = "";
                 this.systemMessage = response.data.success;
-                this.isset_pass = true;
 
                 // フラッシュメッセージを表示
                 this.isShowMessage();
@@ -265,6 +260,7 @@ export default {
                 this.loadingActive();
                 this.errors_name = response.data.errors.name;
                 this.errors_email = response.data.errors.email;
+                this.errors_old_password = response.data.errors.old_password;
                 this.errors_password = response.data.errors.password;
             } else {
                 // 何か予期せぬErrorが発生したとき(500エラーなど)
@@ -294,6 +290,7 @@ export default {
             this.errors = "";
             this.userDataForm.name = "";
             this.userDataForm.email = "";
+            this.userDataForm.old_password = "";
             this.userDataForm.password = "";
             this.userDataForm.password_confirmation = "";
         },
@@ -303,6 +300,8 @@ export default {
                 this.errors_nicname = "";
             } else if (value === "email") {
                 this.errors_email = "";
+            } else if (value === "old_pass") {
+                this.errors_old_password = "";
             } else if (value === "pass") {
                 this.errors_password = "";
             }
@@ -320,6 +319,8 @@ export default {
                     val.name !== undefined &&
                     val.email !== "" &&
                     val.email !== undefined &&
+                    val.old_password !== "" &&
+                    val.old_password !== undefined &&
                     val.password !== "" &&
                     val.password !== undefined &&
                     val.password_confirmation !== "" &&

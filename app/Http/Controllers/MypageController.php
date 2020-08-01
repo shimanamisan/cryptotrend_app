@@ -26,15 +26,8 @@ class MypageController extends Controller
         // Ajax処理でユーザー情報を取得
         $user = Auth::user();
 
-        // SNS登録後でパスワードが空だった場合
-        if (empty($user->password)) {
-            return $user;
-        } else {
-
-            // 登録されていた場合のプロパティを追加する
-            $user['isset_pass'] = true;
-            return $user;
-        }
+        // ログイン中のユーザー情報を返す
+        return $user;
     }
     // ユーザーデータの更新処理
     public function storUserData(MypageRequest $request)
@@ -43,6 +36,7 @@ class MypageController extends Controller
             $user = Auth::user();
             
             $data = $request->all();
+
             // ニックネームが変更されていた場合
             if ($user->name !== $data['name']) {
                 $user->name = $data['name'];
@@ -58,42 +52,43 @@ class MypageController extends Controller
                 \Log::debug('メールアドレスを更新しました');
                 \Log::debug('   ');
             }
-
-            // パスワードが新規登録の場合
-            if (empty($user->password)) {
             
-            // リクエストフォームから受け取ったパスワードをハッシュ化
+            // 現在のパスワードをチェック
+            if (!(Hash::check($request->get('old_password'), Auth::user()->password))) {
+                \Log::debug('現在のパスワードが違います');
+                \Log::debug('   ');
+                
+                $errors = ['errors' =>
+                    ['old_password' =>
+                        ['現在のパスワードが違います。']
+                    ]
+                ];
+                // ステータスコードとエラーメッセージを返す
+                return response()->json($errors, 422);
+            }
+
+            // パスワード更新時の処理
+            // DBに登録されているハッシュ化されたパスワードと入力されたパスワードが一致するか確認
+            if (Hash::check($request->password, $user->password)) { // 第一引数にプレーンパスワード、第二引数にハッシュ化されたパスワード
+                // パスワードがDBのものと同じ場合は、違うパスワードを設定するようにメッセージを出す。
+                \Log::debug('登録されているパスワードと同じでした。');
+                \Log::debug('   ');
+
+                $errors = ['errors' =>
+                    ['password' =>
+                        ['前回と違うパスワードを設定して下さい。']
+                    ]
+                ];
+                // ステータスコードとエラーメッセージを返す
+                return response()->json($errors, 422);
+            } else {
+                // DBと違っていればパスワードを更新する
+                // リクエストフォームから受け取ったパスワードをハッシュ化
                 $newPass = Hash::make($request->password);
                 $user->password = $newPass;
                 $user->save();
-
-                \Log::debug('パスワードを新規登録しました。');
+                \Log::debug('パスワードを更新しました');
                 \Log::debug('   ');
-            } else {
-
-                // パスワード更新時の処理
-                // DBに登録されているハッシュ化されたパスワードと入力されたパスワードが一致するか確認
-                if (Hash::check($request->password, $user->password)) { // 第一引数にプレーンパスワード、第二引数にハッシュ化されたパスワード
-                    // パスワードがDBのものと同じ場合は、違うパスワードを設定するようにメッセージを出す。
-                    \Log::debug('登録されているパスワードと同じでした。');
-                    \Log::debug('   ');
-
-                    $errors = ['errors' =>
-                        ['password' =>
-                            ['前回と違うパスワードを設定して下さい。']
-                        ]
-                    ];
-                    // ステータスコードとエラーメッセージを返す
-                    return response()->json($errors, 422);
-                } else {
-                    // DBと違っていればパスワードを更新する
-                    // リクエストフォームから受け取ったパスワードをハッシュ化
-                    $newPass = Hash::make($request->password);
-                    $user->password = $newPass;
-                    $user->save();
-                    \Log::debug('パスワードを更新しました');
-                    \Log::debug('   ');
-                }
             }
         } catch (\Exception $e) {
             \Log::debug('アカウント情報変更時に例外が発生しました。' .$e->getMessage());

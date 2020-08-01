@@ -65,7 +65,7 @@
               name="password_confirmation"
              
             />
-            <div class="u-wrapp">
+            <div class="u-wrapp u-margin__top--xl">
               <button
                 class="c-btn c-btn__auth"
                 type="submit"
@@ -73,11 +73,11 @@
             </button>
             </div>
           </form>
-          <hr class="u-line" />
+          <!-- <hr class="u-line" />
           <span class="u-line--or">または</span>
           <div class="u-wrapp">
               <a href="{{ route('twitter.register') }}" class="c-btn c-btn__twitter">Twitterで新規登録</a>
-          </div>
+          </div> -->
  
         </div>
       </div>

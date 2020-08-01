@@ -2,6 +2,8 @@
 
 namespace App\Http\Requests;
 
+use Illuminate\Support\Facades\Auth; // ★追加
+use Illuminate\Support\Facades\Hash; // ★追加
 use Illuminate\Foundation\Http\FormRequest;
 
 class MypageRequest extends FormRequest
@@ -26,6 +28,7 @@ class MypageRequest extends FormRequest
         return [
             'name' => 'required|max:30',
             'email' => 'required|string|email',
+            'old_password' => 'required|string|min:8|max:100|regex:/^[a-zA-Z0-9]+$/',
             'password' => 'required|string|confirmed|min:8|max:100|regex:/^[a-zA-Z0-9]+$/'
         ];
     }
