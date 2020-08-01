@@ -9,7 +9,7 @@
             </div>
         </transition>
         <transition name="fade">
-            <Modal
+            <AutoFollowChangeModal
                 v-show="open"
                 @close-event="isModalActive"
                 @autofollow-event="sendAutoFollowRequest"
@@ -115,14 +115,14 @@
 <script>
 import Vue from "vue";
 import Paginate from "vuejs-paginate";
-import Modal from "../module/Modal";
+import AutoFollowChangeModal from "../module/AutoFollowChangeModal";
 import Loading from "../module/Loading";
 import { OK, UNPROCESSABLE_ENTITY, INTERNAL_SERVER_ERROR } from "./../../util"; // http通信のステータスコードの定数を読み込み
 export default {
     props: ["follow_list", "total_page", "user"],
     components: {
         Paginate,
-        Modal,
+        AutoFollowChangeModal,
         Loading,
     },
     data() {
@@ -130,12 +130,11 @@ export default {
             totalPage: this.total_page,
             parPage: "",
             currentPage: 1,
-            // 登録後のメッセージ表示フラグ
-            flash_message_flg: false,
+            flash_message_flg: false, // 登録後のメッセージ表示フラグ
             systemMessage: "",
             autoFollow_flg: this.user.autofollow_status, // 自動フォロー中のフラグ(ユーザー情報より取得)
             followcounter: 0, // DBに保存されているユーザーを何人フォローしているかカウント
-            open: false,
+            open: false, // モーダル表示用フラグ
             loading: false, // 非同期通信時ローディングを表示する
             isFollowActive: true, // 自動フォロー有効時はフォローボタンを非活性化する
         };
@@ -177,7 +176,7 @@ export default {
                 status: this.autoFollow_flg,
             });
             if (response.status === OK) {
-                if (this.autoFollow_flg == 0) {
+                if (this.autoFollow_flg === 0) {
                     this.autoFollow_flg = 1;
                 } else {
                     this.autoFollow_flg = 0;

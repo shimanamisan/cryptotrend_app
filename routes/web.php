@@ -13,13 +13,8 @@ use Illuminate\Support\Facades\Auth;
 |
 */
 
-// 認証系のルーティングそれに対応するコントローラがまとまっている
-// Illuminate\Routing\Routerクラスのauth()メソッドにルーティングが記述されている
- // email認証の機能を有効化
-
 // トップページのページの表示
 Route::get('/', 'IndexController@home')->name('home');
-
 
 // Twitter経由でのログインを行う為のURI
 Route::get('login/twitter', 'Auth\TwitterAuthController@getTwitterLogin')->name('twitter.login');
@@ -29,11 +24,6 @@ Route::get('register/twitter', 'Auth\TwitterAuthController@getTwitterRegister')-
 Route::get('auth/twitter/callback', 'Auth\TwitterAuthController@getTwitterCallback');
 // ログアウト
 Route::post('/logout', 'Auth\LoginController@logout')->name('logout');
-
-// // お問い合わせページの表示
-// Route::get('/contact', 'IndexController@contact')->name('contact.index');
-// // お問い合わせ内容の送信
-// Route::post('/contact/confirm', 'IndexController@confirm')->name('contact.confirm');
 
 Auth::routes();
 
@@ -80,7 +70,3 @@ Route::group(['middleware' => 'auth'], function () {
     // Ajax処理：退会処理
     Route::post('/mypage/delete', 'MypageController@delete');
 });
-
-// 開発時テスト用ルーティング
-// Route::get('/applimit', 'TestController@applimit'); // アプリケーション認証のAPI制限のカウント数の一覧を取得する
-// Route::get('/userlimit', 'TestController@userlimit'); // ログインしているユーザーのAPI制限のカウント数の一覧を取得する

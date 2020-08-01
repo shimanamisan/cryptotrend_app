@@ -327,7 +327,6 @@ class TwitterAuthController extends Controller
     // DBからTwitterユーザー情報を取得する
     public function getTwitterUser()
     {
-
         // DBより仮想通貨関連のアカウントを取得
         $dbresult = Twuser::all();
         // dd($dbresult);

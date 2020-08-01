@@ -105,8 +105,6 @@ class GetCoinsTweet extends Command
 
             // ツイートを取得してく
             for ($k = 0; $k < self::SEARCH_REQUEST_LIMIT; $k++) {
-                // for($k = 0; $k < self::SEARCH_REQUEST_LIMIT; $k++){
-            
                 try {
                     // アプリケーション認証
                     $connection = $this->twitterOauth2();
@@ -138,7 +136,6 @@ class GetCoinsTweet extends Command
                 \Log::debug('リクエスト数をカウントしています：'. $search_request_limit_count .' 回');
     
                 // オブジェクトを配列に変換
-                // $result_arr = (array)$response_result;
                 $result_arr = json_decode(json_encode($response_result), true);
     
                 // ツイート本文を抽出

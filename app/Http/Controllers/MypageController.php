@@ -39,7 +39,6 @@ class MypageController extends Controller
     // ユーザーデータの更新処理
     public function storUserData(MypageRequest $request)
     {
-        // $user = User::where('id', $request->id)->where('delete_flg', 0)->first();
         try {
             $user = Auth::user();
             
@@ -79,14 +78,13 @@ class MypageController extends Controller
                     \Log::debug('登録されているパスワードと同じでした。');
                     \Log::debug('   ');
 
-                        $errors = ['errors' => 
-                        ['password' => 
+                    $errors = ['errors' =>
+                        ['password' =>
                             ['前回と違うパスワードを設定して下さい。']
                         ]
                     ];
                     // ステータスコードとエラーメッセージを返す
                     return response()->json($errors, 422);
-
                 } else {
                     // DBと違っていればパスワードを更新する
                     // リクエストフォームから受け取ったパスワードをハッシュ化

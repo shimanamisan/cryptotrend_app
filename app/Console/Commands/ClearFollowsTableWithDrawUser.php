@@ -13,7 +13,6 @@ class ClearFollowsTableWithDrawUser extends Command
      * @var string
      */
     protected $signature = 'command:clearwithdraw';
-    // protected $signature = 'command:clearwithdraw {user_id}';
 
     /**
      * The console command description.

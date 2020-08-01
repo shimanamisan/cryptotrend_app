@@ -1,13 +1,11 @@
 .p-header {
     color: #fff;
-
     &--isActive {
         opacity: 1;
         transition: all 0.5s;
         transform: translateX(-100%);
         z-index: 2;
     }
-
     &__logo {
         width: 220px;
         height: 100%;
@@ -22,7 +20,6 @@
     }
     &__nav {
         display: block;
-
         &__sp {
             @include sm() {
                 display: block;
@@ -46,7 +43,6 @@
         @include sm() {
             display: block;
         }
-
         &--sub {
             justify-content: space-around;
         }
@@ -76,7 +72,6 @@
             }
         }
     }
-
     // スマホ用SPメニュー
     &__burger {
         display: none;

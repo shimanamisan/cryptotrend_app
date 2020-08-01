@@ -7,7 +7,6 @@ $breackpoints: (
     "md": "screen and (max-width: 768px)",
     "lg": "screen and (max-width: 1024px)",
 ) !default;
-
 @mixin ss($breackpoint: ss) {
     @media #{map-get($breackpoints, $breackpoint)} {
         @content;
@@ -28,13 +27,9 @@ $breackpoints: (
         @content;
     }
 }
-
 @mixin custumRadius($value: 3px) {
-    // -moz-border-radius: $value;
-    // -webkit-border-radius: $value;
     border-radius: $value;
 }
-
 @mixin custumShadow(
     $h: 0px,
     $v: 4px,
@@ -42,7 +37,5 @@ $breackpoints: (
     $s: 0px,
     $color: rgba(155, 155, 155, 0.2)
 ) {
-    // -moz-box-shadow: $h $v $b $s $color;
-    // -webkit-box-shadow: $h $v $b $s $color;
     box-shadow: $h $v $b $s $color;
 }

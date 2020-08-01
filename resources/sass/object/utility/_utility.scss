@@ -1,121 +1,116 @@
 .u-line {
-  margin-top: 32px;
-  margin-bottom: 32px;
-  border-top: 1px solid #707070;
-  @include sm(){
-    width: 90%;
-  }
-
-  &--or {
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-    margin-top: -44px;
-    width: 70px;
-    text-align: center;
-    background-color: $font-color_primary;
-  }
+    margin-top: 32px;
+    margin-bottom: 32px;
+    border-top: 1px solid #707070;
+    @include sm() {
+        width: 90%;
+    }
+    &--or {
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        margin-top: -44px;
+        width: 70px;
+        text-align: center;
+        background-color: $font-color_primary;
+    }
 }
-
 .u-wrapp {
-  text-align: center;
-  margin-top: 30px;
+    text-align: center;
+    margin-top: 30px;
 }
-
 .u-margin {
-  &__top {
-    &--ss {
-      margin-top: 8px;
+    &__top {
+        &--ss {
+            margin-top: 8px;
+        }
+        &--s {
+            margin-top: 16px;
+        }
+        &--m {
+            margin-top: 24px;
+        }
+        &--l {
+            margin-top: 32px;
+        }
+        &--xl {
+            margin-top: 40px;
+        }
+        &--lg {
+            margin-top: 48px;
+        }
     }
-    &--s {
-      margin-top: 16px;
+    &__bottom {
+        &--ss {
+            margin-bottom: 8px;
+        }
+        &--s {
+            margin-bottom: 16px;
+        }
+        &--m {
+            margin-bottom: 24px;
+        }
+        &--l {
+            margin-bottom: 32px;
+        }
+        &--xl {
+            margin-bottom: 40px;
+        }
+        &--lg {
+            margin-bottom: 48px;
+        }
+        &--G {
+            margin-bottom: 80px;
+            @include sm() {
+                margin-bottom: 48px;
+            }
+        }
     }
-    &--m {
-      margin-top: 24px;
-    }
-    &--l {
-      margin-top: 32px;
-    }
-    &--xl {
-      margin-top: 40px;
-    }
-    &--lg {
-      margin-top: 48px;
-    }
-  }
-
-  &__bottom {
-    &--ss {
-      margin-bottom: 8px;
-    }
-    &--s {
-      margin-bottom: 16px;
-    }
-    &--m {
-      margin-bottom: 24px;
-    }
-    &--l {
-      margin-bottom: 32px;
-    }
-    &--xl {
-      margin-bottom: 40px;
-    }
-    &--lg {
-      margin-bottom: 48px;
-    }
-    &--G{
-      margin-bottom: 80px;
-      @include sm(){
-        margin-bottom: 48px;
-      }
-    }
-  }
 }
 
 .u-msg {
-  &__system {
-    padding: 32px;
-    background-color: #62abf8;
-    color: #fff;
-    position: fixed;
-    text-align: center;
-    z-index: 5;
-    width: 100%;
-    top: 0;
-    @include sm(){
-      width: auto;
-      padding: 8px;
-      font-size: 24px;
+    &__system {
+        padding: 32px;
+        background-color: #62abf8;
+        color: #fff;
+        position: fixed;
+        text-align: center;
+        z-index: 5;
+        width: 100%;
+        top: 0;
+        @include sm() {
+            width: auto;
+            padding: 8px;
+            font-size: 24px;
+        }
+        &--active {
+            transform: translateX(-150%);
+            transition: all 0.5s;
+            z-index: 2;
+        }
     }
-    &--active {
-      transform: translateX(-150%);
-      transition: all 0.5s;
-      z-index: 2;
+    &__flash {
+        @include custumRadius(5px);
+        padding: 30px;
+        background-color: #62abf8;
+        color: #fff;
+        position: fixed;
+        z-index: 5;
+        top: 20%;
+        right: 5%;
+        @include sm() {
+            padding: 16px;
+            top: 8%;
+        }
     }
-  }
-
-  &__flash {
-    @include custumRadius(5px);
-    padding: 30px;
-    background-color: #62abf8;
-    color: #fff;
-    position: fixed;
-    z-index: 5;
-    top: 20%;
-    right: 5%;
-    @include sm(){
-      padding: 16px;
-      top: 8%;
-    }
-  }
 }
 
 .flash-enter-active,
 .flash-leave-active {
-  transition: all 0.6s ease;
+    transition: all 0.6s ease;
 }
 .flash-enter,
 .flash-leave-to {
-  opacity: 0;
-  transform: translateX(50px);
+    opacity: 0;
+    transform: translateX(50px);
 }

@@ -17,8 +17,6 @@ class NewsController extends Controller
         Log::debug('====== Google APIからニュースを取得しています ======');
         // $keyword:キーワード検索の文言
         $keyword = '仮想通貨';
-        // $mux_num:取得する記事の上限
-        // $max_num = 100;
 
         // この処理の最大実行時間を指定する。デフォルトは30秒。
         set_time_limit(90);
@@ -34,10 +32,6 @@ class NewsController extends Controller
             // hl,cied,glパラメータで言語の指定を行っている
             "&hl=ja&gl=JP&ceid=JP:ja";
 
-        // APIにアクセス
-        // $contents = file_get_contents($API_BASE_URL);
-        // $xml = simplexml_load_string($contents);
-
         $items = simplexml_load_file($API_BASE_URL)->channel->item;
 
         //記事のタイトルとURLを取り出して配列に格納
@@ -47,7 +41,6 @@ class NewsController extends Controller
                 "UTF-8",
                 "auto"
             );
-            // $url_split = explode("=", (string) $items[$i]->link);
             $list[$i]['url'] = mb_convert_encoding(
                 $items[$i]->link,
                 "UTF-8",

@@ -1,6 +1,5 @@
 .c-container {
     height: auto;
-
     &--common {
         @include custumShadow();
         @include custumRadius(5px);
@@ -24,7 +23,6 @@
             padding: 32px 16px;
         }
     }
-
     // トップページ用のスタイル
     &__index {
         width: 80%;
@@ -42,7 +40,6 @@
             background-color: #fff;
         }
     }
-
     // プロフィール用レイアウト
     &__mypage {
         position: relative;
@@ -59,7 +56,6 @@
             width: 100%;
         }
     }
-
     // トレンド表示画面用レイアウト
     &__coin {
         width: 1200px;
@@ -69,7 +65,7 @@
             width: 100%;
         }
     }
-
+    // 仮想通貨ニュース表示画面用レイアウト
     &__news {
         width: 1200px;
         margin: 0 auto;
@@ -80,7 +76,7 @@
             display: block;
         }
     }
-
+    // 関連Twitterユーザー表示画面用レイアウト
     &__twusr {
         width: 1200px;
         margin: 0 auto;
@@ -89,7 +85,7 @@
             width: 100%;
         }
     }
-
+    // エラーページ表示画面用レイアウト
     &__exception{
         text-align: center;
         font-size: 2.3rem;

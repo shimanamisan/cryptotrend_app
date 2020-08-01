@@ -2,14 +2,12 @@
     width: 100%;
     height: auto;
     box-sizing: border-box;
-
     &__section {
         @include sm() {
             padding-left: 12px;
             padding-right: 12px;
         }
     }
-
     &__common {
         padding-top: 70px;
         padding-bottom: 60px;
@@ -17,7 +15,6 @@
             padding: 48px 12px;
         }
     }
-
     &__auth {
         padding-top: 72px;
         padding-bottom: 40px;

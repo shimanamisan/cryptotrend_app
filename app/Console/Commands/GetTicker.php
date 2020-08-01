@@ -39,6 +39,7 @@ class GetTicker extends Command
     public function handle(Coin $coin)
     {
         \Log::debug('ビットコインの取引価格を取得するバッチ処理が実行されています');
+        \Log::debug('    ');
         // 現在はビットコインのみ24時間の取引価格を取得
         $result = file_get_contents('https://coincheck.com/api/ticker');
 

@@ -6,26 +6,22 @@
     @include sm() {
         width: 100%;
     }
-
     &__distable {
         display: none;
     }
-
     &__link {
         padding: 10px 15px;
         display: block;
-        &:focus{
+        &:focus {
             outline: none;
         }
     }
-
     &__item {
         background-color: #ffff;
         @include custumRadius();
         margin-left: 12px;
         position: relative;
         overflow: hidden;
- 
         @include sm() {
             display: none;
         }

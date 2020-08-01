@@ -46,16 +46,12 @@ class ResetPasswordController extends Controller
         event(new PasswordReset($user));
 
         \Log::debug('パスワードを変更しました。ログイン画面へ遷移します');
-
-        return $user;
+        \Log::debug('   ');
 
         // ResetsPasswordsトレイにはこの後にguardメソッドでログインするようになっていたが
         // ログインさせずにログイン画面へ遷移させるようにする
 
-        // ここでログインするようになっているのでコメントアウトしておく
-        // $this->guard()->login($user) 
-
-        // このあとの条件で、sendResetResponseメソッドか、sendResetFailedResponseメソッドが呼ばれる
+        return $user;
     }
 
     // パスワード変更時にフラッシュメッセージを出力するようにセッションの名前を変更

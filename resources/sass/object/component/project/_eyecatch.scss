@@ -39,7 +39,6 @@
                 margin-left: 0px;
             }
         }
-
         &--text {
             line-height: 50px;
             @include sm() {
@@ -55,7 +54,6 @@
     }
     &__footer {
         background-image: url(../images/footer_eyecatch.png);
-
         &--title {
             text-align: center;
             font-size: 64px;
@@ -66,7 +64,6 @@
                 padding-top: 130px;
             }
         }
-
         &--signup {
             margin-top: 24px;
             text-align: center;

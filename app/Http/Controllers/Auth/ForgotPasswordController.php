@@ -29,12 +29,9 @@ class ForgotPasswordController extends Controller
     // **************************************************************/
     public function sendResetLinkEmail(Request $request)
     {
-        // 既存のコードをカスタマイズ
-        // $this->validateEmail($request);
-
         // emailを検索してきたときに空だった場合に、未登録及び退会済ユーザーは
         // バリデーションに引っかかるようにする
-        $this->validator($request->all())->validate();   
+        $this->validator($request->all())->validate();
         
         $response = $this->broker()->sendResetLink($request->only('email'));
 

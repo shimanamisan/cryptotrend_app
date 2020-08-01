@@ -61,6 +61,7 @@ class RegisterController extends Controller
     {
         // カスタムエラーメッセージ
         $message = [
+            'email.unique' => 'このメールアドレスは登録できません。',
             'regex' => '半角英数のみご利用いただけます。',
             'confirmed' => ':attributeと、:attribute再入力が一致していません。',
         ];

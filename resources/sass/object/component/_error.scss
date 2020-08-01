@@ -1,7 +1,6 @@
 .c-error {
     color: red;
     font-size: 12px;
-
     &__input {
         background: #ffe1df;
         border-color: #ff6366;
@@ -10,7 +9,6 @@
             border-color: #ff6366;
         }
     }
-
     &__authflash {
         @include custumRadius(5px);
         padding: 12px 16px;

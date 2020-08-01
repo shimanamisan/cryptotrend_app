@@ -241,7 +241,6 @@ class Autofollow extends Command
                 // 15/15分制限以内か判定
                 if ($day_follow_quarter_limit_count >= self::AUTO_FOLLOW_QUARTER_LIMIT) {
                     Log::debug('15/15分リクエスト制限を超えました。次のユーザーへ移行します。');
-                    // Log::debug('15/15分リクエスト制限を超えました。処理を停止します。');
                     Log::debug('    ');
                     break;
                 }
@@ -315,12 +314,10 @@ class Autofollow extends Command
     public function fetchFollowTarget($twitter_id, $connection)
     {
         // 15分毎15リクエストが上限です
-        
         $result = $connection->get('friends/ids', [
             'user_id' => $twitter_id
             ])->ids;
         
-        //\Log::debug('取得結果 : ' .print_r($result, true));
         return $result;
     }
 

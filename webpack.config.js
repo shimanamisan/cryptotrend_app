@@ -32,7 +32,6 @@ module.exports = {
     // vagrantの共有フォルダからコードを書いているのでサーバ側のように/resourcesで始まるとディレクトリが見つからずエラーになる
     // babel-loader8 でasync/awaitを動作させるためには、@babel/polyfillが必要
     entry: ["@babel/polyfill", mydir + "/resources/js/app.js"],
-    // entry: `${__dirname}/resources/js/app.js`,
     output: {
         // 出力ファイル名
         filename: "app.js",

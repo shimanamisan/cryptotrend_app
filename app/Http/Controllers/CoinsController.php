@@ -10,14 +10,8 @@ use Abraham\TwitterOAuth\TwitterOAuth; // ★追記
 use Abraham\TwitterOAuth\TwitterOAuthException; // ★追記
 use Laravel\Socialite\Facades\Socialite; // 追加
 
-
 class CoinsController extends Controller
 {
-    // search/tweetsのリクエストの上限は、15分毎450回（アプリケーション認証時）
-    const SEARCH_REQUEST_LIMIT = 450;
-    // 
-    const REQUEST_LIMIT＿MINUTES = 15;
-
     public function __construct()
     {
         $this->middleware('auth');
@@ -34,8 +28,6 @@ class CoinsController extends Controller
         $coins = DB::table('coins')
         ->join('hours', 'coins.id', '=', 'hours.coin_id')
         ->get();
-
-        // dd($coins);
 
         return $coins;
     }
@@ -57,6 +49,4 @@ class CoinsController extends Controller
 
         return $coins;
     }
-
 }
-

@@ -3,7 +3,13 @@
         <main class="l-main l-main__common">
             <Loading v-show="loading" />
             <h1 class="c-title c-title__mypage">マイページ</h1>
-
+            <transition name="fade">
+                <PasswordConfirmModal
+                    v-show="open"
+                    @close-event="isModalActive"
+                    ref="fromParent"
+                />
+            </transition>
             <div class="c-container__mypage u-margin__bottom--lg">
                 <transition name="flash">
                     <div class="u-msg__flash" v-show="flash_message_flg">
@@ -19,17 +25,28 @@
                         <div
                             class="p-mypage__content__body u-margin__bottom--m"
                         >
-                            <label for="name">ニックネーム</label>
+                            <label for="name">ニックネーム
+                                <div>
+
+                                </div>
                             <input
-                                class="c-form__input"
+                                id="name"
+                                class="c-form__input js-mypage-disabled-click"
                                 :class="{ 'c-error__input': errors_name }"
                                 type="text"
-                                name="name"
                                 v-model="userDataForm.name"
                                 placeholder="your nicname"
                                 @focus="clearError('name')"
+                                @click="isModalActive"
+                                :disabled="formActive_flg"
                             />
-                            <span class="p-form__info--pass">※30文字以内で入力して下さい</span>
+                            <div>
+
+                            </div>
+                            </label>
+                            <span class="p-form__info--pass"
+                                >※30文字以内で入力して下さい</span
+                            >
                             <div v-if="errors_name" class="c-error">
                                 <ul v-if="errors_name">
                                     <li v-for="msg in errors_name" :key="msg">
@@ -42,14 +59,17 @@
                         <div
                             class="p-mypage__content__body u-margin__bottom--m"
                         >
-                            <label for>メールアドレス</label>
+                            <label for="email">メールアドレス</label>
                             <input
-                                class="c-form__input"
+                                id="email"
+                                class="c-form__input js-mypage-disabled-click"
                                 :class="{ 'c-error__input': errors_email }"
                                 type="text"
                                 v-model="userDataForm.email"
                                 placeholder="email@example.com"
                                 @focus="clearError('email')"
+                                @click="isModalActive"
+                                :disabled="formActive_flg"
                             />
                             <div v-if="errors_email" class="c-error">
                                 <ul v-if="errors_email">
@@ -63,14 +83,17 @@
                         <div
                             class="p-mypage__content__body u-margin__bottom--m"
                         >
-                            <label for>新しいパスワード</label>
+                            <label for="password">新しいパスワード</label>
                             <input
-                                class="c-form__input"
+                                id="password"
+                                class="c-form__input js-mypage-disabled-click"
                                 :class="{ 'c-error__input': errors_password }"
                                 type="password"
                                 v-model="userDataForm.password"
                                 placeholder="パスワード"
                                 @focus="clearError('pass')"
+                                @click="isModalActive"
+                                :disabled="formActive_flg"
                             />
                             <div v-if="errors_password" class="c-error">
                                 <ul v-if="errors_password">
@@ -95,12 +118,17 @@
                         <div
                             class="p-mypage__content__body u-margin__bottom--m"
                         >
-                            <label for>新しいパスワードの確認</label>
+                            <label for="password_confirmation"
+                                >新しいパスワードの確認</label
+                            >
                             <input
-                                class="c-form__input"
+                                id="password_confirmation"
+                                class="c-form__input js-mypage-disabled-click"
                                 type="password"
                                 placeholder="パスワードの確認"
                                 v-model="userDataForm.password_confirmation"
+                                @click="isModalActive"
+                                :disabled="formActive_flg"
                             />
 
                             <div class="p-mypage__content--inwrap">
@@ -146,11 +174,13 @@
 
 <script>
 import Loading from "./module/Loading";
+import PasswordConfirmModal from "./module/PasswordConfirmModal";
 import { OK, UNPROCESSABLE_ENTITY, INTERNAL_SERVER_ERROR } from "./../util";
 
 export default {
     components: {
         Loading,
+        PasswordConfirmModal,
     },
     data() {
         return {
@@ -162,27 +192,37 @@ export default {
                 password: this.password,
                 password_confirmation: this.password_confirmation,
             },
-            errors_name: "",
-            errors_email: "",
-            errors_password: "",
-            isset_pass: false,
-            // 登録後のメッセージ表示フラグ
-            flash_message_flg: false,
-            systemMessage: "",
-            // パスワード確認用モーダルの表示
-            passwordModalWindow: false,
+            errors_name: "", // バリデーションメッセージを格納する
+            errors_email: "", // バリデーションメッセージを格納する
+            errors_password: "", // バリデーションメッセージを格納する
+            systemMessage: "", // エラーメッセージ全般を格納する
+            isset_pass: false, // パスワードが登録されているユーザーか判定するフラグ
+            flash_message_flg: false, // 登録後のメッセージ表示フラグ
+            checkPassword: false, // 既存パスワードの確認が完了しているか判定するフラグ
             loading: false, // 非同期通信時ローディングを表示する
-            sbumit_flg: true,
+            sbumit_flg: true, // 送信ボタンを活性化・非活性化させるための判定用フラグ
+            formActive_flg: true, // 既存パスワードの確認が出来ていないと、フォームを活性化させない
+            open: false, // モーダル表示用フラグ
+            close_key: "/public/images/svg/mypage_close_key.svg",
+            open_key: "/public/images/svg/mypage_open_key.svg"
         };
     },
     computed: {},
     methods: {
+        // 登録後のメッセージを表示させる
         isShowMessage() {
             this.flash_message_flg = !this.flash_message_flg;
         },
-        isShowPasswordConfirmForm() {
-            this.passwordModalWindow = !this.passwordModalWindow;
+        // モーダルを表示・非表示させる
+        isModalActive(event) { 
+
+            
+            this.open = !this.open;
+            // モーダル開閉時に、背景をスクロール出来ないように固定する
+            let $jsBg = document.getElementById("js-bg");
+            $jsBg.classList.toggle("bg-gray__fix");
         },
+        // ユーザー情報を取得する
         async getUserData() {
             const response = await axios.get("/mypage/user");
             // .catch((error) => error.response || error);
@@ -197,6 +237,7 @@ export default {
                 alert("エラーが発生しました。しばらくお待ち下さい");
             }
         },
+        // フォームデータを送信する
         async storUserData() {
             this.loadingActive();
             const response = await axios.post("/mypage/userdata", {
@@ -234,6 +275,7 @@ export default {
                 setTimeout(this.isShowMessage, 2000);
             }
         },
+        // 退会処理を実行する
         async deleteUser() {
             if (confirm("CryptoTrendを退会します。よろしいですか？")) {
                 const response = await axios.post("/mypage/delete");
@@ -247,6 +289,7 @@ export default {
                 }
             }
         },
+        // 入力フォームを全て空にする
         cancelFrom() {
             this.errors = "";
             this.userDataForm.name = "";
@@ -254,9 +297,9 @@ export default {
             this.userDataForm.password = "";
             this.userDataForm.password_confirmation = "";
         },
+        // 入力フォームのエラーを空にする
         clearError(value) {
             if (value === "name") {
-                // console.log(typeof value);
                 this.errors_nicname = "";
             } else if (value === "email") {
                 this.errors_email = "";
@@ -264,6 +307,7 @@ export default {
                 this.errors_password = "";
             }
         },
+        // ローディング画面を表示させる
         loadingActive() {
             this.loading = !this.loading;
         },
