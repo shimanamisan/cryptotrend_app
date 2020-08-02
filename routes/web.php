@@ -15,29 +15,25 @@ use Illuminate\Support\Facades\Auth;
 
 // トップページのページの表示
 Route::get('/', 'IndexController@home')->name('home');
-
-// Twitter経由でのログインを行う為のURI
-Route::get('login/twitter', 'Auth\TwitterAuthController@getTwitterLogin')->name('twitter.login');
-// Twitter経由でのユーザー登録を行う為のURI
+// ログアウト
+Route::post('/logout', 'Auth\LoginController@logout')->name('logout');
+// Twitter経由でのユーザー登録を行う
 Route::get('register/twitter', 'Auth\TwitterAuthController@getTwitterRegister')->name('twitter.register');
 // アプリ側から情報が返ってくるURL
 Route::get('auth/twitter/callback', 'Auth\TwitterAuthController@getTwitterCallback');
-// ログアウト
-Route::post('/logout', 'Auth\LoginController@logout')->name('logout');
 
 Auth::routes();
 
-// 認証後の画面
+// 認証（ログイン）していなければ表示させないページ
 Route::group(['middleware' => 'auth'], function () {
-
+    
     // 仮想通貨関連のニュースの取得
-    Route::get('/news', 'NewsController@index')->name('getNews.index');
-
+    Route::get('/news', 'NewsController@index')->name('getnews.index');
     /**********************************************
      * ユーザーフォロー機能関連のルーティング
      **********************************************/
     // 仮想通貨関連のTwitterユーザーページを表示
-    Route::get('/tweet-users', 'TwitterController@index')->name('userList.index');
+    Route::get('/twuserlist', 'TwitterController@index')->name('userlist.index');
     // Ajax処理：ユーザーをフォローする
     Route::post('/follow', 'FollowController@follow');
     // // Ajax処理：フォローを外す
