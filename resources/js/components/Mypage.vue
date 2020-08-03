@@ -155,26 +155,6 @@
                             </div>
                         </div>
                     </div>
-                    
-                    <div class="p-form__title u-margin__top--xl">
-                        SNS認証ステータス
-                    </div>
-                    <hr class="u-line" />
-
-                    <div class="p-mypage__content__body">
-                        <div v-if="authTwuser">
-                            <span>Twitterアカウント認証中です</span>
-                            <button
-                                class="c-btn p-mypage__btn p-mypage__btn--submit"
-                            >
-                                Twitter認証を解除する
-                            </button>
-                        </div>
-                        <div v-else>
-                            <span>Twitterアカウントは未認証です</span>
-                        </div>
-
-                    </div>
                 </div>
             </div>
             <div class="c-container__mypage">
@@ -247,8 +227,8 @@ export default {
                 this.userId = response.data.id;
                 this.userDataForm.name = response.data.name;
                 this.userDataForm.email = response.data.email;
-                if(response.data.my_twitter_id){
-                    this.authTwuser = true
+                if (response.data.my_twitter_id) {
+                    this.authTwuser = true;
                 }
             } else {
                 alert("エラーが発生しました。しばらくお待ち下さい");
