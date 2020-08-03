@@ -13,22 +13,21 @@ class CoinPriceSeed extends Seeder
     public function run()
     {
         $coin_name = [
-            'ビットコイン',
-            'イーサリアム',
-            'イーサリアムクラシック',
-            'リスク',
-            'ファクトム',
-            'リップル',
-            'ネム',
-            'ライトコイン',
-            'ビットコインキャッシュ',
-            'モナコイン',
-            'ステラルーメン',
-            'クアンタム',
+            'BTC（ビットコイン）',
+            'ETH（イーサリアム）',
+            'ETC（イーサリアムクラシック）',
+            'LSK（リスク）',
+            'FCT（ファクトム）',
+            'XRP（リップル）',
+            'XEM（ネム）',
+            'LTC（ライトコイン）',
+            'BCH（ビットコインキャッシュ）',
+            'MONA（モナコイン）',
+            'XLM（ステラルーメン）',
+            'QTUM（クアンタム）',
         ];
         
-        foreach($coin_name as $coin_name_item){
-            
+        foreach ($coin_name as $coin_name_item) {
             DB::table('coins')->insert([
                 'coin_name' => $coin_name_item,
                 'max_price' => 0,

@@ -32,10 +32,10 @@
           </li>
           @else
           <li class="p-header__item">
-            <a class="p-header__item--link" href="{{ route('userList.index') }}">関連アカウント</a>
+            <a class="p-header__item--link" href="{{ route('userlist.index') }}">関連アカウント</a>
           </li>
           <li class="p-header__item">
-            <a class="p-header__item--link" href="{{ route('getNews.index') }}">仮想通貨ニュース</a>
+            <a class="p-header__item--link" href="{{ route('getnews.index') }}">仮想通貨ニュース</a>
           </li>
           <li class="p-header__item">
             <a class="p-header__item--link" href="{{ route('conins.index') }}">仮想通貨トレンド</a>

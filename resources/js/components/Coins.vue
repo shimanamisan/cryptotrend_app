@@ -46,51 +46,57 @@
                             </button>
                         </li>
                     </ul>
-
                     <div
-                        class="p-coin__list p-coin__list__btn p-coin__update_at u-margin__bottom--ss"
+                        class="p-coin__list p-coin__update_at u-margin__bottom--m"
                     >
                         <span>更新日時:{{ getUpdated }}</span>
                     </div>
-                </div>
-                <div class="p-coin__table">
-                    <table class="p-coin__table--inner" border="3">
-                        <tr>
-                            <th class="">RANKING</th>
-                            <th>銘柄</th>
-                            <th>ツイート数</th>
-                            <th>最高取引価格（24H）</th>
-                            <th>最安取引価格（24H）</th>
-                        </tr>
-                        <!-- <tr v-for="(coin, index) in getprice" :key="index"> -->
-                        <tr
-                            v-for="(coin, index) in filterCoins"
-                            :key="index"
-                            v-show="coin.display"
+                    <div
+                        class="p-coin__list p-coin__list__nav u-margin__bottom--ss"
+                    >
+                        <span
+                            >※左右にスワイプすると詳細な情報を見ることが出来ます</span
                         >
-                            <td>{{ index + 1 }}</td>
-                            <td>
-                                <a
-                                    class="p-coin__table__link"
-                                    :href="search_url + coin.coin_name"
-                                    >{{ coin.coin_name }}</a
-                                >
-                            </td>
-                            <td>{{ coin.tweet }}</td>
-                            <template v-if="coin.max_price == 0">
-                                <td>不明</td>
-                            </template>
-                            <template v-else>
-                                <td>{{ coin.max_price }}</td>
-                            </template>
-                            <template v-if="coin.low_price == 0">
-                                <td>不明</td>
-                            </template>
-                            <template v-else>
-                                <td>{{ coin.low_price }}</td>
-                            </template>
-                        </tr>
-                    </table>
+                    </div>
+                </div>
+                <div class="p-coin__table__wrapp">
+                    <div class="p-coin__table">
+                        <table class="p-coin__table--inner" border="3">
+                            <tr>
+                                <th class="">RANKING</th>
+                                <th>銘柄</th>
+                                <th>ツイート数</th>
+                                <th>最高取引価格（24H）</th>
+                                <th>最安取引価格（24H）</th>
+                            </tr>
+                            <tr
+                                v-for="(coin, index) in filterCoins"
+                                :key="index"
+                            >
+                                <td>{{ index + 1 }}</td>
+                                <td>
+                                    <a
+                                        class="p-coin__table__link"
+                                        :href="search_url + coin.coin_name"
+                                        >{{ coin.coin_name }}</a
+                                    >
+                                </td>
+                                <td>{{ coin.tweet }}</td>
+                                <template v-if="coin.max_price == 0">
+                                    <td>不明</td>
+                                </template>
+                                <template v-else>
+                                    <td>{{ coin.max_price }}</td>
+                                </template>
+                                <template v-if="coin.low_price == 0">
+                                    <td>不明</td>
+                                </template>
+                                <template v-else>
+                                    <td>{{ coin.low_price }}</td>
+                                </template>
+                            </tr>
+                        </table>
+                    </div>
                 </div>
             </section>
         </div>
@@ -106,51 +112,51 @@ export default {
             coni_data: [
                 {
                     abbreviation: "BTC",
-                    value: "ビットコイン",
+                    value: "BTC（ビットコイン）",
                 },
                 {
                     abbreviation: "ETH",
-                    value: "イーサリアム",
+                    value: "ETH（イーサリアム）",
                 },
                 {
                     abbreviation: "ETC",
-                    value: "イーサリアムクラシック",
+                    value: "ETC（イーサリアムクラシック）",
                 },
                 {
                     abbreviation: "LSK",
-                    value: "リスク",
+                    value: "LSK（リスク）",
                 },
                 {
                     abbreviation: "FCT",
-                    value: "ファクトム",
+                    value: "FCT（ファクトム）",
                 },
                 {
                     abbreviation: "XRP",
-                    value: "リップル",
+                    value: "XRP（リップル）",
                 },
                 {
                     abbreviation: "XEM",
-                    value: "ネム",
+                    value: "XEM（ネム）",
                 },
                 {
                     abbreviation: "LTC",
-                    value: "ライトコイン",
+                    value: "LTC（ライトコイン）",
                 },
                 {
                     abbreviation: "BCH",
-                    value: "ビットコインキャッシュ",
+                    value: "BCH（ビットコインキャッシュ）",
                 },
                 {
                     abbreviation: "MONA",
-                    value: "モナコイン",
+                    value: "MONA（モナコイン）",
                 },
                 {
                     abbreviation: "XLM",
-                    value: "ステラルーメン",
+                    value: "XLM（ステラルーメン）",
                 },
                 {
                     abbreviation: "QTUM",
-                    value: "クアンタム",
+                    value: "QTUM（クアンタム）",
                 },
             ],
             tweet_data: [], // トレンド表示用データ
@@ -177,19 +183,13 @@ export default {
         clearSearch() {
             this.search_value = [];
         },
-        // サーバーから受け取った値をソートし、displayプロパティを追加する
+        // サーバーから受け取った値をソートする
         addProperty(response) {
             this.tweet_data = response.data;
             // ツイート数の多い順に並び替える
-            let sort_data = this.tweet_data.sort((a, b) => {
+            this.tweet_data = this.tweet_data.sort((a, b) => {
                 return b.tweet - a.tweet;
             });
-            // displayプロパティを追加する
-            var new_items = sort_data.map((item) => {
-                return Object.assign({}, item, { display: true });
-            });
-            // displayプロパティの真偽値で絞り込み時の表示・非表示を切り替える
-            this.tweet_data = new_items;
         },
         // 過去1時間のツイート数をDBから取得
         async getHourCoins() {
@@ -225,8 +225,7 @@ export default {
                     alert(
                         "エラーが発生しました。しばらくしてから、再度アクセスして下さい。"
                     );
-                })
-
+                });
         },
         // 過去1週間のツイート数をDBから取得
         async getWeekCoins() {
@@ -244,7 +243,7 @@ export default {
                     alert(
                         "エラーが発生しました。しばらくしてから、再度アクセスして下さい。"
                     );
-                })
+                });
         },
         changeCoinFlg(coin) {
             switch (coin) {
@@ -298,7 +297,6 @@ export default {
                     // チェックボックスの値と同じものがあれば、その要素を新しい配列として返却
                     return this.search_value.indexOf(item.coin_name) > -1;
                 });
-
             } else {
                 // 何も選択されていない場合は、未処理のデータを返却
                 return (this.tweet_data = tweet_data);

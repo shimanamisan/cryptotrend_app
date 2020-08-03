@@ -39,14 +39,58 @@
         margin: 0 auto;
         padding: 32px;
         box-sizing: border-box;
+        margin-top: 16px;
+        padding: 0;
         @include custumRadius(5px);
         @include sm() {
-            margin-top: 16px;
-            padding: 0;
             overflow-y: scroll;
+            white-space: nowrap;
+            padding-left: 12px;
+            padding-right: 12px;
+            -webkit-overflow-scrolling: touch;
         }
         &__link {
             color: #707070;
+        }
+        text-align: center;
+
+        &__wrapp {
+            margin-right: -12px;
+            margin-left: -12px;
+        }
+
+        &--inner {
+            position: relative;
+            margin: 0 auto;
+            @include sm() {
+                width: 1100px;
+                // overflow-y: scroll; を指定したときに、padding-rightが効かないので、
+                // p-coin__tabelの子要素に擬似要素を追加して、親要素のpadding-left分の幅を確保する
+                &::before {
+                    position: absolute;
+                    top: 0;
+                    left: 100%;
+                    width: 12px;
+                    height: 1px;
+                    content: "";
+                }
+            }
+        }
+        & tr {
+            font-size: 1.1rem;
+            & > th,
+            td {
+                padding: 16px 24px;
+                @include sm() {
+                    padding: 12px 18px;
+                }
+                &:first-child {
+                    width: 10%;
+                }
+            }
+            &:nth-of-type(odd) {
+                background-color: #fff;
+            }
         }
     }
     &__item {
@@ -117,38 +161,19 @@
         margin-bottom: 24px;
         display: flex;
         justify-content: center;
+        &__nav {
+            display: none;
+            @include sm() {
+                display: block;
+                font-size: 12px;
+            }
+        }
         @include sm() {
             flex-wrap: wrap;
             justify-content: space-around;
         }
         &__btn {
             justify-content: center;
-        }
-    }
-    &__table {
-        text-align: center;
-
-        &--inner {
-            margin: 0 auto;
-            @include sm() {
-                width: 980px;
-            }
-        }
-        & tr {
-            font-size: 1.1rem;
-            & > th,
-            td {
-                padding: 16px 24px;
-                @include sm() {
-                    padding: 12px 18px;
-                }
-                &:first-child {
-                    width: 10%;
-                }
-            }
-            &:nth-of-type(odd) {
-                background-color: #fff;
-            }
         }
     }
 }

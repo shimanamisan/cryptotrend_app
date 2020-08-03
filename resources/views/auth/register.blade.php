@@ -73,12 +73,6 @@
             </button>
             </div>
           </form>
-          <!-- <hr class="u-line" />
-          <span class="u-line--or">または</span>
-          <div class="u-wrapp">
-              <a href="{{ route('twitter.register') }}" class="c-btn c-btn__twitter">Twitterで新規登録</a>
-          </div> -->
- 
         </div>
       </div>
       <div class="p-form__unit">

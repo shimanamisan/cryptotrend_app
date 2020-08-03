@@ -186,6 +186,7 @@ export default {
     data() {
         return {
             userId: "",
+            authTwuser: false, // Twitterアカウントが認証済みのユーザーか判断する
             // 入力フォームデータバインディング
             userDataForm: {
                 name: this.user,
@@ -200,7 +201,6 @@ export default {
             errors_password: "", // バリデーションメッセージを格納する
             systemMessage: "", // エラーメッセージ全般を格納する
             flash_message_flg: false, // 登録後のメッセージ表示フラグ
-            checkPassword: false, // 既存パスワードの確認が完了しているか判定するフラグ
             loading: false, // 非同期通信時ローディングを表示する
             sbumit_flg: true, // 送信ボタンを活性化・非活性化させるための判定用フラグ
             formActive_flg: true, // 既存パスワードの確認が出来ていないと、フォームを活性化させない
@@ -227,6 +227,9 @@ export default {
                 this.userId = response.data.id;
                 this.userDataForm.name = response.data.name;
                 this.userDataForm.email = response.data.email;
+                if (response.data.my_twitter_id) {
+                    this.authTwuser = true;
+                }
             } else {
                 alert("エラーが発生しました。しばらくお待ち下さい");
             }
