@@ -22,7 +22,7 @@
     <section class="c-container c-container__twusr">
         <h2 class="c-title__twuser__guest">こちらのページはTwitterアカウントを登録することでご利用頂けます。</h2>
         <div class="u-wrapp">
-            <p class="u-margin__bottom--xl">※1ユーザーにつき、Twitterアカウントを1つ登録できます。</p>
+            <p class="u-margin__bottom--m">※1ユーザーにつき、Twitterアカウントを1つ登録できます。</p>
             @if(Session::has('error_message'))
                 <div class="c-error__authflash c-error__twuser u-margin__bottom--m">
                 <p>{{ session('error_message') }}</p>
