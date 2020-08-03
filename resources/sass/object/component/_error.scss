@@ -16,4 +16,10 @@
         color: $font-color_default;
         margin-top: 32px;
     }
+    &__twuser {
+        text-align: center;
+        @include sm() {
+            text-align: none;
+        }
+    }
 }

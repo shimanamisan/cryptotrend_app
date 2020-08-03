@@ -20,9 +20,9 @@
 <main class="l-main l-main__common">
     <h1 class="c-title c-title__twuser">関連アカウント一覧</h1>
     <section class="c-container c-container__twusr">
-        <h2 class="c-title__twuser__guest">こちらのページはTwitterアカウントを登録することでご利用頂けます。</h2>]
+        <h2 class="c-title__twuser__guest">こちらのページはTwitterアカウントを登録することでご利用頂けます。</h2>
         @if(Session::has('error_message'))
-        <div class="c-error__authflash">
+        <div class="c-error__authflash c-error__twuser">
             <p>{{ session('error_message') }}</p>
         </div>
         @endif
