@@ -20,14 +20,18 @@
 <main class="l-main l-main__common">
     <h1 class="c-title c-title__twuser">関連アカウント一覧</h1>
     <section class="c-container c-container__twusr">
-        <h2 class="c-title__twuser__guest">こちらのページはTwitterアカウントを登録することでご利用頂けます。</h2>
+        <h2 class="c-title__twuser__guest">こちらのページはTwitterアカウントを登録することでご利用頂けます。</h2>]
+        @if(Session::has('error_message'))
+        <div class="c-error__authflash">
+            <p>{{ session('error_message') }}</p>
+        </div>
+        @endif
         <div class="u-wrapp">
-         <p class="u-margin__bottom--xl">※1ユーザーにつき、Twitterアカウントを1つ登録できます。</p>
-        <a id="js-redirect" href="{{ route('twitter.register') }}" 
-        class="c-btn c-btn__twitter p-twuser__gest__btn"
-        >Twitterアカウントを登録する</a>
-   
-     </div>
+            <p class="u-margin__bottom--xl">※1ユーザーにつき、Twitterアカウントを1つ登録できます。</p>
+            <a id="js-redirect" href="{{ route('twitter.register') }}" 
+            class="c-btn c-btn__twitter p-twuser__gest__btn"
+            >Twitterアカウントを登録する</a>
+        </div>
     </section>
 </main>
 

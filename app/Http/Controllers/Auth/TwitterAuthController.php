@@ -134,6 +134,17 @@ class TwitterAuthController extends Controller
     // Twitter認証で新規ユーザー登録の処理
     public function findCreateUser($twuser, $authUser)
     {
+        // 既に同じTwitterアカウントが登録されていないか検索する
+        $checkTwuser = User::where('my_twitter_id', $twuser->getId())
+        ->where('delete_flg', 0)
+        ->first();
+
+        if (!empty($checkTwuser)) {
+            \Log::debug('既に登録済みのTwitterアカウントです。');
+            \Log::debug('   ');
+            return redirect('/twuserlist')->with('error_message', '既に認証されているアカウントです。他のTwitterアカウントを選択してください。');
+        }
+
         // メールアドレスを元に退会していないユーザーを検索
         $userInfo = $authUser->where('email', $authUser->email)
         ->where('delete_flg', 0)
