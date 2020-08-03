@@ -19,7 +19,7 @@
     &__twuser {
         text-align: center;
         @include sm() {
-            text-align: none;
+            text-align: left;
         }
     }
 }
