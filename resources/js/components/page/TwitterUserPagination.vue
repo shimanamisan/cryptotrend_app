@@ -242,6 +242,7 @@ export default {
                 alert("問題が発生しました。しばらくお待ち下さい。");
             }
         },
+        // フォロー済みのユーザーをカウントする
         followUserCounter() {
             let counter = this.follow_list.filter((item) => {
                 return item.isFollow;
@@ -252,6 +253,7 @@ export default {
         sendingDone() {
             this.$refs.fromParent.sendingHandler();
         },
+        // ローディング画面を表示させる
         loadingActive() {
             this.loading = !this.loading;
         },

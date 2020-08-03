@@ -19,7 +19,7 @@ class CoinsController extends Controller
 
     public function index()
     {
-        // ビューファイルを表示させる
+        // ビューテンプレートを表示させる
         return view('coins');
     }
 

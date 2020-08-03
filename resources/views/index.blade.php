@@ -28,7 +28,7 @@
               <button class="c-btn c-btn__auth c-btn--radius u-btn">トレンドを見る</button>
             </a>
             <div class="p-eyecatch__content--text">
-            <a class="c-link__common" href="{{ route('userList.index') }}"><p>関連アカウントをフォローする</p></a>
+            <a class="c-link__common" href="{{ route('userlist.index') }}"><p>関連アカウントをフォローする</p></a>
             </div>
           </div>
           @endguest
@@ -112,7 +112,7 @@
         </div>
         @else
         <div class="p-eyecatch__footer--signup">
-          <a href="{{ route('getNews.index') }}">
+          <a href="{{ route('getnews.index') }}">
             <button class="c-btn c-btn__auth c-btn--radius">仮想通貨ニュースを見る</button>
           </a>
         </div>

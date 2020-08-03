@@ -408,18 +408,18 @@ class FollowController extends Controller
         }
     }
 
-    // Twitterアカウント未登録ユーザーを登録画面へ遷移させる（一度ログアウトさせる）
+    // Twitterアカウント未登録ユーザーを登録画面へ遷移させる
     public function registerRedirect()
     {
-        // 認証済みユーザーを取得
-        $user = Auth::user();
-        // ログアウト
-        Auth::logout();
-        // セッションを削除
-        session()->invalidate();
-        // csrfトークンを再生成
-        session()->regenerateToken();
-        // Twitter認証画面へ遷移させる
+        // // 認証済みユーザーを取得
+        // $user = Auth::user();
+        // // ログアウト
+        // Auth::logout();
+        // // セッションを削除
+        // session()->invalidate();
+        // // csrfトークンを再生成
+        // session()->regenerateToken();
+        // // Twitter認証画面へ遷移させる
         return redirect()->to('/register/twitter');
     }
 }
