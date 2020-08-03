@@ -51,6 +51,12 @@ class TwitterAuthController extends Controller
                 // 新規登録時の登録処理を関数に切り出し
                 $userInfo = $this->findCreateUser($twuser, $authUser);
 
+                if ($userInfo === false) {
+                    \Log::debug('既に登録済みのTwitterアカウントです。');
+                    \Log::debug('   ');
+                    return redirect('/twuserlist')->with('error_message', '既に認証されているアカウントです。他のTwitterアカウントを選択してください。');
+                }
+
                 // ユーザーが正しく取得でき、Twitter認証情報を保存出来ていたら下記の処理を行う
                 if ($userInfo !== null) {
 
@@ -140,9 +146,8 @@ class TwitterAuthController extends Controller
         ->first();
 
         if (!empty($checkTwuser)) {
-            \Log::debug('既に登録済みのTwitterアカウントです。');
-            \Log::debug('   ');
-            return redirect('/twuserlist')->with('error_message', '既に認証されているアカウントです。他のTwitterアカウントを選択してください。');
+            // 既にTwitter認証されていたIDだった場合は、その旨をメッセージで表示させる
+            return $userInfo = false;
         }
 
         // メールアドレスを元に退会していないユーザーを検索
