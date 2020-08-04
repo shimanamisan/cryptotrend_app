@@ -154,28 +154,30 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="p-form__title u-margin__top--xl">
-                            SNS認証ステータス
-                        </div>
-                        <hr class="u-line" />
+                    </div>
 
-                        <div class="p-mypage__content__body">
-                            <div v-if="authTwuser">
-                                <span>Twitterアカウント認証中です</span>
-                                <button
-                                    class="c-btn p-mypage__btn p-mypage__btn--submit"
-                                    @click="clearTwitterAuth"
-                                >
-                                    Twitter認証を解除する
-                                </button>
-                            </div>
-                            <div v-else>
-                                <span>Twitterアカウントは未認証です</span>
-                            </div>
+                    <div class="p-form__title u-margin__top--xl">
+                        SNS連携ステータス
+                    </div>
+                    <hr class="u-line" />
+
+                    <div class="p-mypage__content__body u-margin__bottom--lg">
+                        <div v-if="authTwuser">
+                            <span>Twitterアカウント連携中です</span>
+                            <button
+                                class="c-btn p-mypage__btn p-mypage__btn--submit"
+                                @click="clearTwitterAuth"
+                            >
+                                Twitterアカウントの連携を解除する
+                            </button>
+                        </div>
+                        <div v-else>
+                            <span>Twitterアカウントは未認証です</span>
                         </div>
                     </div>
                 </div>
             </div>
+
             <div class="c-container__mypage">
                 <div class="p-mypage__container p-mypage__dlcontent--common">
                     <h1 class="p-mypage__dltitle">アカウントの停止</h1>
@@ -309,24 +311,26 @@ export default {
         },
         // Twitterユーザーアカウントの認証を解除する
         async clearTwitterAuth() {
-            this.loadingActive();
-            const response = await axios.post("/mypage/clear-twuser");
-
-            if (response.status === OK) {
+            if(confirm("Twitterアカウントの連携を解除します。\n よろしいですか？")){
                 this.loadingActive();
-                this.systemMessage = response.data.success;
-                this.authTwuser = false;
-                // フラッシュメッセージを表示
-                this.isShowMessage();
-                // 2秒後にメッセージを非表示にする
-                setTimeout(this.isShowMessage, 2000);
-            } else {
-                // 何か予期せぬErrorが発生したとき(500エラーなど)
-                this.loadingActive();
-                this.systemMessage =
-                    "エラーが発生しました。しばらくお待ち下さい";
-                this.isShowMessage();
-                setTimeout(this.isShowMessage, 2000);
+                const response = await axios.post("/mypage/clear-twuser");
+    
+                if (response.status === OK) {
+                    this.loadingActive();
+                    this.systemMessage = response.data.success;
+                    this.authTwuser = false;
+                    // フラッシュメッセージを表示
+                    this.isShowMessage();
+                    // 2秒後にメッセージを非表示にする
+                    setTimeout(this.isShowMessage, 2000);
+                } else {
+                    // 何か予期せぬErrorが発生したとき(500エラーなど)
+                    this.loadingActive();
+                    this.systemMessage =
+                        "エラーが発生しました。しばらくお待ち下さい";
+                    this.isShowMessage();
+                    setTimeout(this.isShowMessage, 2000);
+                }
             }
         },
         // 入力フォームを全て空にする
