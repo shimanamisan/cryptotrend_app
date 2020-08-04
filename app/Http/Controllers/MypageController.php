@@ -99,6 +99,26 @@ class MypageController extends Controller
         return response()->json(['user' => $user, 'success' => 'アカウント情報を更新しました。']);
     }
 
+    // Twitter連携を解除する
+    public function clearTwitterAuth()
+    {
+        try {
+            $user = Auth::user();
+            // followsテーブルにあるフォロー済みユーザーを削除する
+            $user->follows()->delete();
+            // ユーザーアカウントに登録されていたTwitterIDなどを削除する
+            $user->my_twitter_id = null;
+            $user->twitter_token = null;
+            $user->twitter_token_secret = null;
+            $user->save();
+
+            return response()->json(['user' => $user, 'success' => 'Twitter連携を解除しました。']);
+        } catch (\Exception $e) {
+            \Log::debug('アカウント情報変更時に例外が発生しました。' .$e->getMessage());
+            \Log::debug('   ');
+        }
+    }
+
     // 退会処理
     public function delete()
     {

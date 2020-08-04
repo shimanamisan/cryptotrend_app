@@ -154,6 +154,25 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="p-form__title u-margin__top--xl">
+                            SNS認証ステータス
+                        </div>
+                        <hr class="u-line" />
+
+                        <div class="p-mypage__content__body">
+                            <div v-if="authTwuser">
+                                <span>Twitterアカウント認証中です</span>
+                                <button
+                                    class="c-btn p-mypage__btn p-mypage__btn--submit"
+                                    @click="clearTwitterAuth"
+                                >
+                                    Twitter認証を解除する
+                                </button>
+                            </div>
+                            <div v-else>
+                                <span>Twitterアカウントは未認証です</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -286,6 +305,28 @@ export default {
                     alert("エラーが発生しました。しばらくお待ち下さい");
                     window.location = "/login";
                 }
+            }
+        },
+        // Twitterユーザーアカウントの認証を解除する
+        async clearTwitterAuth() {
+            this.loadingActive();
+
+            const response = await axios.post("/mypage/clear-twuser")
+
+            if (response.status === OK) {
+                this.loadingActive();
+                this.systemMessage = response.data.success;
+                // フラッシュメッセージを表示
+                this.isShowMessage();
+                // 2秒後にメッセージを非表示にする
+                setTimeout(this.isShowMessage, 2000);
+            } else {
+                // 何か予期せぬErrorが発生したとき(500エラーなど)
+                this.loadingActive();
+                this.systemMessage =
+                    "エラーが発生しました。しばらくお待ち下さい";
+                this.isShowMessage();
+                setTimeout(this.isShowMessage, 2000);
             }
         },
         // 入力フォームを全て空にする
