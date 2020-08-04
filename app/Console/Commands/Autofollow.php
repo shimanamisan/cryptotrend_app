@@ -143,6 +143,8 @@ class Autofollow extends Command
                 $run_user->save();
                 \Log::debug('全てのユーザーをフォローしたので、' . $run_user->name . 'さんの自動フォローステータスをOFFにします。');
                 \Log::debug('    ');
+                \Log::debug('次のユーザーの処理へ移行します。');
+                \Log::debug('    ');
                 // このユーザーのループをスキップして、次のユーザーへ移る
                 continue;
             }
