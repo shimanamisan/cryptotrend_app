@@ -315,9 +315,7 @@ export default {
             if (response.status === OK) {
                 this.loadingActive();
                 this.systemMessage = response.data.success;
-                if (response.data.my_twitter_id) {
-                    this.authTwuser = true;
-                }
+                this.authTwuser = false;
                 // フラッシュメッセージを表示
                 this.isShowMessage();
                 // 2秒後にメッセージを非表示にする
