@@ -6,7 +6,9 @@ echo "##                   START                   ##"
 echo "###############################################"
 
 # 作業ディレクトリを表示
+echo ""
 pwd
+echo ""
 # 既存の設定ファイルをコピー
 cp .htaccess .htaccess_old
 sleep 2
@@ -19,7 +21,11 @@ sleep 2
 # コピー後に削除
 rm .htaccess_production
 
+echo ""
 ls -la
+
+echo ""
+cat .htaccess
 
 echo ""
 echo "###############################################"
