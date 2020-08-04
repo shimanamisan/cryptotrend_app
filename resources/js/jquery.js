@@ -30,7 +30,7 @@ SPメニューを開閉するアクション
     $jsRedirect.on("click", function (e) {
         e.preventDefault;
         let checked = confirm(
-            "Twitterアカウントの登録画面へ移動します。\n よろしいですか？"
+            "Twitterアカウント認証画面へ移動します。\n よろしいですか？"
         );
         if (checked == true) {
             return true;
