@@ -94,7 +94,7 @@ class Autofollow extends Command
             $day_follow_limit_count = $auto_follow_run_user_item->day_follow_limit_count;
 
             \Log::debug('   ');
-            \Log::debug("現在、 ${$run_user->name} さんの自動フォロー処理中です");
+            \Log::debug('現在、' . $run_user->name . 'さんの自動フォロー処理中です');
             \Log::debug('   ');
 
             /************************************************
@@ -143,11 +143,11 @@ class Autofollow extends Command
             
                 // 全てフォローしてリストが空だったら処理を停止
                 if (empty($follow_target_list)) {
-                    \Log::debug("フォローリストが空なので、すべてのユーザーをフォローし終えました。${$run_user->name} さんの処理を停止します。");
+                    \Log::debug('フォローリストが空なので、すべてのユーザーをフォローし終えました。' . $run_user->name . 'さんの処理を停止します。');
                     \Log::debug('    ');
                     $run_user->autofollow_status = 0;
                     $run_user->save();
-                    \Log::debug("全てのユーザーをフォローしたので、${$run_user->name} さんの自動フォローステータスをOFFにします。");
+                    \Log::debug('全てのユーザーをフォローしたので、' . $run_user->name . 'さんの自動フォローステータスをOFFにします。');
                     \Log::debug('    ');
                     break;
                 }
