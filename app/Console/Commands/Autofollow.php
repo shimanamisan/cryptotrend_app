@@ -140,7 +140,7 @@ class Autofollow extends Command
 
                 // 現在の時間を格納
                 $now_time = Carbon::now();
-                dd(empty($follow_target_list));
+                dd($follow_target_list);
                 // 全てフォローしてリストが空だったら処理を停止
                 if (empty($follow_target_list)) {
                     \Log::debug('フォローリストが空なので、すべてのユーザーをフォローし終えました。' . $run_user->name . 'さんの処理を停止します。');
