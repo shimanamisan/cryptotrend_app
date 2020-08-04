@@ -124,7 +124,7 @@ class Autofollow extends Command
             if (empty($twitterUserList)) {
                 \Log::debug('DBに登録している仮想通貨関連のアカウントがありませんでした');
                 \Log::debug('   ');
-                continue;
+                break;
             }
             // フォローしているユーザーのIDとDBに登録されているIDの差分を取得する。一致していないもの（フォローしていないユーザー）を取得する
             // 第一引数が比較元の配列、第二引数に比較する配列を指定する
@@ -135,7 +135,7 @@ class Autofollow extends Command
             \Log::debug($run_user->name . ' さんのフォローリストです。' . print_r($follow_target_list, true));
             \Log::debug('   ');
 
-            // 全てフォローしてリストが空だったら処理を停止
+            // 自動フォロー機能をONにしているユーザーが、DBに登録されているTwitterユーザーリストを全てフォローしていて、空だったら処理を停止
             if (empty($follow_target_list)) {
                 \Log::debug('フォローリストが空なので、すべてのユーザーをフォローし終えました。' . $run_user->name . 'さんの処理を停止します。');
                 \Log::debug('    ');
@@ -143,7 +143,8 @@ class Autofollow extends Command
                 $run_user->save();
                 \Log::debug('全てのユーザーをフォローしたので、' . $run_user->name . 'さんの自動フォローステータスをOFFにします。');
                 \Log::debug('    ');
-                break;
+                // このユーザーのループをスキップして、次のユーザーへ移る
+                continue;
             }
 
             /*********************************************
