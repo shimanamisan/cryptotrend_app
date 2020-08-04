@@ -87,31 +87,31 @@ class Autofollow extends Command
          * 各ユーザーに対するループ処理
         *****************************************/
         foreach ($user as $auto_follow_run_user_item) {
-            $user = $auto_follow_run_user_item; // 各ユーザーのUserモデル
+            $run_user = $auto_follow_run_user_item; // 各ユーザーのUserモデル
             $twitter_id = $auto_follow_run_user_item->my_twitter_id;
             $twitter_user_token = $auto_follow_run_user_item->twitter_token;
             $twitter_user_token_secret = $auto_follow_run_user_item->twitter_token_secret;
             $day_follow_limit_count = $auto_follow_run_user_item->day_follow_limit_count;
 
             \Log::debug('   ');
-            \Log::debug('現在、' . $auto_follow_run_user_item->name. ' さんの自動フォロー処理中です');
+            \Log::debug('現在、' . $run_user->name. ' さんの自動フォロー処理中です');
             \Log::debug('   ');
 
             /************************************************
             ユーザー単位としてのリクエスト制限に関するデータ
             *************************************************/
             // 1日のフォロー上限を超えないように、現在のフォローした数を取得（上限395/日）
-            $day_follow_limit_count = $user->day_follow_limit_count;
+            $day_follow_limit_count = $run_user->day_follow_limit_count;
             // ユーザー個別の1日のフォローリクエスト制限解除時刻
-            $day_follow_release_time = $user->day_follow_release_time;
+            $day_follow_release_time = $run_user->day_follow_release_time;
 
             /******************************************************************
             15フォロー/15分を超えないようにするためのリクエスト制限に関するデータ
             *******************************************************************/
             // リクエスト制限解除時刻を格納
-            $day_follow_quarter_release_time = $user->day_follow_quarter_release_time;
+            $day_follow_quarter_release_time = $run_user->day_follow_quarter_release_time;
             // 15フォロー/15分のリクエスト制限の上限をカウントする
-            $day_follow_quarter_limit_count = $user->day_follow_quarter_limit_count;
+            $day_follow_quarter_limit_count = $run_user->day_follow_quarter_limit_count;
 
             // 制限にかかっていなければ処理を実行する
             // インスタンスを生成
@@ -187,9 +187,9 @@ class Autofollow extends Command
                 // フォロー実行時、24時間後のリクエスト制限解除時刻をDBに登録する
                 // リクエスト制限に掛からなくても、この時刻を経過すればカウントがリセットされるようにする
                 if ($day_follow_release_time === null) {
-                    $user->day_follow_release_time = Carbon::now()->addHours(24);
-                    $user->update();
-                    $day_follow_release_time = $user->day_follow_release_time;
+                    $run_user->day_follow_release_time = Carbon::now()->addHours(24);
+                    $run_user->update();
+                    $day_follow_release_time = $run_user->day_follow_release_time;
                     Log::debug('ユーザー単位での24時間後のリクエスト制限解除時刻です');
                     Log::debug('    ');
                 } elseif ($day_follow_release_time !== null) {
@@ -199,11 +199,11 @@ class Autofollow extends Command
                 }
                 // ユーザー個別のリクエスト制限解除時刻より、現在の時刻のほうが進んでいたら制限を解除する
                 if ($now_time > $day_follow_release_time) {
-                    $user->day_follow_release_time = Carbon::now()->addHours(24);
-                    $user->day_follow_limit_count = 0;
-                    $user->update();
-                    $day_follow_limit_count = $user->day_follow_limit_count;
-                    $day_follow_release_time = $user->day_follow_release_time;
+                    $run_user->day_follow_release_time = Carbon::now()->addHours(24);
+                    $run_user->day_follow_limit_count = 0;
+                    $run_user->update();
+                    $day_follow_limit_count = $run_user->day_follow_limit_count;
+                    $day_follow_release_time = $run_user->day_follow_release_time;
                     Log::debug('24時間経過しました。新たに制限解除用の時刻を格納し、カウンターをリセットします。');
                     Log::debug('    ');
                 }
@@ -218,9 +218,9 @@ class Autofollow extends Command
                 15/15分リクエスト制限に関する処理
                 *************************************************/
                 if ($day_follow_quarter_release_time === null) {
-                    $user->day_follow_quarter_release_time = new Carbon('+15 minutes');
-                    $user->update();
-                    $day_follow_quarter_release_time = $user->day_follow_quarter_release_time;
+                    $run_user->day_follow_quarter_release_time = new Carbon('+15 minutes');
+                    $run_user->update();
+                    $day_follow_quarter_release_time = $run_user->day_follow_quarter_release_time;
                     Log::debug('15/15分リクエスト制限解除時刻です。');
                     Log::debug('    ');
                 } elseif ($day_follow_quarter_release_time !== null) {
@@ -230,11 +230,11 @@ class Autofollow extends Command
                 }
                 // 個別フォロー処理時のリクエスト制限解除時刻より、現在の時刻のほうが進んでいたら制限を解除する
                 if ($now_time > $day_follow_quarter_release_time) {
-                    $user->day_follow_quarter_release_time = new Carbon('+15 minutes');
-                    $user->day_follow_quarter_limit_count = 0;
-                    $user->update();
-                    $day_follow_quarter_limit_count = $user->day_follow_quarter_limit_count;
-                    $day_follow_quarter_release_time = $user->day_follow_quarter_release_time;
+                    $run_user->day_follow_quarter_release_time = new Carbon('+15 minutes');
+                    $run_user->day_follow_quarter_limit_count = 0;
+                    $run_user->update();
+                    $day_follow_quarter_limit_count = $run_user->day_follow_quarter_limit_count;
+                    $day_follow_quarter_release_time = $run_user->day_follow_quarter_release_time;
                     Log::debug('15分経過しました。新たに制限解除用の時刻を格納し、カウンターをリセットします。');
                     Log::debug('    ');
                 }
@@ -256,9 +256,9 @@ class Autofollow extends Command
                 ++$day_follow_quarter_limit_count; // 15/15分フォロー制限用のカウント
                 ++$day_follow_limit_count; // 1日395フォロー制限用のカウント
                 ++$one_day_system_counter; // 1日1000フォロー制限用のカウント（アプリ全体）
-                $user->day_follow_quarter_limit_count = $day_follow_quarter_limit_count;
-                $user->day_follow_limit_count = $day_follow_limit_count;
-                $user->update();
+                $run_user->day_follow_quarter_limit_count = $day_follow_quarter_limit_count;
+                $run_user->day_follow_limit_count = $day_follow_limit_count;
+                $run_user->update();
                 $SystemManager->one_day_system_counter = $one_day_system_counter;
                 $SystemManager->update();
 
