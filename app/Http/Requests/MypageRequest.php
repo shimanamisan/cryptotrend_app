@@ -37,6 +37,7 @@ class MypageRequest extends FormRequest
     {
         return [
             'email.email' => '有効なメールアドレスを指定してください。',
+            'old_password.regex' => '半角英数のみご利用いただけます。',
             'password.regex' => '半角英数のみご利用いただけます。',
             'password.confirmed' => ':attributeと、:attribute再入力が一致していません。',
         ];
