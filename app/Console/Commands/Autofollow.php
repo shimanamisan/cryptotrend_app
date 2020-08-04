@@ -132,6 +132,9 @@ class Autofollow extends Command
             // 配列を比較して重複していない値のみ出力（第二引数の配列の値と一致したものは除外される）
             $follow_target_list = array_diff($twitterUserList, $follow_list);
 
+            \Log::debug($run_user->name . ' さんのフォローリストです。' . print_r($follow_target_list, true));
+            \Log::debug('   ');
+
             /*********************************************
              * ここから自動フォローに関するループ処理
             **********************************************/
@@ -140,9 +143,6 @@ class Autofollow extends Command
 
                 // 現在の時間を格納
                 $now_time = Carbon::now();
-
-                \Log::debug($run_user->name . ' さんのフォローリストです。' . print_r($follow_target_list, true));
-                \Log::debug('   ');
                
                 // 全てフォローしてリストが空だったら処理を停止
                 if (empty($follow_target_list)) {
