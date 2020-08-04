@@ -162,8 +162,8 @@
                     <hr class="u-line" />
 
                     <div class="p-mypage__content__body u-margin__bottom--lg">
-                        <div v-if="authTwuser">
-                            <span>Twitterアカウント連携中です</span>
+                        <div class="p-mypage__content__twauth u-margin__bottom--m" v-if="authTwuser">
+                            <span class="u-margin__bottom--m">Twitterアカウント連携中です</span>
                             <button
                                 class="c-btn p-mypage__btn p-mypage__btn--submit"
                                 @click="clearTwitterAuth"
@@ -171,8 +171,8 @@
                                 Twitterアカウントの連携を解除する
                             </button>
                         </div>
-                        <div v-else>
-                            <span>Twitterアカウントは未認証です</span>
+                        <div class="p-mypage__content__twauth u-margin__bottom--m" v-else>
+                            <span class="u-margin__bottom--m">Twitterアカウントは未認証です</span>
                         </div>
                     </div>
                 </div>
