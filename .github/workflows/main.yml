@@ -22,5 +22,7 @@ jobs:
           
       - name: Run htaccess.sh
         shell: bash 
-        run: ./htaccess.sh
+        run: |
+           chmod 777 htaccess.sh	
+           ./htaccess.sh
         working-directory: ./public
