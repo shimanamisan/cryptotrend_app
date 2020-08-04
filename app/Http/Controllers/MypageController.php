@@ -112,6 +112,13 @@ class MypageController extends Controller
             $user->twitter_token_secret = null;
             $user->save();
 
+            session()->forget('twitter_id');
+            session()->forget('access_tokena');
+            session()->forget('access_token_secret');
+            
+            \Log::debug('Twitterアカウントの連携を解除しました。');
+            \Log::debug('   ');
+
             return response()->json(['user' => $user, 'success' => 'Twitter連携を解除しました。']);
         } catch (\Exception $e) {
             \Log::debug('アカウント情報変更時に例外が発生しました。' .$e->getMessage());

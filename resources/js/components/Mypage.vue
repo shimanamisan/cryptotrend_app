@@ -310,12 +310,14 @@ export default {
         // Twitterユーザーアカウントの認証を解除する
         async clearTwitterAuth() {
             this.loadingActive();
-
-            const response = await axios.post("/mypage/clear-twuser")
+            const response = await axios.post("/mypage/clear-twuser");
 
             if (response.status === OK) {
                 this.loadingActive();
                 this.systemMessage = response.data.success;
+                if (response.data.my_twitter_id) {
+                    this.authTwuser = true;
+                }
                 // フラッシュメッセージを表示
                 this.isShowMessage();
                 // 2秒後にメッセージを非表示にする
