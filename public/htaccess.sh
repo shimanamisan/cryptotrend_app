@@ -9,3 +9,7 @@ rm .htaccess
 cp .htaccess_production .htaccess
 # コピー後に削除
 rm .htaccess_production
+
+git status
+
+pwd
