@@ -124,7 +124,7 @@ class Autofollow extends Command
             if (empty($twitterUserList)) {
                 \Log::debug('DBに登録している仮想通貨関連のアカウントがありませんでした');
                 \Log::debug('   ');
-                break;
+                continue;
             }
             // フォローしているユーザーのIDとDBに登録されているIDの差分を取得する。一致していないもの（フォローしていないユーザー）を取得する
             // 第一引数が比較元の配列、第二引数に比較する配列を指定する
