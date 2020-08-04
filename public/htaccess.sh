@@ -5,6 +5,6 @@
 # cp .htaccess .htaccess_old
 # コピー後に削除
 rm .htaccess
-rm .htaccess_old
+rm .htaccess_production
 # 本番環境用に用意したものをリネーム
-cp .htaccess_production .htaccess
+# cp .htaccess_production .htaccess
