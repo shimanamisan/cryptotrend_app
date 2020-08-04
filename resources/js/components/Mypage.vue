@@ -162,18 +162,30 @@
                     <hr class="u-line" />
 
                     <div class="p-mypage__content__body u-margin__bottom--lg">
-                        <div class="p-mypage__content__twauth u-margin__bottom--m" v-if="authTwuser">
-                            <span class="u-margin__bottom--m">Twitterアカウント連携中です</span>
-                            <button
-                                class="c-btn p-mypage__btn p-mypage__btn--submit"
-                                @click="clearTwitterAuth"
+                        <template v-if="authTwuser">
+                            <div
+                                class="p-mypage__content__twauth u-margin__bottom--m"
                             >
-                                Twitterアカウントの連携を解除する
-                            </button>
-                        </div>
-                        <div class="p-mypage__content__twauth u-margin__bottom--m" v-else>
-                            <span class="u-margin__bottom--m">Twitterアカウントは未認証です</span>
-                        </div>
+                                <span class="u-margin__bottom--m"
+                                    >Twitterアカウント連携中です</span
+                                >
+                                <button
+                                    class="c-btn p-mypage__btn p-mypage__btn--submit"
+                                    @click="clearTwitterAuth"
+                                >
+                                    Twitterアカウントの連携を解除する
+                                </button>
+                            </div>
+                        </template>
+                        <template v-else>
+                            <div
+                                class="p-mypage__content__twauth u-margin__bottom--m"
+                            >
+                                <span class="u-margin__bottom--m"
+                                    >Twitterアカウントは未認証です</span
+                                >
+                            </div>
+                        </template>
                     </div>
                 </div>
             </div>
@@ -311,10 +323,14 @@ export default {
         },
         // Twitterユーザーアカウントの認証を解除する
         async clearTwitterAuth() {
-            if(confirm("Twitterアカウントの連携を解除します。\n よろしいですか？")){
+            if (
+                confirm(
+                    "Twitterアカウントの連携を解除します。\n よろしいですか？"
+                )
+            ) {
                 this.loadingActive();
                 const response = await axios.post("/mypage/clear-twuser");
-    
+
                 if (response.status === OK) {
                     this.loadingActive();
                     this.systemMessage = response.data.success;
