@@ -135,6 +135,17 @@ class Autofollow extends Command
             \Log::debug($run_user->name . ' さんのフォローリストです。' . print_r($follow_target_list, true));
             \Log::debug('   ');
 
+            // 全てフォローしてリストが空だったら処理を停止
+            if (empty($follow_target_list)) {
+                \Log::debug('フォローリストが空なので、すべてのユーザーをフォローし終えました。' . $run_user->name . 'さんの処理を停止します。');
+                \Log::debug('    ');
+                $run_user->autofollow_status = 0;
+                $run_user->save();
+                \Log::debug('全てのユーザーをフォローしたので、' . $run_user->name . 'さんの自動フォローステータスをOFFにします。');
+                \Log::debug('    ');
+                break;
+            }
+
             /*********************************************
              * ここから自動フォローに関するループ処理
             **********************************************/
@@ -143,18 +154,7 @@ class Autofollow extends Command
 
                 // 現在の時間を格納
                 $now_time = Carbon::now();
-               
-                // 全てフォローしてリストが空だったら処理を停止
-                if (empty($follow_target_list)) {
-                    \Log::debug('フォローリストが空なので、すべてのユーザーをフォローし終えました。' . $run_user->name . 'さんの処理を停止します。');
-                    \Log::debug('    ');
-                    $run_user->autofollow_status = 0;
-                    $run_user->save();
-                    \Log::debug('全てのユーザーをフォローしたので、' . $run_user->name . 'さんの自動フォローステータスをOFFにします。');
-                    \Log::debug('    ');
-                    break;
-                }
-            
+
                 /************************************************
                 システムとしてのリクエスト制限に関する処理
                 *************************************************/
