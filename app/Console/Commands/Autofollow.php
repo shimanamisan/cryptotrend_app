@@ -296,6 +296,14 @@ class Autofollow extends Command
                     \Log::debug('削除後、一度処理を停止します。');
                     \Log::debug('   ');
                     exit();
+                } elseif ($result->errors[0]->code === 160) {
+                    // フォローした際のエラーコードが、既にフォロー済みだった場合は処理をスキップする（鍵付きユーザーの可能性も有り）
+                    \Log::debug('既にフォロー済みのユーザーです。Twitter_ID：'. $follow_target_id);
+                    \Log::debug('エラー内容を取得します '. print_r($result, true));
+                    \Log::debug('   ');
+                    \Log::debug('処理をスキップします。');
+                    \Log::debug('   ');
+                    continue;
                 } else {
                     // APIエラーが発生した場合は処理を停止する
                     \Log::debug('リクエスト時にエラーが発生しています。Twitter_ID：'. $follow_target_id);
