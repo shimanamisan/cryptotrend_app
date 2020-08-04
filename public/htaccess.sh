@@ -19,6 +19,8 @@ sleep 2
 # コピー後に削除
 rm .htaccess_production
 
+ls -la
+
 echo ""
 echo "###############################################"
 echo "##                    END                    ##"

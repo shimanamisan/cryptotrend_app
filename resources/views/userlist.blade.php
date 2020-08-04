@@ -24,9 +24,11 @@
         <div class="u-wrapp">
             <p class="u-margin__bottom--m">※1ユーザーにつき、Twitterアカウントを1つ登録できます。</p>
             @if(Session::has('error_message'))
+            <div class="c-error__twuser__wrapp">
                 <div class="c-error__authflash c-error__twuser u-margin__bottom--m">
                 <p>{{ session('error_message') }}</p>
                 </div>
+            </div>
             @endif
             <a id="js-redirect" href="{{ route('twitter.register') }}" 
             class="c-btn c-btn__twitter p-twuser__gest__btn"
