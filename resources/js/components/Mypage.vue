@@ -109,6 +109,7 @@
                                 placeholder="パスワード"
                                 @focus="clearError('pass')"
                             />
+                            <span class="p-form__info--pass">※半角英数8文字以上で入力して下さい</span>
                             <div v-if="errors_password" class="c-error">
                                 <ul v-if="errors_password">
                                     <li
