@@ -6,7 +6,11 @@
                 v-for="(news, index) in getnewsItems"
                 :key="index"
             >
-                <a class="p-news__link" :href="news.url" target="_blank"
+                <a
+                    class="p-news__link"
+                    :href="news.url"
+                    target="_blank"
+                    rel="noopener"
                     ><p>{{ news.title }}</p></a
                 >
                 <br />
