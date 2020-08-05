@@ -31,7 +31,6 @@ return [
         'array' => ':attributeは、:min個から:max個の間で指定してください。',
     ],
     'boolean' => ':attributeは、trueかfalseを指定してください。',
-    // 'confirmed' => ':attributeと、確認フィールドとが、一致していません。',
     'confirmed' => ':attributeと:attribute再確認が、一致していません。',
     'date' => ':attributeには有効な日付を指定してください。',
     'date_equals' => ':attributeには、:dateと同じ日付けを指定してください。',
@@ -42,7 +41,6 @@ return [
     'dimensions' => ':attributeの図形サイズが正しくありません。',
     'distinct' => ':attributeには異なった値を指定してください。',
     'email' => 'メールアドレスの形式で入力して下さい。',
-    // 'email' => ':attributeには、有効なメールアドレスを指定してください。',
     'ends_with' =>
         ':attributeには、:valuesのどれかで終わる値を指定してください。',
     'exists' => '選択された:attributeは正しくありません。',
@@ -128,7 +126,6 @@ return [
     'string' => ':attributeは文字列を指定してください。',
     'timezone' => ':attributeには、有効なゾーンを指定してください。',
     'unique' => 'その:attributeの値は既に登録されています。',
-    // 'unique' => ':attributeの値は既に存在しています。',
     'uploaded' => ':attributeのアップロードに失敗しました。',
     'url' => ':attributeに正しい形式を指定してください。',
     'uuid' => ':attributeに有効なUUIDを指定してください。',

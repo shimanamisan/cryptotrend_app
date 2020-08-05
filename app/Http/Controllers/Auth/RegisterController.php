@@ -44,10 +44,6 @@ class RegisterController extends Controller
 
     public function showRegistrationForm()
     {
-        // Twitter認証のログイン処理時に、ログイン・新規登録判定用のセッションを
-        // 新規登録画面表示時に、残っていないようにする。
-        session()->forget('login_flg');
-
         return view('auth.register');
     }
 
@@ -79,7 +75,6 @@ class RegisterController extends Controller
     public function redirectPath()
     {
         return '/mypage';
-        //例）return 'costs/index';
     }
     
     /**

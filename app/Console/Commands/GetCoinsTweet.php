@@ -75,10 +75,8 @@ class GetCoinsTweet extends Command
             11 => '"クアンタム" OR "QTUM"',
         ];
 
-        // 15分毎450回制限のリクエストをカウントしていく
+        // リクエストカウント用
         $search_request_limit_count = 0;
-        // 15分毎のリクエストの回数をカウントしていく
-        $request_limit_quarter_count = 0;
 
         // ツイートを取得する期間を設定
         // このような形式にする：since:2018-12-31_23:59:59_JST until:2019-01-01_00:00:00_JST
@@ -196,7 +194,6 @@ class GetCoinsTweet extends Command
         // ヘルパー関数のconfigメソッドを通じて、config/services.phpのtwitterトークン用の設定を参照
         $config = config('services.twitter');
         // アプリ認証参考
-        // https://qiita.com/yasunori_tanochi_gp/items/2e238638f846a1b1240f
         $api_key = $config['client_id'];
         $api_key_secret = $config['client_secret'];
         $access_token = $config['access_token'];

@@ -171,7 +171,6 @@ export default {
             $jsBg.classList.toggle("bg-gray__fix");
         },
         async sendAutoFollowRequest() {
-            // catch(error => error.response || error)で非同期通信が成功しても失敗してもresponseに結果を代入する
             const response = await axios.post("/autofollow", {
                 status: this.autoFollow_flg,
             });

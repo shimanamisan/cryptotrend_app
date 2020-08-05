@@ -29,8 +29,6 @@ class ResetPasswordController extends Controller
      *
      * @var string
      */
-    // リダイレクト先をログイン画面に変更する
-    // protected $redirectTo = RouteServiceProvider::HOME;
 
     // /*************************************************************
     // ResetsPasswords トレイトのメソッドをオーバーライド

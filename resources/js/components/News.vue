@@ -24,15 +24,5 @@ export default {
     },
     // js内ではキャメルケース
     props: ["news_data"],
-    methods: {
-        getNewsLength() {
-            // ニュースの記事の総数を取得。ページネーションコンポーネントにpropsで渡す
-            // this.totalPageNum = Object.keys(this.news_data).length;
-            this.totalPageNum = this.news_data.length;
-        },
-    },
-    created() {
-        this.getNewsLength();
-    },
 };
 </script>

@@ -40,9 +40,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('/unfollow', 'FollowController@unfollow');
     // Ajax処理：自動フォロー機能をONにする
     Route::post('/autofollow', 'FollowController@autoFollowFlg');
-    // Twitter未登録ユーザーをTwitterアカウント登録へ遷移させるための処理
-    Route::get('/userlist/redirect', 'FollowController@registerRedirect')->name('userlist.redirect');
-
+    
     /*****************************************
      * トレンド表示機能関連のルーティング
      *****************************************/

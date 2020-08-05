@@ -42,7 +42,6 @@ export default {
   props: ['coinData'],
   methods: {
     checkTrigger(e) {
-      // console.log(e.target.value)
       this.$emit('check-event', this.checkedNames);
     },
     clearTrigger(){

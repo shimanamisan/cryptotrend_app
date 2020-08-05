@@ -14,8 +14,7 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-    // コマンドを登録
-    // Commands\GetCoinsTweet::class,
+
   ];
 
     /**
@@ -55,11 +54,6 @@ class Kernel extends ConsoleKernel
         $schedule->command('command:autofollow')
         // 30分毎に処理を実行し、前の処理が終わっていない（多重起動）場合は処理を実行しない
         ->everyThirtyMinutes()->withoutOverlapping();
-
-        // // 退会済のユーザーのフォローデータ削除する
-        // $schedule->command('command:clearwithdraw')
-        // // 毎月1日の深夜12時に実行する
-        // ->monthly()->withoutOverlapping();
     }
 
     /**

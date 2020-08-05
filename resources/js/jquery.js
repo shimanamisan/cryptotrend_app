@@ -14,13 +14,11 @@ $(function () {
     /****************************************
 SPメニューを開閉するアクション
 *****************************************/
-    // let $jsBg = $("#js-bg");
     let $jsSpmenu = $("#js-spmenu-trigger");
     let $jsSpNav = $("#js-spnav-trigger");
     $jsSpmenu.on("click", function () {
         $jsSpmenu.toggleClass("active"); // ハンバーガーメニューの描画を変えるクラス
         $jsSpNav.toggleClass("p-header--isActive"); // SPメニューを横から表示するクラス
-        // $jsBg.toggleClass("bg-gray__fix"); // SPメニューを開いたら、背景をスクロールできないよう固定する
     });
 
     /****************************************************************************

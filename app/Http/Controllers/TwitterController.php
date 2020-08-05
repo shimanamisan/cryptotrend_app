@@ -26,17 +26,14 @@ class TwitterController extends Controller
         $user = json_encode($outh_user);
         // 新しく登録されたアカウントから表示していく
         $tw_user_result = Twuser::orderBy('id', 'desc')->get();
-        // dd($tw_user_result);
         // フォローテーブルのデータを取得
         $follow_list_result = Follow::where('user_id', Auth::user()->id)->where('delete_flg', 0)->get();
-        // dd($follow_list_result);
         
         // followsテーブルからのコレクションのオブジェクトが空で無ければ処理を実行
         if ($follow_list_result->isNotEmpty()) {
             // 仮想通貨関連一覧ユーザーとフォロー済みのいユーザーのデータを比較
             // フォローしているユーザーに isFollow プロパティを追加する
             foreach ($tw_user_result as $tw_item) {
-                // dd(gettype($tw_item->id)); // String
                 $tw_ID = (int)$tw_item->id; // 数値型に変換
                 
                 foreach ($follow_list_result as $follow_item) {
@@ -48,9 +45,9 @@ class TwitterController extends Controller
                 }
             }
             // 結合先
-                $source = $tw_user_result->toArray(); // コレクションを配列へ変換
-                // 結合元(destinationをsourceに結合する)
-                $destination = $new_tw_user;
+            $source = $tw_user_result->toArray(); // コレクションを配列へ変換
+            // 結合元(destinationをsourceに結合する)
+            $destination = $new_tw_user;
             // 配列の差分を結合する、既存のデータに isFollow = true が追加されたデータが取得できる
             $result = array_merge($source, $destination);
             
@@ -71,7 +68,6 @@ class TwitterController extends Controller
         // ヘルパー関数のconfigメソッドを通じて、config/services.phpのtwitterトークン用の設定を参照
         $config = config('services.twitter');
         // アプリ認証参考
-        // https://qiita.com/yasunori_tanochi_gp/items/2e238638f846a1b1240f
         $api_key = $config['client_id'];
         $api_key_secret = $config['client_secret'];
         $access_token = $config['access_token'];

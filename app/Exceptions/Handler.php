@@ -57,8 +57,6 @@ class Handler extends ExceptionHandler
     // 表示させるエラーページを変更するために、getHttpExceptionViewメソッドをオーバーライドする
     protected function getHttpExceptionView(HttpExceptionInterface $e)
     {
-        // return "errors::{$e->getStatusCode()}";
         return "errors.exception";
     }
-    
 }
