@@ -79,6 +79,7 @@
                                         class="p-coin__table__link"
                                         :href="search_url + coin.coin_name"
                                         target="_blank"
+                                        rel="noopener"
                                         >{{ coin.coin_name }}</a
                                     >
                                 </td>
