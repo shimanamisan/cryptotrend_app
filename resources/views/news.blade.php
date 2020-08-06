@@ -7,6 +7,6 @@
 @section('content')
 <div id="app">
     <!-- app.bladeのyieldの箇所に読み込まれる -->
-    <News :news_data="{{ ($newsList) }}"/>
+    <News :news_data="{{ ($newslist) }}"/>
 </div>
 @endsection
