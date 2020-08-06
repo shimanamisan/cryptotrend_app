@@ -269,7 +269,6 @@ export default {
             loading: false, // 非同期通信時ローディングを表示する
             userDataSbumit_flg: true, // 送信ボタンを活性化・非活性化させるための判定用フラグ（ニックネーム、メールアドレス側）
             passwordSbumit_flg: true, // 送信ボタンを活性化・非活性化させるための判定用フラグ（パスワードフォーム側）
-            formActive_flg: true, // 既存パスワードの確認が出来ていないと、フォームを活性化させない
         };
     },
     computed: {},
