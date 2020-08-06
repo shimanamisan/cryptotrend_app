@@ -33,7 +33,14 @@ class NewsController extends Controller
             "&hl=ja&gl=JP&ceid=JP:ja";
 
         $items = simplexml_load_file($API_BASE_URL)->channel->item;
+        // dd($items->item);
 
+        // $array = get_object_vars($items);
+
+        // dd(count($array['item']));
+        
+
+        Log::debug('====== Google APIからニュースを取得しています ======');
         //記事のタイトルとURLを取り出して配列に格納
         for ($i = 0; $i < count($items); $i++) {
             $list[$i]['title'] = mb_convert_encoding(
@@ -52,6 +59,8 @@ class NewsController extends Controller
                 "auto"
             );
         }
+
+        dd($list);
 
         // json形式へ変換
         $newsList = json_encode($list);
