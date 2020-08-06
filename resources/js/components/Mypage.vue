@@ -15,6 +15,7 @@
                         各種アカウント情報を変更できます。
                     </div>
                     <hr class="u-line" />
+
                     <div class="p-mypage__content">
                         <div
                             class="p-mypage__content__body u-margin__bottom--m"
@@ -67,8 +68,34 @@
                                     </li>
                                 </ul>
                             </div>
+                            
+                            <div class="p-mypage__content--inwrap">
+                                <div class="p-mypage__content--cancel">
+                                    <button
+                                        class="c-btn p-mypage__btn p-mypage__btn--cancel"
+                                        @click="cancelFromUserData"
+                                    >
+                                        入力をクリア
+                                    </button>
+                                </div>
+                                <div class="p-mypage__content--submit">
+                                    <button
+                                        class="c-btn p-mypage__btn p-mypage__btn--submit"
+                                        @click="storUserData"
+                                        :disabled="userDataSbumit_flg"
+                                    >
+                                        変更を保存
+                                    </button>
+                                </div>
+                            </div>
                         </div>
+                    </div>
 
+                    <div class="p-mypage__content"> 
+                        <div class="p-form__title">
+                            パスワードを変更する
+                        </div>
+                        <hr class="u-line" />
                         <div
                             class="p-mypage__content__body u-margin__bottom--m"
                         >
@@ -80,7 +107,7 @@
                                     'c-error__input': errors_old_password,
                                 }"
                                 type="password"
-                                v-model="userDataForm.old_password"
+                                v-model="userPasswordDataForm.old_password"
                                 placeholder="現在のパスワード"
                                 @focus="clearError('old_pass')"
                             />
@@ -105,11 +132,13 @@
                                 class="c-form__input js-mypage-disabled-click"
                                 :class="{ 'c-error__input': errors_password }"
                                 type="password"
-                                v-model="userDataForm.password"
+                                v-model="userPasswordDataForm.password"
                                 placeholder="パスワード"
                                 @focus="clearError('pass')"
                             />
-                            <span class="p-form__info--pass">※半角英数8文字以上で入力して下さい</span>
+                            <span class="p-form__info--pass"
+                                >※半角英数8文字以上で入力して下さい</span
+                            >
                             <div v-if="errors_password" class="c-error">
                                 <ul v-if="errors_password">
                                     <li
@@ -132,14 +161,14 @@
                                 class="c-form__input js-mypage-disabled-click"
                                 type="password"
                                 placeholder="パスワードの確認"
-                                v-model="userDataForm.password_confirmation"
+                                v-model="userPasswordDataForm.password_confirmation"
                             />
 
                             <div class="p-mypage__content--inwrap">
                                 <div class="p-mypage__content--cancel">
                                     <button
                                         class="c-btn p-mypage__btn p-mypage__btn--cancel"
-                                        @click="cancelFrom"
+                                        @click="cancelFromPassword"
                                     >
                                         入力をクリア
                                     </button>
@@ -147,8 +176,8 @@
                                 <div class="p-mypage__content--submit">
                                     <button
                                         class="c-btn p-mypage__btn p-mypage__btn--submit"
-                                        @click="storUserData"
-                                        :disabled="sbumit_flg"
+                                        @click="changePasswordData"
+                                        :disabled="passwordSbumit_flg"
                                     >
                                         変更を保存
                                     </button>
@@ -225,6 +254,8 @@ export default {
             userDataForm: {
                 name: this.user,
                 email: this.email,
+            },
+            userPasswordDataForm: {
                 old_password: this.old_password,
                 password: this.password,
                 password_confirmation: this.password_confirmation,
@@ -236,9 +267,9 @@ export default {
             systemMessage: "", // エラーメッセージ全般を格納する
             flash_message_flg: false, // 登録後のメッセージ表示フラグ
             loading: false, // 非同期通信時ローディングを表示する
-            sbumit_flg: true, // 送信ボタンを活性化・非活性化させるための判定用フラグ
+            userDataSbumit_flg: true, // 送信ボタンを活性化・非活性化させるための判定用フラグ（ニックネーム、メールアドレス側）
+            passwordSbumit_flg: true, // 送信ボタンを活性化・非活性化させるための判定用フラグ（パスワードフォーム側）
             formActive_flg: true, // 既存パスワードの確認が出来ていないと、フォームを活性化させない
-            open: false, // モーダル表示用フラグ
         };
     },
     computed: {},
@@ -246,13 +277,6 @@ export default {
         // 登録後のメッセージを表示させる
         isShowMessage() {
             this.flash_message_flg = !this.flash_message_flg;
-        },
-        // モーダルを表示・非表示させる
-        isModalActive(event) {
-            this.open = !this.open;
-            // モーダル開閉時に、背景をスクロール出来ないように固定する
-            let $jsBg = document.getElementById("js-bg");
-            $jsBg.classList.toggle("bg-gray__fix");
         },
         // ユーザー情報を取得する
         async getUserData() {
@@ -268,25 +292,56 @@ export default {
                 alert("エラーが発生しました。しばらくお待ち下さい");
             }
         },
-        // フォームデータを送信する
+        // ニックネーム、メールアドレスのパスワードフォームを送信する
         async storUserData() {
             this.loadingActive();
-            const response = await axios.post("/mypage/userdata", {
+            const response = await axios.patch("/mypage/userdata", {
                 id: this.userId,
                 name: this.userDataForm.name,
                 email: this.userDataForm.email,
-                old_password: this.userDataForm.old_password,
-                password: this.userDataForm.password,
-                password_confirmation: this.userDataForm.password_confirmation,
             });
             if (response.status === OK) {
                 this.loadingActive();
                 this.userId = response.data.user.id;
                 this.userDataForm.name = response.data.user.name;
                 this.userDataForm.email = response.data.user.email;
-                this.userDataForm.old_password = "";
-                this.userDataForm.password = "";
-                this.userDataForm.password_confirmation = "";
+                this.systemMessage = response.data.success;
+
+                // フラッシュメッセージを表示
+                this.isShowMessage();
+                // 2秒後にメッセージを非表示にする
+                setTimeout(this.isShowMessage, 2000);
+            } else if (response.status === UNPROCESSABLE_ENTITY) {
+                this.loadingActive();
+                this.errors_name = response.data.errors.name;
+                this.errors_email = response.data.errors.email;
+                this.errors_old_password = response.data.errors.old_password;
+                this.errors_password = response.data.errors.password;
+            } else {
+                // 何か予期せぬErrorが発生したとき(500エラーなど)
+                this.loadingActive();
+                this.systemMessage =
+                    "エラーが発生しました。しばらくお待ち下さい";
+                this.isShowMessage();
+                setTimeout(this.isShowMessage, 2000);
+            }
+        },
+        // パスワードのフォームデータを送信する
+        async changePasswordData() {
+            this.loadingActive();
+            console.log(this.userPasswordDataForm)
+            const response = await axios.patch("/mypage/change-password", {
+                id: this.userId,
+                old_password: this.userPasswordDataForm.old_password,
+                password: this.userPasswordDataForm.password,
+                password_confirmation: this.userPasswordDataForm.password_confirmation,
+            });
+            if (response.status === OK) {
+                this.loadingActive();
+                this.userId = response.data.user.id;
+                this.userPasswordDataForm.old_password = "";
+                this.userPasswordDataForm.password = "";
+                this.userPasswordDataForm.password_confirmation = "";
                 this.systemMessage = response.data.success;
 
                 // フラッシュメッセージを表示
@@ -351,18 +406,21 @@ export default {
             }
         },
         // 入力フォームを全て空にする
-        cancelFrom() {
+        cancelFromUserData() {
             this.errors = "";
             this.userDataForm.name = "";
             this.userDataForm.email = "";
-            this.userDataForm.old_password = "";
-            this.userDataForm.password = "";
-            this.userDataForm.password_confirmation = "";
+        },
+        cancelFromPassword() {
+            this.errors = "";
+            this.userPasswordDataForm.old_password = "";
+            this.userPasswordDataForm.password = "";
+            this.userPasswordDataForm.password_confirmation = "";
         },
         // 入力フォームのエラーを空にする
         clearError(value) {
             if (value === "name") {
-                this.errors_nicname = "";
+                this.errors_name = "";
             } else if (value === "email") {
                 this.errors_email = "";
             } else if (value === "old_pass") {
@@ -377,13 +435,26 @@ export default {
         },
     },
     watch: {
+        // ニックネーム、メールアドレス側の監視
         userDataForm: {
             handler: function (val, oldval) {
                 if (
                     val.name !== "" &&
                     val.name !== undefined &&
                     val.email !== "" &&
-                    val.email !== undefined &&
+                    val.email !== undefined
+                ) {
+                    this.userDataSbumit_flg = false;
+                } else {
+                    this.userDataSbumit_flg = true;
+                }
+            },
+            deep: true, // オブジェクトのネストされた値の更新を検出するためのオプション
+        },
+        // パスワードフォーム側の監視
+        userPasswordDataForm: {
+            handler: function (val, oldval) {
+                if (
                     val.old_password !== "" &&
                     val.old_password !== undefined &&
                     val.password !== "" &&
@@ -391,9 +462,9 @@ export default {
                     val.password_confirmation !== "" &&
                     val.password_confirmation !== undefined
                 ) {
-                    this.sbumit_flg = false;
+                    this.passwordSbumit_flg = false;
                 } else {
-                    this.sbumit_flg = true;
+                    this.passwordSbumit_flg = true;
                 }
             },
             deep: true, // オブジェクトのネストされた値の更新を検出するためのオプション

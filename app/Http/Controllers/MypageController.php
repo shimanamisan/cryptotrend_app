@@ -4,10 +4,12 @@ namespace App\Http\Controllers;
 
 use App\User; // ★追加
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash; // ★追加
 use Illuminate\Support\Facades\Log; // ★追加
 use App\Http\Requests\MypageRequest; // ★追加
 use Illuminate\Support\Facades\Auth; // ★追加
+use Illuminate\Support\Facades\Hash; // ★追加
+use App\Http\Requests\MypagePasswordRequest; // ★追加
+use App\Http\Requests\MypageUserDataRequest; // ★追加
 
 class MypageController extends Controller
 {
@@ -30,13 +32,13 @@ class MypageController extends Controller
         return $user;
     }
     // ユーザーデータの更新処理
-    public function storUserData(MypageRequest $request)
+    public function storUserData(MypageUserDataRequest $request)
     {
         try {
             $user = Auth::user();
             
             $data = $request->all();
-
+            
             // ニックネームが変更されていた場合
             if ($user->name !== $data['name']) {
                 $user->name = $data['name'];
@@ -52,6 +54,21 @@ class MypageController extends Controller
                 \Log::debug('メールアドレスを更新しました');
                 \Log::debug('   ');
             }
+        } catch (\Exception $e) {
+            \Log::debug('アカウント情報変更時に例外が発生しました。' .$e->getMessage());
+            \Log::debug('   ');
+            return response()->json(['error', 'エラーが発生しました。'], 500);
+        }
+
+        return response()->json(['user' => $user, 'success' => 'アカウント情報を更新しました。']);
+    }
+    // パスワードの更新処理
+    public function changePasswordData(MypagePasswordRequest $request)
+    {
+        try {
+            $user = Auth::user();
+            
+            $data = $request->all();
             
             // 現在のパスワードをチェック
             if (!(Hash::check($request->get('old_password'), Auth::user()->password))) {
@@ -96,7 +113,7 @@ class MypageController extends Controller
             return response()->json(['error', 'エラーが発生しました。'], 500);
         }
 
-        return response()->json(['user' => $user, 'success' => 'アカウント情報を更新しました。']);
+        return response()->json(['user' => $user, 'success' => 'パスワードを変更しました。']);
     }
 
     // Twitter連携を解除する
