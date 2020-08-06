@@ -148,6 +148,8 @@ class GetTwitterUsers extends Command
                             // 文字数をカットする
                             $text = $search_result_item->description;
                             $text_count = mb_strlen($text);
+                            \Log::debug("descriptionの文字数。文字数：{$text_count}");
+                            \Log::debug('    ');
 
                             if ($text_count >= 191) {
                                 \Log::debug("descriptionの文字数が191文字を超えています。文字列を切り取ります。文字数：{$text_count}");
