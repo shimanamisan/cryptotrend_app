@@ -141,6 +141,8 @@ class MypageController extends Controller
                 ->first();
             // デリートフラグを立てる
             $userInfo->delete_flg = 1;
+            // 自動フォローステータスをOFFにする
+            $userInfo->autofollow_status = 0;
             // followsテーブルのdelete_flgカラムも更新する
             User::find($user->id)->follows()->update(['delete_flg' => 1]);
             // ログイン保持のトークンを空にする
