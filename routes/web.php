@@ -60,9 +60,9 @@ Route::group(['middleware' => 'auth'], function () {
     // Ajax処理：ユーザーデータの取得
     Route::get('/mypage/user', 'MypageController@getUserData');
     // Ajax処理：ニックネームやメールアドレスの登録・更新処理
-    Route::patch('/mypage/userdata', 'MypageController@storUserData');
+    Route::post('/mypage/userdata', 'MypageController@storUserData');
     // Ajax処理：パスワードの変更
-    Route::patch('/mypage/change-password', 'MypageController@changePasswordData');
+    Route::post('/mypage/change-password', 'MypageController@changePasswordData');
     // Ajax処理：Twitterユーザーの連携解除
     Route::post('/mypage/clear-twuser', 'MypageController@clearTwitterAuth');
     // Ajax処理：退会処理

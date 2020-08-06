@@ -295,7 +295,7 @@ export default {
         // ニックネーム、メールアドレスのパスワードフォームを送信する
         async storUserData() {
             this.loadingActive();
-            const response = await axios.patch("/mypage/userdata", {
+            const response = await axios.post("/mypage/userdata", {
                 id: this.userId,
                 name: this.userDataForm.name,
                 email: this.userDataForm.email,
@@ -329,8 +329,7 @@ export default {
         // パスワードのフォームデータを送信する
         async changePasswordData() {
             this.loadingActive();
-            console.log(this.userPasswordDataForm)
-            const response = await axios.patch("/mypage/change-password", {
+            const response = await axios.post("/mypage/change-password", {
                 id: this.userId,
                 old_password: this.userPasswordDataForm.old_password,
                 password: this.userPasswordDataForm.password,
@@ -367,7 +366,6 @@ export default {
         async deleteUser() {
             if (confirm("CryptoTrendを退会します。よろしいですか？")) {
                 const response = await axios.post("/mypage/delete");
-                // console.log(response);
                 if (response.status === OK) {
                     // 退会後ページを移動
                     window.location = "/";
