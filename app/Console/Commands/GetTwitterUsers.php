@@ -65,13 +65,14 @@ class GetTwitterUsers extends Command
         
         // 配列の個数分ループしてユーザーを取得する
         foreach ($page_random as $page) {
+            \Log::debug('=============================');
             \Log::debug($page . 'ページ目を取得しています。');
-            \Log::debug('    ');
+            \Log::debug('=============================');
 
             $options = [
                     'q' => $search_key,
-                    'count' => $search_limit_count,
                     'page' => $page,
+                    'count' => $search_limit_count,
                     'lang' => 'ja',
                     ];
         
