@@ -88,13 +88,13 @@
                                     <td>不明</td>
                                 </template>
                                 <template v-else>
-                                    <td>{{ coin.max_price }}</td>
+                                    <td>{{ coin.max_price }} JPY</td>
                                 </template>
                                 <template v-if="coin.low_price == 0">
                                     <td>不明</td>
                                 </template>
                                 <template v-else>
-                                    <td>{{ coin.low_price }}</td>
+                                    <td>{{ coin.low_price }} JPY</td>
                                 </template>
                             </tr>
                         </table>
