@@ -48,7 +48,7 @@ class PasswordResetNotification extends Notification
         $url = $toplevelURL . "/password/reset/{$this->token}";
 
         return (new MailMessage())
-            ->from('itsup-info@shimanamisan.com') // 送信元アドレス
+            ->from('cryptotrend-info@shimanamisan.com') // 送信元アドレス
             ->subject($this->title) // メールに表示されるタイトル
             ->view('email.reset', ['result_url' => url($url)]); // URLを変数に入れてテンプレートに渡す
     }
