@@ -68,7 +68,7 @@
                                     </li>
                                 </ul>
                             </div>
-                            
+
                             <div class="p-mypage__content--inwrap">
                                 <div class="p-mypage__content--cancel">
                                     <button
@@ -91,7 +91,7 @@
                         </div>
                     </div>
 
-                    <div class="p-mypage__content"> 
+                    <div class="p-mypage__content">
                         <div class="p-form__title">
                             パスワードを変更する
                         </div>
@@ -161,7 +161,9 @@
                                 class="c-form__input js-mypage-disabled-click"
                                 type="password"
                                 placeholder="パスワードの確認"
-                                v-model="userPasswordDataForm.password_confirmation"
+                                v-model="
+                                    userPasswordDataForm.password_confirmation
+                                "
                             />
 
                             <div class="p-mypage__content--inwrap">
@@ -299,17 +301,26 @@ export default {
                 name: this.userDataForm.name,
                 email: this.userDataForm.email,
             });
+            console.log(response.data.success);
             if (response.status === OK) {
                 this.loadingActive();
-                this.userId = response.data.user.id;
-                this.userDataForm.name = response.data.user.name;
-                this.userDataForm.email = response.data.user.email;
-                this.systemMessage = response.data.success;
+
+                // メールアドレスが変更された際は、ユーザー情報を返却していのでJavaScript側でエラーになって
+                // フラッシュメッセージを出力させる処理まで実行されない。ユーザー情報を返却していなくとも
+                // 処理としては通っているので、エラーで処理が停止しないようにtry catch構文で囲む
+                try {
+                    this.userId = response.data.user.id;
+                    this.userDataForm.name = response.data.user.name;
+                    this.userDataForm.email = response.data.user.email;
+                    this.systemMessage = response.data.success;
+                } catch (e) {
+                    this.systemMessage = response.data.success;
+                }
 
                 // フラッシュメッセージを表示
                 this.isShowMessage();
                 // 2秒後にメッセージを非表示にする
-                setTimeout(this.isShowMessage, 2000);
+                setTimeout(this.isShowMessage, 5000);
             } else if (response.status === UNPROCESSABLE_ENTITY) {
                 this.loadingActive();
                 this.errors_name = response.data.errors.name;
@@ -322,7 +333,7 @@ export default {
                 this.systemMessage =
                     "エラーが発生しました。しばらくお待ち下さい";
                 this.isShowMessage();
-                setTimeout(this.isShowMessage, 2000);
+                setTimeout(this.isShowMessage, 5000);
             }
         },
         // パスワードのフォームデータを送信する
@@ -332,7 +343,8 @@ export default {
                 id: this.userId,
                 old_password: this.userPasswordDataForm.old_password,
                 password: this.userPasswordDataForm.password,
-                password_confirmation: this.userPasswordDataForm.password_confirmation,
+                password_confirmation: this.userPasswordDataForm
+                    .password_confirmation,
             });
             if (response.status === OK) {
                 this.loadingActive();
@@ -345,7 +357,7 @@ export default {
                 // フラッシュメッセージを表示
                 this.isShowMessage();
                 // 2秒後にメッセージを非表示にする
-                setTimeout(this.isShowMessage, 2000);
+                setTimeout(this.isShowMessage, 5000);
             } else if (response.status === UNPROCESSABLE_ENTITY) {
                 this.loadingActive();
                 this.errors_name = response.data.errors.name;
@@ -358,7 +370,7 @@ export default {
                 this.systemMessage =
                     "エラーが発生しました。しばらくお待ち下さい";
                 this.isShowMessage();
-                setTimeout(this.isShowMessage, 2000);
+                setTimeout(this.isShowMessage, 5000);
             }
         },
         // 退会処理を実行する
@@ -391,14 +403,14 @@ export default {
                     // フラッシュメッセージを表示
                     this.isShowMessage();
                     // 2秒後にメッセージを非表示にする
-                    setTimeout(this.isShowMessage, 2000);
+                    setTimeout(this.isShowMessage, 5000);
                 } else {
                     // 何か予期せぬErrorが発生したとき(500エラーなど)
                     this.loadingActive();
                     this.systemMessage =
                         "エラーが発生しました。しばらくお待ち下さい";
                     this.isShowMessage();
-                    setTimeout(this.isShowMessage, 2000);
+                    setTimeout(this.isShowMessage, 5000);
                 }
             }
         },
