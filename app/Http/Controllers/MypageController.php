@@ -52,10 +52,6 @@ class MypageController extends Controller
 
             // メールアドレスが変更されていた場合
             if ($user->email !== $data['email']) {
-                // $user->email = $data['email'];
-                // $user->save();
-                // \Log::debug('メールアドレスを更新しました');
-                // \Log::debug('   ');
                 \Log::debug('メールアドレス変更通知を送信します。');
                 \Log::debug('   ');
 
