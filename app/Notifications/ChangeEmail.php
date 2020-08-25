@@ -46,7 +46,7 @@ class ChangeEmail extends Notification
     {
         return (new MailMessage)
             // 件名
-            ->subject('メールアドレス変更')
+            ->subject('メールアドレス変更 通知')
             // メールテンプレートの指定
             ->view(
                 'email.changeEmail',
