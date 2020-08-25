@@ -210,8 +210,6 @@ class MypageController extends Controller
         $param['token'] = $token;
         // 新しいレコードを作成
         $email_reset = EmailReset::create($param);
-            
-        // dd($email_reset->sendEmailResetNotification($token));
         // リセットメールを送信する
         $email_reset->sendEmailResetNotification($token);
 
@@ -235,14 +233,13 @@ class MypageController extends Controller
             $user->email = $userEmail->new_email;
             $user->save();
             // 登録後は、変更に使用したトークンやユーザーID、メールアドレスが格納されたレコードを削除する
-            $email_reset->delete();
-
+            $userEmail->delete();
             \Log::debug('ユーザーのメールアドレスを変更して、email_resetsテーブルのレコードを削除しました。');
             \Log::debug('   ');
 
             return redirect('/mypage')->with('system_message', 'メールアドレスを更新しました。');
         } else {
-            // 有効期限が切れたレコードが存在していた場合削除
+            // レコードが存在していて、有効期限が切れていた場合削除
             if ($userEmail) {
                 $email_reset->where('token', $token)->delete();
             }
