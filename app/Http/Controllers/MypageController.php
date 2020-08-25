@@ -4,8 +4,9 @@ namespace App\Http\Controllers;
 
 use App\User; // ★追加
 use App\EmailReset; // ★追加
-use Illuminate\Support\Str; // ★追加
 use Illuminate\Http\Request;
+use Carbon\Carbon; // ★追加
+use Illuminate\Support\Str; // ★追加
 use Illuminate\Support\Facades\Log; // ★追加
 use App\Http\Requests\MypageRequest; // ★追加
 use Illuminate\Support\Facades\Auth; // ★追加
@@ -59,6 +60,8 @@ class MypageController extends Controller
                 \Log::debug('   ');
 
                 $this->sendChangeEmailLink($data['email']);
+
+                return response()->json(['success' => 'メールアドレス変更通知を送信しました。受信ボックスを確認してください。']);
             }
         } catch (\Exception $e) {
             \Log::debug('アカウント情報変更時に例外が発生しました。' .$e->getMessage());
@@ -201,34 +204,25 @@ class MypageController extends Controller
         $token = hash_hmac('sha256', Str::random(40) . $email, config('app.key'));
 
         // トークンをDBへ保存
-        try {
-            $param = [];
-            $param['user_id'] = Auth::id();
-            $param['new_email'] = $email;
-            $param['token'] = $token;
-            // 新しいレコードを作成
-            $email_reset = EmailReset::create($param);
+        $param = [];
+        $param['user_id'] = Auth::id();
+        $param['new_email'] = $email;
+        $param['token'] = $token;
+        // 新しいレコードを作成
+        $email_reset = EmailReset::create($param);
             
-            // dd($email_reset->sendEmailResetNotification($token));
-            // リセットメールを送信する
-            $email_reset->sendEmailResetNotification($token);
+        // dd($email_reset->sendEmailResetNotification($token));
+        // リセットメールを送信する
+        $email_reset->sendEmailResetNotification($token);
 
-
-            \Log::debug('メールアドレス変更確認メールを送信しました。');
-            \Log::debug('   ');
-
-            return response()->json(['success' => '確認メールを送信しました。']);
-        } catch (\Exception $e) {
-            \Log::debug('メールアドレス確認メール送信時に例外が発生しました。' .$e->getMessage());
-            \Log::debug('   ');
-            return response()->json(['error', 'エラーが発生しました。'], 500);
-        }
+        \Log::debug('メールアドレス変更確認メールを送信しました。');
+        \Log::debug('   ');
     }
 
     public function changeEmail(Request $request, EmailReset $email_reset, $token)
     {
         // トークンが登録されているものか確認
-        $userEmail = $email_reset->whewe('token', $token)->first();
+        $userEmail = $email_reset->where('token', $token)->first();
         \Log::debug('URLクエリから渡ってきたトークンがDBに保存されているかチェックしています。');
         \Log::debug('   ');
 
@@ -245,14 +239,15 @@ class MypageController extends Controller
 
             \Log::debug('ユーザーのメールアドレスを変更して、email_resetsテーブルのレコードを削除しました。');
             \Log::debug('   ');
-            return response()->json(['success' => 'メールアドレスを変更しました。']);
+
+            return redirect('/mypage')->with('system_message', 'メールアドレスを更新しました。');
         } else {
             // 有効期限が切れたレコードが存在していた場合削除
             if ($userEmail) {
-                $email_reset->whewe('token', $token)->delete();
+                $email_reset->where('token', $token)->delete();
             }
 
-            return response()->json(['error', 'メールアドレスの更新に失敗しました。'], 422);
+            return redirect('/mypage')->with('system_message', 'メールアドレスの更新に失敗しました。');
         }
     }
 
