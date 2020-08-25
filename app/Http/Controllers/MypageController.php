@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\User; // ★追加
+use App\EmailReset; // ★追加
 use Illuminate\Http\Request;
+use Carbon\Carbon; // ★追加
+use Illuminate\Support\Str; // ★追加
 use Illuminate\Support\Facades\Log; // ★追加
 use App\Http\Requests\MypageRequest; // ★追加
 use Illuminate\Support\Facades\Auth; // ★追加
@@ -49,10 +52,16 @@ class MypageController extends Controller
 
             // メールアドレスが変更されていた場合
             if ($user->email !== $data['email']) {
-                $user->email = $data['email'];
-                $user->save();
-                \Log::debug('メールアドレスを更新しました');
+                // $user->email = $data['email'];
+                // $user->save();
+                // \Log::debug('メールアドレスを更新しました');
+                // \Log::debug('   ');
+                \Log::debug('メールアドレス変更通知を送信します。');
                 \Log::debug('   ');
+
+                $this->sendChangeEmailLink($data['email']);
+
+                return response()->json(['success' => 'メールアドレス変更通知を送信しました。受信ボックスを確認してください。']);
             }
         } catch (\Exception $e) {
             \Log::debug('アカウント情報変更時に例外が発生しました。' .$e->getMessage());
@@ -186,5 +195,70 @@ class MypageController extends Controller
 
             return response()->json(['error', 'エラーが発生しました。'], 500);
         }
+    }
+
+    // メールアドレス変更リンクを送信する
+    public function sendChangeEmailLink($email)
+    {
+        // トークン生成
+        $token = hash_hmac('sha256', Str::random(40) . $email, config('app.key'));
+
+        // トークンをDBへ保存
+        $param = [];
+        $param['user_id'] = Auth::id();
+        $param['new_email'] = $email;
+        $param['token'] = $token;
+        // 新しいレコードを作成
+        $email_reset = EmailReset::create($param);
+            
+        // dd($email_reset->sendEmailResetNotification($token));
+        // リセットメールを送信する
+        $email_reset->sendEmailResetNotification($token);
+
+        \Log::debug('メールアドレス変更確認メールを送信しました。');
+        \Log::debug('   ');
+    }
+
+    public function changeEmail(Request $request, EmailReset $email_reset, $token)
+    {
+        // トークンが登録されているものか確認
+        $userEmail = $email_reset->where('token', $token)->first();
+        \Log::debug('URLクエリから渡ってきたトークンがDBに保存されているかチェックしています。');
+        \Log::debug('   ');
+
+        // トークンが存在している且つ、有効期限が切れていないかチェック
+        if ($userEmail && !$this->tokenExpired($userEmail->created_at)) {
+            \Log::debug('トークンが存在しており、有効期限以内でした！');
+            \Log::debug('   ');
+            // ユーザーのメールアドレスを変更
+            $user = User::find($userEmail->user_id);
+            $user->email = $userEmail->new_email;
+            $user->save();
+            // 登録後は、変更に使用したトークンやユーザーID、メールアドレスが格納されたレコードを削除する
+            $email_reset->delete();
+
+            \Log::debug('ユーザーのメールアドレスを変更して、email_resetsテーブルのレコードを削除しました。');
+            \Log::debug('   ');
+
+            return redirect('/mypage')->with('system_message', 'メールアドレスを更新しました。');
+        } else {
+            // 有効期限が切れたレコードが存在していた場合削除
+            if ($userEmail) {
+                $email_reset->where('token', $token)->delete();
+            }
+
+            return redirect('/mypage')->with('system_message', 'メールアドレスの更新に失敗しました。');
+        }
+    }
+
+    protected function tokenExpired($createdAt)
+    {
+        // トークンの有効期限は30分に設定
+        $expires = 60 * 30;
+        // parseメソッドで、サーバー内の時刻ではなく現在時刻を指定した値にする。ここでは、DBに登録された created_atの時刻が指定される
+        // そこから30分が経過しているか判定する。
+        // addSecondsメソッドで、日付を加算する。60 * 30 が入っている
+        // isPastメソッドで、指定された時刻より過去かどうか判定する。進んでいればfalseが返ってくる
+        return Carbon::parse($createdAt)->addSeconds($expires)->isPast();
     }
 }

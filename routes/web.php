@@ -56,6 +56,7 @@ Route::group(['middleware' => 'auth'], function () {
     /*****************************************
      * プロフィール機能関連のルーティング
      *****************************************/
+    // マイページの表示
     Route::get('/mypage', 'MypageController@index')->name('mypage.index');
     // Ajax処理：ユーザーデータの取得
     Route::get('/mypage/user', 'MypageController@getUserData');
@@ -67,4 +68,6 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('/mypage/clear-twuser', 'MypageController@clearTwitterAuth');
     // Ajax処理：退会処理
     Route::post('/mypage/delete', 'MypageController@delete');
+    // メールアドレス変更確定
+    Route::get('/mypage/change-password/{token}', "MypageController@changeEmail");
 });

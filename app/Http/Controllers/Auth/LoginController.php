@@ -84,7 +84,7 @@ class LoginController extends Controller
     }
 
     /******************************************************************
-     * AuthenticatesUsersトレイトのcredentialsメソッドをオーバーライド
+     * AuthenticatesUsersトレイトのvalidateLoginメソッドをオーバーライド
     ******************************************************************/
     protected function validateLogin(Request $request)
     {

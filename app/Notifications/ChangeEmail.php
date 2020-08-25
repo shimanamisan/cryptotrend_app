@@ -7,12 +7,12 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class PasswordResetNotification extends Notification
+class ChangeEmail extends Notification
 {
     use Queueable;
 
     public $token; // 追加
-    protected $title = 'パスワードリセット 通知'; // 追加
+    protected $title = 'メールアドレス変更 通知'; // 追加
 
     /**
      * Create a new notification instance.
@@ -44,13 +44,16 @@ class PasswordResetNotification extends Notification
      */
     public function toMail($notifiable)
     {
-        $toplevelURL = route('home');
-        $url = $toplevelURL . "/password/reset/{$this->token}";
-
-        return (new MailMessage())
-            ->from('cryptotrend-info@shimanamisan.com') // 送信元アドレス
-            ->subject($this->title) // メールに表示されるタイトル
-            ->view('email.reset', ['result_url' => url($url)]); // URLを変数に入れてテンプレートに渡す
+        return (new MailMessage)
+            // 件名
+            ->subject('メールアドレス変更 通知')
+            // メールテンプレートの指定
+            ->view(
+                'email.changeEmail',
+                // urlヘルパメソッドは、URLを生成する。生成されるURLは自動的に
+                // 現在のリクエストのスキームとホストが使用される
+                ['result_url' =>url("/mypage/change-password/{$this->token}")]
+            );
     }
 
     /**
@@ -62,7 +65,7 @@ class PasswordResetNotification extends Notification
     public function toArray($notifiable)
     {
         return [
-                //
-            ];
+            //
+        ];
     }
 }
