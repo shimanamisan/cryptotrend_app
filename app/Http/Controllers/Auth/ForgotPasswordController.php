@@ -51,8 +51,8 @@ class ForgotPasswordController extends Controller
         return Validator::make($data, [
         
             'email' => ['required', 'string', 'email', 'max:100',
-                        // usersテーブルで退会済みのユーザーを探す（deletef_flgが1のユーザー）
-                        Rule::unique('users', 'email')->where('delete_flg', 1)]
+                        // usersテーブルで退会済みでないユーザーが存在しているか探す（deletef_flgが0のユーザー）
+                        Rule::exists('users', 'email')->where('delete_flg', 0)]
         ], $message);
     }
 }
