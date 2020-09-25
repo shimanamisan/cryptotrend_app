@@ -19,9 +19,9 @@
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteRule ^ index.php [L]
 
-    # httpへのリクエストをhttpsへ受け渡す処理（本番環境で有効にする）
-    # HTTPS
-    # RewriteEngine On
-    # RewriteCond %{HTTPS} off
-    # RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
+    <If "%{HTTP_HOST} == 'http://crypto-trend2020.shimanamisan.com'">
+    # 本番環境のホストならHTTPSへリダイレクトさせる
+    RewriteEngine On
+    RewriteCond %{HTTPS} off
+    RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
 </IfModule>
