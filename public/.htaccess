@@ -3,6 +3,13 @@
         Options -MultiViews -Indexes
     </IfModule>
 
+    <IfModule "%{HTTP_HOST} === 'crypto-trend2020.shimanamisan.com'">
+    # 本番環境のホストならHTTPSへリダイレクトさせる
+    RewriteEngine On
+    RewriteCond %{HTTPS} off
+    RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
+    </IfModule>
+
     RewriteEngine On
 
     # Handle Authorization Header
@@ -19,9 +26,4 @@
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteRule ^ index.php [L]
 
-    <If "%{HTTP_HOST} == 'crypto-trend2020.shimanamisan.com'">
-    # 本番環境のホストならHTTPSへリダイレクトさせる
-    RewriteEngine On
-    RewriteCond %{HTTPS} off
-    RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
 </IfModule>
