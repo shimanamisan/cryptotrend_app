@@ -36,7 +36,7 @@
       </section>
       <section class="c-container__index p-sitemap l-main__section">
         <div  class="p-sitemap__about js-scroll">
-          <h1 class="p-sitemap__title">CRYPTO TORENDとは？</h1>
+          <h1 class="p-sitemap__title">CRYPTO TRENDとは？</h1>
 
           <hr class="u-line" />
           <div>
