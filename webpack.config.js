@@ -1,21 +1,17 @@
 // productionモードでの圧縮方法、https://reffect.co.jp/html/webpack-4-mini-css-extract-plugin
 
 const path = require("path");
-const { VueLoaderPlugin } = require("vue-loader");
-// LIVEリロードをするためのプラグイン
-const LiveReloadPlugin = require("webpack-livereload-plugin");
-// app.jsとapp.cssファイルに分割するためのプラグイン
-const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-// JSのコメントをビルド時に削除する
-const TerserPlugin = require("terser-webpack-plugin");
-// 別ファイルに出力したCSSファイルを圧縮するために必要
-const OptimizeCssAssetsPlugin = require("optimize-css-assets-webpack-plugin");
-const WebpackBuildNotifierPlugin = require("webpack-build-notifier");
+
+const { VueLoaderPlugin } = require("vue-loader"); // vue-loaderの読み込み
+const LiveReloadPlugin = require("webpack-livereload-plugin"); // LIVEリロードをするためのプラグイン
+const MiniCssExtractPlugin = require("mini-css-extract-plugin"); // app.jsとapp.cssファイルに分割するためのプラグイン
+const TerserPlugin = require("terser-webpack-plugin"); // JSのコメントをビルド時に削除する
+const OptimizeCssAssetsPlugin = require("optimize-css-assets-webpack-plugin"); // 別ファイルに出力したCSSファイルを圧縮するために必要
+const WebpackBuildNotifierPlugin = require("webpack-build-notifier"); // 通知用プラグイン
 
 // [定数] webpack の出力オプションを指定します
 // 'production' か 'development' を指定
-const MODE = "development";
-
+const MODE = "production";
 const mydir = path.resolve(__dirname);
 
 console.log("ファイルパスを確認しています：" + mydir);

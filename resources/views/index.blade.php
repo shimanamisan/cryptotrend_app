@@ -11,7 +11,7 @@
         <div class="p-eyecatch__wrap c-anime__fadein">
           <h1 class="p-eyecatch__title">
             仮想通貨の最新情報は
-            <br />CRYPTO TOREND
+            <br />CRYPTO TREND
           </h1>
           @guest
           <div class="p-eyecatch__content">
@@ -42,7 +42,7 @@
           <div>
             <span class="p-sitemap__about--text">
               CRYPTO
-              TORENDはTwitterを利用した仮想通貨のトレンドを検索するサービスです。
+              TRENDはTwitterを利用した仮想通貨のトレンドを検索するサービスです。
             </span>
 
             <span class="p-sitemap__about--text">注目されている銘柄を知ることにより効率よく投資先の銘柄を選択することができます。</span>
