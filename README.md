@@ -5,10 +5,10 @@
 TwitterAPI を利用して、仮想通貨に関するツイートを銘柄毎に集計し、各銘柄の話題性を教えてくれるサービスです。
 その他、仮想通貨関連アカウントの一覧を表示し、Google News から仮想通貨関連のニュースの一覧を表示します。
 
-[アプリケーションはこちらからご覧になれます。](http://crypto-trend2020.shimanamisan.com/)
+- [アプリケーションはこちらからご覧になれます。](http://crypto-trend2020.shimanamisan.com/)
 
-テストユーザー：test01@mail.com
-パスワード：password
+- テストユーザー：test01@mail.com
+- パスワード：password
 
 ## 機能一覧
 
