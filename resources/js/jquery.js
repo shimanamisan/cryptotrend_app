@@ -57,4 +57,17 @@ SPメニューを開閉するアクション
             }
         });
     }
+
+    /****************************************
+かんたんログイン
+*****************************************/
+    let $inputEmail = $(".js-guest-email");
+    let $inputPass = $(".js-guest-password");
+    let $guestBtn = $(".js-guest-login");
+
+    $guestBtn.on('click', function(e){
+        e.preventDefault();
+        $inputEmail.val("test01@mail.com")
+        $inputPass.val("password")
+    })
 });
