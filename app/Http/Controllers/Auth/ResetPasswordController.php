@@ -43,8 +43,8 @@ class ResetPasswordController extends Controller
 
         event(new PasswordReset($user));
 
-        \Log::debug('パスワードを変更しました。ログイン画面へ遷移します');
-        \Log::debug('   ');
+        \Log::debug("パスワードを変更しました。ログイン画面へ遷移します");
+        \Log::debug("   ");
 
         // ResetsPasswordsトレイにはこの後にguardメソッドでログインするようになっていたが
         // ログインさせずにログイン画面へ遷移させるようにする
@@ -55,30 +55,34 @@ class ResetPasswordController extends Controller
     // パスワード変更時にフラッシュメッセージを出力するようにセッションの名前を変更
     protected function sendResetResponse(Request $request, $response)
     {
-        return redirect($this->redirectPath())
-                            ->with('system_message', trans($response));
+        return redirect($this->redirectPath())->with(
+            "system_message",
+            trans($response)
+        );
     }
 
     protected function rules()
     {
         return [
-            'email' => 'required|string|email',
-            'password' => 'required|string|confirmed|min:8|max:100|regex:/^[a-zA-Z0-9]+$/'
+            "email" => "required|string|email",
+            "password" =>
+                'required|string|confirmed|min:8|max:100|regex:/^[a-zA-Z0-9]+$/',
         ];
     }
 
     protected function validationErrorMessages()
     {
         return [
-            'email.email' => '有効なメールアドレスを指定してください。',
-            'password.regex' => '半角英数のみご利用いただけます。',
-            'password.confirmed' => ':attributeと、:attribute再入力が一致していません。',
+            "email.email" => "有効なメールアドレスを指定してください。",
+            "password.regex" => "半角英数のみご利用いただけます。",
+            "password.confirmed" =>
+                ":attributeと、:attribute再入力が一致していません。",
         ];
     }
 
     // パスワードリセット後にログイン画面へリダイレクトさせるためにオーバーライドする
     public function redirectPath()
     {
-        return '/login';
+        return "/login";
     }
 }

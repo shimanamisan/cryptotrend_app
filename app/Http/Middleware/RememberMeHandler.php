@@ -17,7 +17,7 @@
 //      * @return mixed
 //      */
 //     public function handle($request, Closure $next)
-//     {   
+//     {
 //         if(Auth::viaRemember()){ // Remember Meでの認証時
 //             Log::notice('remember meクッキーを使用して認証されています');
 //             // 行いたい処理を書く

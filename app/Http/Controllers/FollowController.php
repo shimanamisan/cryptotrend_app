@@ -28,18 +28,19 @@ class FollowController extends Controller
     const FOLLOW_QUARTER_LIMIT = 14;
 
     /*********************************************************
-    * フォローボタンからユーザーをフォローする
-    *********************************************************/
+     * フォローボタンからユーザーをフォローする
+     *********************************************************/
     public function follow(Request $request)
     {
         /************************************************
         システムとしてのリクエスト制限に関するデータ
         *************************************************/
-        $SystemManager = SystemManager::where('id', 1)->first();
+        $SystemManager = SystemManager::where("id", 1)->first();
         // アプリ全体としてのフォロー制限のカウント数
         $one_day_system_counter = $SystemManager->one_day_system_counter;
         // アプリ全体としてフォロー制限に関する時刻
-        $system_follow_release_time = $SystemManager->one_day_system_follow_release_time;
+        $system_follow_release_time =
+            $SystemManager->one_day_system_follow_release_time;
 
         /************************************************
         ユーザー単位としてのリクエスト制限に関するデータ
@@ -54,7 +55,8 @@ class FollowController extends Controller
         15フォロー/15分を超えないようにするためのリクエスト制限に関するデータ
         *******************************************************************/
         // リクエスト制限解除時刻を格納
-        $day_follow_quarter_release_time = $user->day_follow_quarter_release_time;
+        $day_follow_quarter_release_time =
+            $user->day_follow_quarter_release_time;
         // 15フォロー/15分のリクエスト制限の上限をカウントする
         $day_follow_quarter_limit_count = $user->day_follow_quarter_limit_count;
 
@@ -77,32 +79,46 @@ class FollowController extends Controller
         // フォロー実行時、24時間後のリクエスト制限解除時刻をDBに登録する
         // リクエスト制限に掛からなくても、この時刻を経過すればカウントがリセットされるようにする
         if ($system_follow_release_time === null) {
-            $SystemManager->one_day_system_follow_release_time = Carbon::now()->addHours(24);
+            $SystemManager->one_day_system_follow_release_time = Carbon::now()->addHours(
+                24
+            );
             $SystemManager->update();
-            $system_follow_release_time = $SystemManager->one_day_system_follow_release_time;
-            Log::debug('アプリ単位での24時間後のリクエスト制限解除時刻です。');
-            Log::debug('    ');
+            $system_follow_release_time =
+                $SystemManager->one_day_system_follow_release_time;
+            Log::debug("アプリ単位での24時間後のリクエスト制限解除時刻です。");
+            Log::debug("    ");
         } elseif ($system_follow_release_time !== null) {
             // 既に解除用の時刻が格納されていれば何もしない
-            Log::debug('アプリ単位でのリクエスト制限解除時刻は既に格納されています。');
-            Log::debug('    ');
+            Log::debug(
+                "アプリ単位でのリクエスト制限解除時刻は既に格納されています。"
+            );
+            Log::debug("    ");
         }
         // アプリ単位のリクエスト制限解除時刻より、現在の時刻のほうが進んでいたら制限を解除する
         if ($now_time > $system_follow_release_time) {
-            $SystemManager->one_day_system_follow_release_time = Carbon::now()->addHours(24);
+            $SystemManager->one_day_system_follow_release_time = Carbon::now()->addHours(
+                24
+            );
             $SystemManager->one_day_system_counter = 0;
             $SystemManager->update();
             $one_day_system_counter = $SystemManager->one_day_system_counter;
-            Log::debug('24時間経過しました。新たに制限解除用の時刻を格納し、カウンターをリセットします。');
-            Log::debug('    ');
+            Log::debug(
+                "24時間経過しました。新たに制限解除用の時刻を格納し、カウンターをリセットします。"
+            );
+            Log::debug("    ");
         }
         // アプリとしての1日のフォローリクエスト制限以内か判定
         if ($one_day_system_counter >= self::SYSTEM_FOLLOW_LIMIT) {
-            Log::debug('アプリ単位でのリクエスト制限を超えました 1000/日。処理を停止します。');
-            Log::debug('    ');
-            return response()->json(['error' => '本日のリクエスト上限に到達しました。'], 403);
+            Log::debug(
+                "アプリ単位でのリクエスト制限を超えました 1000/日。処理を停止します。"
+            );
+            Log::debug("    ");
+            return response()->json(
+                ["error" => "本日のリクエスト上限に到達しました。"],
+                403
+            );
         }
-    
+
         /************************************************
         ユーザー単位としてのリクエスト制限に関する処理
         *************************************************/
@@ -112,12 +128,14 @@ class FollowController extends Controller
             $user->day_follow_release_time = Carbon::now()->addHours(24);
             $user->update();
             $day_follow_release_time = $user->day_follow_release_time;
-            Log::debug('ユーザー単位での24時間後のリクエスト制限解除時刻です');
-            Log::debug('    ');
+            Log::debug("ユーザー単位での24時間後のリクエスト制限解除時刻です");
+            Log::debug("    ");
         } elseif ($day_follow_release_time !== null) {
             // 既に解除用の時刻が格納されていれば何もしない
-            Log::debug('ユーザー単位でのリクエスト制限解除時刻は既に格納されています。');
-            Log::debug('    ');
+            Log::debug(
+                "ユーザー単位でのリクエスト制限解除時刻は既に格納されています。"
+            );
+            Log::debug("    ");
         }
         // ユーザー個別のリクエスト制限解除時刻より、現在の時刻のほうが進んでいたら制限を解除する
         if ($now_time > $day_follow_release_time) {
@@ -125,14 +143,21 @@ class FollowController extends Controller
             $user->day_follow_limit_count = 0;
             $user->update();
             $day_follow_limit_count = $user->day_follow_limit_count;
-            Log::debug('24時間経過しました。新たに制限解除用の時刻を格納し、カウンターをリセットします。');
-            Log::debug('    ');
+            Log::debug(
+                "24時間経過しました。新たに制限解除用の時刻を格納し、カウンターをリセットします。"
+            );
+            Log::debug("    ");
         }
         // ユーザー単位の1日のフォローリクエスト制限以内か判定
         if ($day_follow_limit_count >= self::DAY_FOLLOW_LIMIT) {
-            Log::debug('ユーザー単位のリクエスト制限を超えました 400/日。処理を停止します。');
-            Log::debug('    ');
-            return response()->json(['error' => '本日のリクエスト上限に到達しました。'], 403);
+            Log::debug(
+                "ユーザー単位のリクエスト制限を超えました 400/日。処理を停止します。"
+            );
+            Log::debug("    ");
+            return response()->json(
+                ["error" => "本日のリクエスト上限に到達しました。"],
+                403
+            );
         }
 
         /************************************************
@@ -144,12 +169,16 @@ class FollowController extends Controller
             $user->person_follow_release_time = Carbon::now()->addHours(24);
             $user->update();
             $person_follow_release_time = $user->person_follow_release_time;
-            Log::debug('個別フォロー（30フォロー/日）での24時間後のリクエスト制限解除時刻です。');
-            Log::debug('    ');
+            Log::debug(
+                "個別フォロー（30フォロー/日）での24時間後のリクエスト制限解除時刻です。"
+            );
+            Log::debug("    ");
         } elseif ($person_follow_release_time !== null) {
             // 既に解除用の時刻が格納されていれば何もしない
-            Log::debug('個別フォロー（30フォロー/日）でのリクエスト制限解除時刻は既に格納されています。');
-            Log::debug('    ');
+            Log::debug(
+                "個別フォロー（30フォロー/日）でのリクエスト制限解除時刻は既に格納されています。"
+            );
+            Log::debug("    ");
         }
         // 個別フォロー処理時のリクエスト制限解除時刻より、現在の時刻のほうが進んでいたら制限を解除する
         if ($now_time > $person_follow_release_time) {
@@ -157,63 +186,75 @@ class FollowController extends Controller
             $user->person_follow_limit_count = 0;
             $user->update();
             $person_follow_limit_count = $user->person_follow_limit_count;
-            Log::debug('24時間経過しました。新たに制限解除用の時刻を格納し、カウンターをリセットします。');
-            Log::debug('    ');
+            Log::debug(
+                "24時間経過しました。新たに制限解除用の時刻を格納し、カウンターをリセットします。"
+            );
+            Log::debug("    ");
         }
         // フォローボタンからの、フォローリクエスト制限以内か判定
         if ($person_follow_limit_count >= self::DAY_PERSON_LIMIT) {
-            Log::debug('フォローボタンからのリクエスト制限を超えました 30/日。処理を停止します。');
-            Log::debug('    ');
-            return response()->json(['error' => '本日のリクエスト上限に到達しました。'], 403);
+            Log::debug(
+                "フォローボタンからのリクエスト制限を超えました 30/日。処理を停止します。"
+            );
+            Log::debug("    ");
+            return response()->json(
+                ["error" => "本日のリクエスト上限に到達しました。"],
+                403
+            );
         }
 
         /************************************************
         15/15分リクエスト制限に関する処理
         *************************************************/
         if ($day_follow_quarter_release_time === null) {
-            $user->day_follow_quarter_release_time = Carbon::now()->addHours(24);
+            $user->day_follow_quarter_release_time = Carbon::now()->addHours(
+                24
+            );
             $user->update();
-            $day_follow_quarter_release_time = $user->day_follow_quarter_release_time;
-            Log::debug('15/15分リクエスト制限解除時刻です。');
-            Log::debug('    ');
+            $day_follow_quarter_release_time =
+                $user->day_follow_quarter_release_time;
+            Log::debug("15/15分リクエスト制限解除時刻です。");
+            Log::debug("    ");
         } elseif ($day_follow_quarter_release_time !== null) {
             // 既に解除用の時刻が格納されていれば何もしない
-            Log::debug('15/15分リクエスト制限解除時刻は既に格納されています。');
-            Log::debug('    ');
+            Log::debug("15/15分リクエスト制限解除時刻は既に格納されています。");
+            Log::debug("    ");
         }
         // 個別フォロー処理時のリクエスト制限解除時刻より、現在の時刻のほうが進んでいたら制限を解除する
         if ($now_time > $day_follow_quarter_release_time) {
-            $user->day_follow_quarter_release_time = new Carbon('+15 minutes');
+            $user->day_follow_quarter_release_time = new Carbon("+15 minutes");
             $user->day_follow_quarter_limit_count = 0;
             $user->update();
-            $day_follow_quarter_limit_count = $user->day_follow_quarter_limit_count;
-            Log::debug('15分経過しました。新たに制限解除用の時刻を格納し、カウンターをリセットします。');
-            Log::debug('    ');
+            $day_follow_quarter_limit_count =
+                $user->day_follow_quarter_limit_count;
+            Log::debug(
+                "15分経過しました。新たに制限解除用の時刻を格納し、カウンターをリセットします。"
+            );
+            Log::debug("    ");
         }
         // 15/15分制限以内か判定
         if ($day_follow_quarter_limit_count >= self::FOLLOW_QUARTER_LIMIT) {
-            Log::debug('15/15分リクエスト制限を超えました。処理を停止します。');
-            Log::debug('    ');
-            return response()->json(['error' => 'フォロー制限中です。'], 403);
+            Log::debug("15/15分リクエスト制限を超えました。処理を停止します。");
+            Log::debug("    ");
+            return response()->json(["error" => "フォロー制限中です。"], 403);
         }
         // インスタンスを生成
         $connection = $this->singleFollowAuth();
-        Log::debug('インスタンスを生成します。');
-        Log::debug('   ');
-        Log::debug('本日のリクエスト制限内です。処理を実行します。');
-        Log::debug('    ');
-            
+        Log::debug("インスタンスを生成します。");
+        Log::debug("   ");
+        Log::debug("本日のリクエスト制限内です。処理を実行します。");
+        Log::debug("    ");
+
         // APIのエンドポイントを叩きフォローする
-        $result = $connection->post('friendships/create', [
-                        'user_id' => $follow_target_id,
-                        ]);
+        $result = $connection->post("friendships/create", [
+            "user_id" => $follow_target_id,
+        ]);
 
         // 通信成功時、リクエスト制限が掛かっていない場合
         if ($connection->getLastHttpCode() == 200) {
-                         
             // 既にフォロー済みのユーザーはfollowsテーブルで管理しているが、既にフォロー済みだった場合の処理を記述
             if ($result->following) {
-                Log::debug('既にフォローしています；'. print_r($result, true));
+                Log::debug("既にフォローしています；" . print_r($result, true));
                 // APIへのリクエストは通っているので、リミット数をカウントする。
                 ++$day_follow_quarter_limit_count; // 15/15分フォロー制限用のカウント
                 ++$person_follow_limit_count; // 1日30フォロー制限用のカウント
@@ -225,7 +266,10 @@ class FollowController extends Controller
                 $user->update();
                 $SystemManager->one_day_system_counter = $one_day_system_counter;
                 $SystemManager->update();
-                return response()->json(['forbidden' => '既にフォローしているユーザーです'], 403);
+                return response()->json(
+                    ["forbidden" => "既にフォローしているユーザーです"],
+                    403
+                );
             }
             // APIへのリクエスト後、リミット数をカウント
             ++$day_follow_quarter_limit_count; // 15/15分フォロー制限用のカウント
@@ -238,29 +282,35 @@ class FollowController extends Controller
             $user->update();
             $SystemManager->one_day_system_counter = $one_day_system_counter;
             $SystemManager->update();
-    
+
             // followsテーブルへ登録
             $this->addFollowTable(Auth::user()->id, $follow_target_id);
-                
-            return response()->json(['success' => 'フォローしました！'], 200);
+
+            return response()->json(["success" => "フォローしました！"], 200);
         } elseif ($connection->getLastHttpCode() == 403) {
-            \Log::debug('ステータスコード403の処理です');
-            \Log::debug('エラー内容を取得します '. print_r($result, true));
-            \Log::debug('   ');
+            \Log::debug("ステータスコード403の処理です");
+            \Log::debug("エラー内容を取得します " . print_r($result, true));
+            \Log::debug("   ");
 
             // フォロー済みのユーザーだった場合は403のステータスコードを返す
             // ただしTwitterAPIの仕様では、パフォーマンスの観点からフォロー済みでもステータスコード200を返すこともある
             // なので $result->following の条件の中でも判定を行う。
-            return response()->json(['error' => 'フォローに失敗しました。'], 403);
+            return response()->json(
+                ["error" => "フォローに失敗しました。"],
+                403
+            );
         } else {
             // 通信失敗時の処理
-            return response()->json(['error' => '時間を置いてから再度実行して下さい'], 500);
+            return response()->json(
+                ["error" => "時間を置いてから再度実行して下さい"],
+                500
+            );
         }
     }
 
     /*****************************
-    * フォローを解除する
-    ******************************/
+     * フォローを解除する
+     ******************************/
     public function unfollow(Request $request)
     {
         /**************************************************
@@ -280,7 +330,7 @@ class FollowController extends Controller
         $unfollow_limit_release_time = $user->unfollow_limit_release_time;
         // ユーザー個別アンフォローリクエスト制限の上限をカウントする（上限30/日）
         $unfollow_limit_count = $user->unfollow_limit_count;
-        
+
         /**************************************************************************
         個別フォロー解除（30アンフォロー/日）処理時のリクエスト制限に関する処理
         ***************************************************************************/
@@ -290,12 +340,16 @@ class FollowController extends Controller
             $user->unfollow_limit_release_time = Carbon::now()->addHours(24);
             $user->update();
             $unfollow_limit_release_time = $user->unfollow_limit_release_time;
-            Log::debug('個別アンフォロー（30アンフォロー/日）での24時間後のリクエスト制限解除時刻です。');
-            Log::debug('    ');
+            Log::debug(
+                "個別アンフォロー（30アンフォロー/日）での24時間後のリクエスト制限解除時刻です。"
+            );
+            Log::debug("    ");
         } elseif ($unfollow_limit_release_time !== null) {
             // 既に解除用の時刻が格納されていれば何もしない
-            Log::debug('個別アンフォロー（30アンフォロー/日）でのリクエスト制限解除時刻は既に格納されています。');
-            Log::debug('    ');
+            Log::debug(
+                "個別アンフォロー（30アンフォロー/日）でのリクエスト制限解除時刻は既に格納されています。"
+            );
+            Log::debug("    ");
         }
         // 個別アンフォロー処理時のリクエスト制限解除時刻より、現在の時刻のほうが進んでいたら制限を解除する
         if ($now_time > $unfollow_limit_release_time) {
@@ -303,23 +357,30 @@ class FollowController extends Controller
             $user->unfollow_limit_count = 0;
             $user->update();
             $unfollow_limit_count = $user->unfollow_limit_count;
-            Log::debug('24時間経過しました。新たに制限解除用の時刻を格納し、カウンターをリセットします。');
-            Log::debug('    ');
+            Log::debug(
+                "24時間経過しました。新たに制限解除用の時刻を格納し、カウンターをリセットします。"
+            );
+            Log::debug("    ");
         }
         // アンフォローボタンからの、フォロー解除リクエスト制限以内か判定
         if ($unfollow_limit_count >= self::DAY_PERSON_LIMIT) {
-            Log::debug('アンフォローボタンからのリクエスト制限を超えました 30/日。処理を停止します。');
-            Log::debug('    ');
-            return response()->json(['error' => '本日のリクエスト上限に到達しました。'], 403);
+            Log::debug(
+                "アンフォローボタンからのリクエスト制限を超えました 30/日。処理を停止します。"
+            );
+            Log::debug("    ");
+            return response()->json(
+                ["error" => "本日のリクエスト上限に到達しました。"],
+                403
+            );
         }
         // インスタンスを生成
         $connection = $this->singleFollowAuth();
-        Log::debug('本日のリクエスト制限内です。処理を実行します。');
-        Log::debug('    ');
+        Log::debug("本日のリクエスト制限内です。処理を実行します。");
+        Log::debug("    ");
         // APIのエンドポイントを叩きフォロー解除する
-        $result = $connection->post('friendships/destroy', [
-                    'user_id' => $unfollow_target_id,
-                    ]);
+        $result = $connection->post("friendships/destroy", [
+            "user_id" => $unfollow_target_id,
+        ]);
         // Errorハンドリング
         // 通信成功時の処理
         if ($connection->getLastHttpCode() == 200) {
@@ -328,11 +389,20 @@ class FollowController extends Controller
             $user->update();
             // followsテーブルから削除
             $this->deleteFollowTable(Auth::user()->id, $unfollow_target_id);
-            
-            return response()->json(['success' => 'フォロー解除しました。'], 200);
+
+            return response()->json(
+                ["success" => "フォロー解除しました。"],
+                200
+            );
         } else {
             // 通信失敗時の処理
-            return response()->json(['error' => '問題が発生しました。時間を置いてから再度実行して下さい'], 500);
+            return response()->json(
+                [
+                    "error" =>
+                        "問題が発生しました。時間を置いてから再度実行して下さい",
+                ],
+                500
+            );
         }
     }
 
@@ -346,30 +416,35 @@ class FollowController extends Controller
         if ($autoFollow_flg === 0) {
             $user->autofollow_status = ++$autoFollow_flg;
             $user->update();
-            \Log::debug('自動フォローをONにしました：' . $autoFollow_flg);
+            \Log::debug("自動フォローをONにしました：" . $autoFollow_flg);
             return;
         } else {
             $user->autofollow_status = --$autoFollow_flg;
             $user->update();
-            \Log::debug('自動フォローをOFFにしました：' . $autoFollow_flg);
+            \Log::debug("自動フォローをOFFにしました：" . $autoFollow_flg);
             return;
         }
     }
- 
+
     // フォローボタンをクリックした時に使用するインスタンスを生成する
     public function singleFollowAuth()
     {
         // ヘルパー関数のconfigメソッドを通じて、config/services.phpのtwitterの登録した中身を参照
-        $config = config('services.twitter');
+        $config = config("services.twitter");
         // APIキーを格納
-        $api_key = $config['client_id'];
-        $api_key_secret = $config['client_secret'];
+        $api_key = $config["client_id"];
+        $api_key_secret = $config["client_secret"];
         // アクセストークンを格納
-        $access_token = session('access_token');
-        $access_token_secret = session('access_token_secret');
- 
-        $OAuth = new TwitterOAuth($api_key, $api_key_secret, $access_token, $access_token_secret);
- 
+        $access_token = session("access_token");
+        $access_token_secret = session("access_token_secret");
+
+        $OAuth = new TwitterOAuth(
+            $api_key,
+            $api_key_secret,
+            $access_token,
+            $access_token_secret
+        );
+
         return $OAuth;
     }
 
@@ -378,15 +453,21 @@ class FollowController extends Controller
     {
         try {
             Follow::create([
-                'user_id' => $userID,
-                'twuser_id' => $twUserID
+                "user_id" => $userID,
+                "twuser_id" => $twUserID,
             ]);
 
-            \Log::debug('フォローしたユーザーをfollowsテーブルへ登録しました： ID'. $twUserID);
-            \Log::debug('   ');
+            \Log::debug(
+                "フォローしたユーザーをfollowsテーブルへ登録しました： ID" .
+                    $twUserID
+            );
+            \Log::debug("   ");
         } catch (Exception $e) {
-            \Log::debug('例外が発生しました' . $e->getMessage());
-            return response()->json(['error' => '問題が発生しました。しばらくお待ち下さい。'], 500);
+            \Log::debug("例外が発生しました" . $e->getMessage());
+            return response()->json(
+                ["error" => "問題が発生しました。しばらくお待ち下さい。"],
+                500
+            );
         }
     }
 
@@ -394,17 +475,24 @@ class FollowController extends Controller
     public function deleteFollowTable($userID, $twUserID)
     {
         try {
-            Twuser::where('id', $twUserID)->with('follows')
-                    ->first()->follows()
-                    ->where('user_id', $userID)
-                    ->where('delete_flg', 0)
-                    ->delete();
+            Twuser::where("id", $twUserID)
+                ->with("follows")
+                ->first()
+                ->follows()
+                ->where("user_id", $userID)
+                ->where("delete_flg", 0)
+                ->delete();
 
-            \Log::debug('フォローしたユーザーをfollowsテーブルから削除しました。');
-            \Log::debug('   ');
+            \Log::debug(
+                "フォローしたユーザーをfollowsテーブルから削除しました。"
+            );
+            \Log::debug("   ");
         } catch (Exception $e) {
-            \Log::debug('例外が発生しました' . $e->getMessage());
-            return response()->json(['error' => '問題が発生しました。しばらくお待ち下さい。'], 500);
+            \Log::debug("例外が発生しました" . $e->getMessage());
+            return response()->json(
+                ["error" => "問題が発生しました。しばらくお待ち下さい。"],
+                500
+            );
         }
     }
 }

@@ -7,13 +7,13 @@ use Illuminate\Database\Eloquent\Model;
 class Twuser extends Model
 {
     protected $fillable = [
-        'id',
-        'user_name',
-        'account_name',
-        'new_tweet',
-        'description',
-        'friends_count',
-        'followers_count',
+        "id",
+        "user_name",
+        "account_name",
+        "new_tweet",
+        "description",
+        "friends_count",
+        "followers_count",
     ];
 
     // IDなどの数値も文字列に変換してしてVue側に渡す
@@ -21,11 +21,10 @@ class Twuser extends Model
     public $incrementing = false;
     /**
      * リレーションシップ followテーブル
-     * 
+     *
      */
     public function follows()
     {
-        return $this->hasMany('App\Follow');
+        return $this->hasMany("App\Follow");
     }
-
 }

@@ -39,7 +39,7 @@ class LoginController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('guest')->except('logout');
+        $this->middleware("guest")->except("logout");
     }
 
     /******************************************************************
@@ -55,47 +55,53 @@ class LoginController extends Controller
         // twitter認証済みのユーザーであればtokenを格納する
         $access_token = $user->twitter_token;
         $access_token_secret = $user->twitter_token_secret;
-      
-        if (!empty($twitter_id) && !empty($access_token) && !empty($access_token_secret)) {
-            session(['twitter_id' => $twitter_id]);
-            session(['access_token' => $access_token]);
-            session(['access_token_secret' => $access_token_secret]);
-            \Log::debug('twitter_id及びtwitter_token、twitter_token_secretが空でない場合はセッションに格納します');
 
-            return redirect()->to('/mypage');
+        if (
+            !empty($twitter_id) &&
+            !empty($access_token) &&
+            !empty($access_token_secret)
+        ) {
+            session(["twitter_id" => $twitter_id]);
+            session(["access_token" => $access_token]);
+            session(["access_token_secret" => $access_token_secret]);
+            \Log::debug(
+                "twitter_id及びtwitter_token、twitter_token_secretが空でない場合はセッションに格納します"
+            );
+
+            return redirect()->to("/mypage");
         }
 
-        \Log::debug('twitter未登録のユーザーです');
-        \Log::debug('   ');
-        return redirect()->to('/mypage');
+        \Log::debug("twitter未登録のユーザーです");
+        \Log::debug("   ");
+        return redirect()->to("/mypage");
     }
-  
+
     /******************************************************************
      * AuthenticatesUsersトレイトのcredentialsメソッドをオーバーライド
-    ******************************************************************/
+     ******************************************************************/
     // メールアドレスログイン時、delete_flgが立っていないユーザーを検索するよう条件を追加
     protected function credentials(Request $request)
     {
-        $temporary = $request->only($this->username(), 'password');
+        $temporary = $request->only($this->username(), "password");
         // 論理削除フラグが立っていないユーザーを検索するパラメータを追加
-        $temporary['delete_flg'] = 0;
+        $temporary["delete_flg"] = 0;
 
         return $temporary;
     }
 
     /******************************************************************
      * AuthenticatesUsersトレイトのvalidateLoginメソッドをオーバーライド
-    ******************************************************************/
+     ******************************************************************/
     protected function validateLogin(Request $request)
     {
         $request->validate(
             [
-      $this->username() => 'required|string|email|max:100',
-      'password' => 'required|string|max:100|regex:/^[a-zA-Z0-9]+$/',
-    ],
+                $this->username() => "required|string|email|max:100",
+                "password" => 'required|string|max:100|regex:/^[a-zA-Z0-9]+$/',
+            ],
             [
-      'regex' => '半角英数のみご利用いただけます。',
-    ]
+                "regex" => "半角英数のみご利用いただけます。",
+            ]
         );
     }
 }

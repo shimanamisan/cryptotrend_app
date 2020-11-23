@@ -31,5 +31,3 @@ window.axios.interceptors.response.use(
     // どのAPI呼び出し時でも共通だったので、インターセプターにまとめる
     (error) => error.response || error
 );
-
-

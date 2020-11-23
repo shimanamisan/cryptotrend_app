@@ -16,12 +16,12 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name',
-        'email',
-        'password',
-        'my_twitter_id',
-        'twitter_token',
-        'twitter_token_secret',
+        "name",
+        "email",
+        "password",
+        "my_twitter_id",
+        "twitter_token",
+        "twitter_token_secret",
     ];
 
     /**
@@ -29,7 +29,7 @@ class User extends Authenticatable
      *
      * @var array
      */
-    protected $hidden = ['password', 'remember_token'];
+    protected $hidden = ["password", "remember_token"];
 
     /**
      * The attributes that should be cast to native types.
@@ -37,7 +37,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $casts = [
-        'email_verified_at' => 'datetime',
+        "email_verified_at" => "datetime",
     ];
 
     /**
@@ -52,11 +52,10 @@ class User extends Authenticatable
     }
 
     /**
-     * リレーションシップ 
+     * リレーションシップ
      */
     public function follows()
     {
-        return $this->hasMany('App\Follow');
+        return $this->hasMany("App\Follow");
     }
-
 }
