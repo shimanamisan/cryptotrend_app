@@ -8,10 +8,14 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin"); // app.jsとapp
 const TerserPlugin = require("terser-webpack-plugin"); // JSのコメントをビルド時に削除する
 const OptimizeCssAssetsPlugin = require("optimize-css-assets-webpack-plugin"); // 別ファイルに出力したCSSファイルを圧縮するために必要
 const WebpackBuildNotifierPlugin = require("webpack-build-notifier"); // 通知用プラグイン
+const CopyPlugin = require('copy-webpack-plugin'); // ファイルをコピーするプラグイン
+const ImageminPlugin = require('imagemin-webpack-plugin').default; // 各種画像形式の圧縮ツールを取りまとめる
+const ImageminMozjpeg = require('imagemin-mozjpeg'); // jpgファイルを圧縮する
+const ImageminMozpng = require('imagemin-pngquant'); // pngファイルを圧縮する
 
 // [定数] webpack の出力オプションを指定します
 // 'production' か 'development' を指定
-const MODE = "production";
+const MODE = "development";
 const mydir = path.resolve(__dirname);
 
 console.log("ファイルパスを確認しています：" + mydir);
@@ -151,6 +155,38 @@ module.exports = {
             filename: "../css/style.css",
         }),
         new WebpackBuildNotifierPlugin(),
+         // ファイルをコピーするプラグイン
+         new CopyPlugin({
+            patterns: [
+              {
+                from: path.resolve(__dirname, 'resources/images/'),
+                to: path.resolve(__dirname, 'public/images/'),
+                // from: "./resources/img/*",
+                // to: "@/../../public/img", // ディレクトリ構成もコピーされる
+                // context: ".src/sample",
+              },
+            ],
+          }),
+          new ImageminPlugin({
+            test: /\.(jpe?g|jpg|png|gif|svg)$/i,
+            pngquant: {
+              quality: '50'
+            },
+            gifsicle: {
+              interlaced: false,
+              optimizationLevel: 1,
+              colors: 256
+            },
+            svgo: {
+            },
+            plugins: [
+              ImageminMozjpeg({
+                quality: 60,
+                progressive: true
+              }),
+              ImageminMozpng({})
+            ]
+          })
     ],
     // import 文で .ts ファイルを解決するため
     resolve: {
