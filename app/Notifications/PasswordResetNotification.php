@@ -12,7 +12,7 @@ class PasswordResetNotification extends Notification
     use Queueable;
 
     public $token; // 追加
-    protected $title = 'パスワードリセット 通知'; // 追加
+    protected $title = "パスワードリセット 通知"; // 追加
 
     /**
      * Create a new notification instance.
@@ -33,7 +33,7 @@ class PasswordResetNotification extends Notification
      */
     public function via($notifiable)
     {
-        return ['mail'];
+        return ["mail"];
     }
 
     /**
@@ -44,13 +44,13 @@ class PasswordResetNotification extends Notification
      */
     public function toMail($notifiable)
     {
-        $toplevelURL = route('home');
+        $toplevelURL = route("home");
         $url = $toplevelURL . "/password/reset/{$this->token}";
 
         return (new MailMessage())
-            ->from('cryptotrend-info@shimanamisan.com') // 送信元アドレス
+            ->from("cryptotrend-info@shimanamisan.com") // 送信元アドレス
             ->subject($this->title) // メールに表示されるタイトル
-            ->view('email.reset', ['result_url' => url($url)]); // URLを変数に入れてテンプレートに渡す
+            ->view("email.reset", ["result_url" => url($url)]); // URLを変数に入れてテンプレートに渡す
     }
 
     /**

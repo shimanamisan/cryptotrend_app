@@ -24,17 +24,20 @@ class MypagePasswordRequest extends FormRequest
     public function rules()
     {
         return [
-            'old_password' => 'required|string|min:8|max:100|regex:/^[a-zA-Z0-9]+$/',
-            'password' => 'required|string|confirmed|min:8|max:100|regex:/^[a-zA-Z0-9]+$/'
+            "old_password" =>
+                'required|string|min:8|max:100|regex:/^[a-zA-Z0-9]+$/',
+            "password" =>
+                'required|string|confirmed|min:8|max:100|regex:/^[a-zA-Z0-9]+$/',
         ];
     }
 
     public function messages()
     {
         return [
-            'old_password.regex' => '半角英数のみご利用いただけます。',
-            'password.regex' => '半角英数のみご利用いただけます。',
-            'password.confirmed' => ':attributeと、:attribute再入力が一致していません。',
+            "old_password.regex" => "半角英数のみご利用いただけます。",
+            "password.regex" => "半角英数のみご利用いただけます。",
+            "password.confirmed" =>
+                ":attributeと、:attribute再入力が一致していません。",
         ];
     }
 }

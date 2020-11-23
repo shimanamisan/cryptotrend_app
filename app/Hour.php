@@ -6,17 +6,14 @@ use Illuminate\Database\Eloquent\Model;
 
 class Hour extends Model
 {
-    protected $fillable = [
-        'coin_id',
-        'tweet',
-    ];
+    protected $fillable = ["coin_id", "tweet"];
 
     protected $casts = [
-        'tweet' => 'integer',
+        "tweet" => "integer",
     ];
 
     public function coin()
     {
-        return $this->belongdTo('App\Coin');
+        return $this->belongdTo("App\Coin");
     }
 }

@@ -7,10 +7,9 @@ use App\Http\Requests\ContactRequest;
 
 class IndexController extends Controller
 {
-    
     // トップページの表示
     public function home()
     {
-        return view('index');
+        return view("index");
     }
 }

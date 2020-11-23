@@ -32,8 +32,8 @@ class ForgotPasswordController extends Controller
         // emailを検索してきたときに空だった場合に、未登録及び退会済ユーザーは
         // バリデーションに引っかかるようにする
         $this->validator($request->all())->validate();
-        
-        $response = $this->broker()->sendResetLink($request->only('email'));
+
+        $response = $this->broker()->sendResetLink($request->only("email"));
 
         return $response == Password::RESET_LINK_SENT
             ? $this->sendResetLinkResponse($request, $response)
@@ -44,15 +44,24 @@ class ForgotPasswordController extends Controller
     {
         // カスタムエラーメッセージ
         $message = [
-            'email' => '有効なメールアドレスを指定してください。',
-            'email.unique' => 'メールアドレスに一致するユーザーは存在していません。',
+            "email" => "有効なメールアドレスを指定してください。",
+            "email.unique" =>
+                "メールアドレスに一致するユーザーは存在していません。",
         ];
 
-        return Validator::make($data, [
-        
-            'email' => ['required', 'string', 'email', 'max:100',
-                        // usersテーブルで退会済みでないユーザーが存在しているか探す（deletef_flgが0のユーザー）
-                        Rule::exists('users', 'email')->where('delete_flg', 0)]
-        ], $message);
+        return Validator::make(
+            $data,
+            [
+                "email" => [
+                    "required",
+                    "string",
+                    "email",
+                    "max:100",
+                    // usersテーブルで退会済みでないユーザーが存在しているか探す（deletef_flgが0のユーザー）
+                    Rule::exists("users", "email")->where("delete_flg", 0),
+                ],
+            ],
+            $message
+        );
     }
 }

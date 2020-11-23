@@ -24,16 +24,15 @@ class MypageUserDataRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|max:30',
-            'email' => 'required|string|email|max:100',
-        
+            "name" => "required|max:30",
+            "email" => "required|string|email|max:100",
         ];
     }
 
     public function messages()
     {
         return [
-            'email.email' => '有効なメールアドレスを指定してください。',
+            "email.email" => "有効なメールアドレスを指定してください。",
         ];
     }
 }

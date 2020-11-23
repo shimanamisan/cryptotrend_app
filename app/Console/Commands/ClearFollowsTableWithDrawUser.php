@@ -12,14 +12,14 @@ class ClearFollowsTableWithDrawUser extends Command
      *
      * @var string
      */
-    protected $signature = 'command:clearwithdraw';
+    protected $signature = "command:clearwithdraw";
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'followsテーブルの退会済のユーザーを削除するコマンドです';
+    protected $description = "followsテーブルの退会済のユーザーを削除するコマンドです";
 
     /**
      * Create a new command instance.
@@ -39,14 +39,19 @@ class ClearFollowsTableWithDrawUser extends Command
     public function handle(Follow $follow)
     {
         try {
-            $count = count($follow->all()->where('delete_flg', 1));
+            $count = count($follow->all()->where("delete_flg", 1));
             // delete_flgが立っているユーザーを削除
-            $follow->where('delete_flg', 1)->delete();
+            $follow->where("delete_flg", 1)->delete();
 
-            \Log::debug('退会したユーザー関連の情報を削除しました。削除したレコード数：'. $count);
-            \Log::debug('   ');
+            \Log::debug(
+                "退会したユーザー関連の情報を削除しました。削除したレコード数：" .
+                    $count
+            );
+            \Log::debug("   ");
         } catch (\Exception $e) {
-            \Log::debug('例外が発生しました。処理を停止します。  '. $e->getMessage());
+            \Log::debug(
+                "例外が発生しました。処理を停止します。  " . $e->getMessage()
+            );
             exit();
         }
     }

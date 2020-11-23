@@ -6,21 +6,16 @@ use Illuminate\Database\Eloquent\Model;
 
 class Trend extends Model
 {
-    protected $fillable = [
-        'coin_id',
-        'hour',
-        'day',
-        'week'
-    ];
+    protected $fillable = ["coin_id", "hour", "day", "week"];
 
     protected $casts = [
-        'hour' => 'integer',
-        'day' => 'integer',
-        'week' => 'integer',
+        "hour" => "integer",
+        "day" => "integer",
+        "week" => "integer",
     ];
 
     public function coin()
     {
-        return $this->belongdTo('App\Coin');
+        return $this->belongdTo("App\Coin");
     }
 }
