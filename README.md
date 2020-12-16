@@ -1,5 +1,7 @@
 # Twitter を利用した仮想通貨のトレンド分析サービス
 
+![CryptoTrend](https://user-images.githubusercontent.com/49751604/102307076-23582680-3fa7-11eb-80b8-54c03a925107.png)
+
 ## 機能概要
 
 TwitterAPI を利用して、仮想通貨に関するツイートを銘柄毎に集計し、各銘柄の話題性を教えてくれるサービスです。
