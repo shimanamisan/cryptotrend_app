@@ -20,7 +20,7 @@
         "@babel/preset-env": "^7.10.2",
         "@prettier/plugin-php": "github:prettier/plugin-php",
         "autoprefixer": "^9.8.0",
-        "axios": "^0.19",
+        "axios": "^0.21",
         "babel-loader": "^8.1.0",
         "bootstrap": "^4.0.0",
         "copy-webpack-plugin": "^6.3.2",
