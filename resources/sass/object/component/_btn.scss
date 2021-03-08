@@ -14,11 +14,11 @@
     &__auth {
         background-color: $btn_color;
         color: $font-color_primary;
-        transition: 0.3s;
+        transition: color 0.3s;
         cursor: pointer;
         &:hover {
             background-color: #5a5b79;
-            transition: 0.3s;
+            transition: color 0.3s;
         }
     }
     &__disabled {
@@ -32,20 +32,20 @@
         background-color: $btn_color;
         border: 1px solid $btn_color;
         color: $font-color_primary;
-        transition: 0.3s;
+        transition: color 0.3s;
         padding: 10px 20px;
         cursor: pointer;
         &:hover {
             background-color: #5a5b79;
             border: 1px solid #5a5b79;
-            transition: 0.3s;
+            transition: color 0.3s;
         }
         &--active {
             background-color: #fff;
             color: $btn_color;
             cursor: pointer;
             &:hover {
-                transition: 0.3s;
+                transition: color 0.3s;
             }
         }
         &--follow {
@@ -59,7 +59,7 @@
             }
             cursor: pointer;
             &:hover {
-                transition: 0.3s;
+                transition: background-color 0.3s;
                 background-color: #62abf8;
                 border: none;
             }
