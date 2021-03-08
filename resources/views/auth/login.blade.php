@@ -21,7 +21,7 @@
           @csrf
             <label class="p-form__info" for="email">メールアドレス</label>
             <input
-              class="c-form__input c-from__input--login js-guest-email @error('email') c-error__input @enderror"
+              class="c-form__input c-from__input--login @error('email') c-error__input @enderror"
               type="text"
               name="email"
               value="{{ old('email') }}"
@@ -33,7 +33,7 @@
             @enderror
             <label class="p-form__info" for="password">パスワード</label>
             <input
-              class="c-form__input c-from__input--login js-guest-password @error('password') c-error__input @enderror"
+              class="c-form__input c-from__input--login @error('password') c-error__input @enderror"
               type="password"
               name="password"
               value="{{ old('password') }}"
@@ -59,11 +59,6 @@
             <div class="u-wrapp">
               <a class="p-form__inquiry" href="{{ route('password.request') }}"
                 ><span>パスワードをお忘れですか？</span></a
-              >
-            </div>
-            <div class="u-wrapp">
-              <a class="p-form__inquiry u-btn__guest js-guest-login" href=""
-                ><span>かんたんログイン</span></a
               >
             </div>
           </form>
