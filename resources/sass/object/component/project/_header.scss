@@ -63,10 +63,10 @@
             cursor: pointer;
         }
         &--link {
-            transition: color 0.3s;
+            transition: color opacity 0.3s;
             color: $font-color_primary;
             &:hover {
-                transition: color 0.3s;
+                transition: color opacity 0.3s;
                 cursor: pointer;
                 opacity: 0.7;
             }

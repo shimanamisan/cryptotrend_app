@@ -27,12 +27,12 @@ a {
 }
 
 a {
-    transition: 0.3s;
+    transition: all 0.3s;
 }
 
 a:hover {
     cursor: pointer;
-    transition: 0.3s;
+    transition: all 0.3s;
 }
 
 img {
