@@ -33,6 +33,8 @@ class GetTwitterUsers extends Command
         parent::__construct();
     }
 
+    private $_descriptionInsertLimit = 191;
+
     /**
      * Execute the console command.
      *
@@ -80,33 +82,69 @@ class GetTwitterUsers extends Command
             $search_result = $connection->get("users/search", $options);
             // DBから返却されたコレクションが空だったら初期処理として新規登録します
             if ($dbresult->isEmpty()) {
-                \Log::debug(
-                    "twitter_usersテーブルが空なので初期登録処理を実行します。："
-                );
+                \Log::debug("twitter_usersテーブルが空なので初期登録処理を実行します。：");
                 \Log::debug("    ");
+
                 foreach ($search_result as $search_result_item) {
-                    $twitter_user[] = [
-                        "id" => $search_result_item->id,
-                        "user_name" => $search_result_item->name,
-                        "account_name" => $search_result_item->screen_name,
-                        "new_tweet" => $search_result_item->status->text,
-                        "description" => $search_result_item->description,
-                        "friends_count" => $search_result_item->friends_count,
-                        "followers_count" =>
-                            $search_result_item->followers_count,
-                        "created_at" => Carbon::now(),
-                        "updated_at" => Carbon::now(),
-                    ];
+
+                    // description が191文字を超える場合はDBへ登録出来ないので、文字数をカウントして超えていた場合は
+                    // 文字数をカットする
+                    $text = $search_result_item->description;
+                    $text_count = mb_strlen($text);
+                    \Log::debug("descriptionの文字数。文字数：{$text_count}");
+                    \Log::debug("    ");
+
+                    
+                    try{
+                        
+                        if ($text_count >= $this->_descriptionInsertLimit) {
+                            \Log::debug("descriptionの文字数が191文字を超えています。文字列を切り取ります。文字数：{$text_count}");
+                            \Log::debug("    ");
+                            $newDescription = mb_substr($text, 0, 190);
+    
+                            $after_text = mb_strlen($newDescription);
+                            \Log::debug("切り取り後の文字数です：{$after_text}");
+                            \Log::debug("    ");
+    
+                            $twitter_user = [
+                                "id" => $search_result_item->id,
+                                "user_name" => $search_result_item->name,
+                                "account_name" => $search_result_item->screen_name,
+                                "new_tweet" => $search_result_item->status->text,
+                                "description" => $newDescription,
+                                "friends_count" => $search_result_item->friends_count,
+                                "followers_count" => $search_result_item->followers_count,
+                                "created_at" => Carbon::now(),
+                                "updated_at" => Carbon::now(),
+                            ];
+                        } else {
+                            \Log::debug("descriptionの文字数は超えていません。");
+                            \Log::debug("    ");
+                            $twitter_user = [
+                                "id" => $search_result_item->id,
+                                "user_name" => $search_result_item->name,
+                                "account_name" => $search_result_item->screen_name,
+                                "new_tweet" => $search_result_item->status->text,
+                                "description" => $search_result_item->description,
+                                "friends_count" => $search_result_item->friends_count,
+                                "followers_count" => $search_result_item->followers_count,
+                                "created_at" => Carbon::now(),
+                                "updated_at" => Carbon::now(),
+                            ];
+                        }
+                    }catch(\Exception $e){
+                        \Log::debug("プロパティを抽出中に例外が発生しました。ループ処理をスキップします" . $e->getMessage());
+                        \Log::debug("    ");
+                        continue;
+                    }
+
                 }
                 try {
                     $TwitterUser->insert($twitter_user);
                     \Log::debug("登録が完了しました。");
                     \Log::debug("    ");
                 } catch (\Exception $e) {
-                    \Log::debug(
-                        "例外が発生しました。ループ処理をスキップします" .
-                            $e->getMessage()
-                    );
+                    \Log::debug("例外が発生しました。ループ処理をスキップします" . $e->getMessage());
                     \Log::debug("    ");
                     continue;
                 }
@@ -117,10 +155,7 @@ class GetTwitterUsers extends Command
                 foreach ($search_result as $search_result_item) {
                     // 検索してきた結果からTwitterUserIDを取り出しています
                     $search_user_id = $search_result_item->id;
-                    \Log::debug(
-                        "TwitterユーザーのIDを取り出しています：" .
-                            $search_user_id
-                    );
+                    \Log::debug("TwitterユーザーのIDを取り出しています：" . $search_user_id);
                     \Log::debug("    ");
 
                     // 既に登録済みのIDかDBを検索する
@@ -131,31 +166,23 @@ class GetTwitterUsers extends Command
                         if ($result->isNotEmpty()) {
                             // idで検索できていればDBに存在している
                             ++$alreadyCounter;
-                            \Log::debug(
-                                "DBに存在していたユーザーです。既存ユーザーカウンター：{$alreadyCounter}"
-                            );
+                            \Log::debug( "DBに存在していたユーザーです。既存ユーザーカウンター：{$alreadyCounter}" );
                             \Log::debug("    ");
 
                             // description が191文字を超える場合はDBへ登録出来ないので、文字数をカウントして超えていた場合は
                             // 文字数をカットする
                             $text = $search_result_item->description;
                             $text_count = mb_strlen($text);
-                            \Log::debug(
-                                "descriptionの文字数。文字数：{$text_count}"
-                            );
+                            \Log::debug("descriptionの文字数。文字数：{$text_count}");
                             \Log::debug("    ");
 
-                            if ($text_count >= 191) {
-                                \Log::debug(
-                                    "descriptionの文字数が191文字を超えています。文字列を切り取ります。文字数：{$text_count}"
-                                );
+                            if ($text_count >= $this->_descriptionInsertLimit) {
+                                \Log::debug("descriptionの文字数が191文字を超えています。文字列を切り取ります。文字数：{$text_count}");
                                 \Log::debug("    ");
                                 $newDescription = mb_substr($text, 0, 190);
 
                                 $after_text = mb_strlen($newDescription);
-                                \Log::debug(
-                                    "切り取り後の文字数です：{$after_text}"
-                                );
+                                \Log::debug("切り取り後の文字数です：{$after_text}");
                                 \Log::debug("    ");
 
                                 $twitter_user = [
@@ -174,53 +201,40 @@ class GetTwitterUsers extends Command
                                     "updated_at" => Carbon::now(),
                                 ];
                             } else {
-                                \Log::debug(
-                                    "descriptionの文字数は超えていません。"
-                                );
+                                \Log::debug("descriptionの文字数は超えていません。");
                                 \Log::debug("    ");
                                 $twitter_user = [
                                     "id" => $search_result_item->id,
                                     "user_name" => $search_result_item->name,
-                                    "account_name" =>
-                                        $search_result_item->screen_name,
-                                    "new_tweet" =>
-                                        $search_result_item->status->text,
-                                    "description" =>
-                                        $search_result_item->description,
-                                    "friends_count" =>
-                                        $search_result_item->friends_count,
-                                    "followers_count" =>
-                                        $search_result_item->followers_count,
+                                    "account_name" => $search_result_item->screen_name,
+                                    "new_tweet" => $search_result_item->status->text,
+                                    "description" => $search_result_item->description,
+                                    "friends_count" => $search_result_item->friends_count,
+                                    "followers_count" => $search_result_item->followers_count,
                                     "created_at" => Carbon::now(),
                                     "updated_at" => Carbon::now(),
                                 ];
                             }
 
                             // 存在していたユーザーの情報を更新します
-                            $TwitterUser
-                                ->where("id", $search_user_id)
-                                ->update($twitter_user);
+                            $TwitterUser->where("id", $search_user_id)->update($twitter_user);
                             \Log::debug(
                                 "更新しました。更新したID：" . $search_user_id
                             );
                             \Log::debug("    ");
                         } else {
                             ++$newCounter;
-                            \Log::debug(
-                                "DBに存在していなかったユーザーです。新規ユーザーカウンター：{$newCounter}"
-                            );
+                            \Log::debug("DBに存在していなかったユーザーです。新規ユーザーカウンター：{$newCounter}");
                             \Log::debug("    ");
 
                             // description が191文字を超える場合はDBへ登録出来ないので、文字数をカウントして超えていた場合は
                             // 文字数をカットする
                             $text = $search_result_item->description;
                             $text_count = mb_strlen($text);
-                            \Log::debug(
-                                "descriptionの文字数。文字数：{$text_count}"
-                            );
+                            \Log::debug("descriptionの文字数。文字数：{$text_count}");
                             \Log::debug("    ");
 
-                            if ($text_count >= 191) {
+                            if ($text_count >= $this->_descriptionInsertLimit) {
                                 \Log::debug(
                                     "descriptionの文字数が191文字を超えています。文字列を切り取ります。文字数：{$text_count}"
                                 );
