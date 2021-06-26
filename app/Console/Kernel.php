@@ -27,41 +27,64 @@ class Kernel extends ConsoleKernel
         $schedule
             ->command("command:getcoin hour")
             // 1時間おきに実行する
-            ->hourly()
-            ->everyThirtyMinutes();
+            // ->hourly()
+            // ->everyThirtyMinutes();
+
+            // テスト用、毎分実行し多重起動を帽子
+            ->everyMinute()
+            ->withoutOverlapping();
 
         // 過去1日の各銘柄に関するツイートを取得
         $schedule
             ->command("command:getcoin day")
             // 毎日深夜12時に実行する
-            ->daily()
-            ->everyThirtyMinutes();
+            // ->daily()
+            // ->everyThirtyMinutes();
+
+           // テスト用、毎分実行し多重起動を帽子
+           ->everyMinute()
+           ->withoutOverlapping();
+            
 
         // 過去1週間の各銘柄に関するツイートを取得
         $schedule
             ->command("command:getcoin week")
             // 毎日深夜3時に実行する
-            ->dailyAt("3:00")
-            ->everyThirtyMinutes();
+
+           // テスト用、毎分実行し多重起動を帽子
+            ->everyMinute()
+            ->withoutOverlapping();
 
         // CoincheckAPIからビットコインの価格を取得する
         $schedule
             ->command("command:getticker")
             // 30分毎に実行する
-            ->everyThirtyMinutes();
+            // ->everyThirtyMinutes();
+
+            // テスト用、毎分実行し多重起動を帽子
+            ->everyMinute()
+            ->withoutOverlapping();
 
         // 仮想通貨関連のアカウント情報を取得する
         $schedule
             ->command("command:gettwitterusers")
             // 1日1回、深夜1時に実行する
-            ->dailyAt("1:00")
+            // ->dailyAt("1:00")
+            // ->withoutOverlapping();
+
+            // テスト用、毎分実行し多重起動を帽子
+            ->everyMinute()
             ->withoutOverlapping();
 
         // 自動フォローを行う処理
         $schedule
             ->command("command:autofollow")
             // 30分毎に処理を実行し、前の処理が終わっていない（多重起動）場合は処理を実行しない
-            ->everyThirtyMinutes()
+            // ->everyThirtyMinutes()
+            // ->withoutOverlapping();
+
+            // テスト用、毎分実行し多重起動を帽子
+            ->everyMinute()
             ->withoutOverlapping();
     }
 
