@@ -82,10 +82,7 @@ class GetCoinsTweet extends Command
         // 検索開始日時を取得
         $search_date = $this->getSearchDate($date);
 
-        \Log::debug(
-            $search_date .
-                " ：この日時より現在の日時に向かってツイートを取得します"
-        );
+        \Log::debug($search_date ." ：この日時より現在の日時に向かってツイートを取得します");
         \Log::debug("  ");
 
         // search_keyに格納した銘柄ごとにツイートを取得する
@@ -162,12 +159,8 @@ class GetCoinsTweet extends Command
                     break;
                 }
 
-                // パラメータの先頭の？を除去（次のページの）
-                $next_results = preg_replace(
-                    "/^\?/",
-                    "",
-                    $result_arr["search_metadata"]["next_results"]
-                );
+                // 次のページのパラメータの先頭の？を除去
+                $next_results = preg_replace("/^\?/", "", $result_arr["search_metadata"]["next_results"]);
 
                 \Log::debug($next_results);
 
@@ -249,9 +242,7 @@ class GetCoinsTweet extends Command
                         "updated_at" => Carbon::now(),
                     ]
                 );
-                \Log::debug(
-                    "1時間あたりのツイート数を計測したデータを保存しました"
-                );
+                \Log::debug("1時間あたりのツイート数を計測したデータを保存しました");
                 \Log::debug("  ");
                 break;
 
@@ -263,9 +254,7 @@ class GetCoinsTweet extends Command
                         "updated_at" => Carbon::now(),
                     ]
                 );
-                \Log::debug(
-                    "1日あたりのツイート数を計測したデータを保存しました"
-                );
+                \Log::debug("1日あたりのツイート数を計測したデータを保存しました");
                 \Log::debug("  ");
                 break;
 
@@ -277,9 +266,7 @@ class GetCoinsTweet extends Command
                         "updated_at" => Carbon::now(),
                     ]
                 );
-                \Log::debug(
-                    "1週間あたりのツイート数を計測したデータを保存しました"
-                );
+                \Log::debug("1週間あたりのツイート数を計測したデータを保存しました");
                 \Log::debug("  ");
                 break;
 
