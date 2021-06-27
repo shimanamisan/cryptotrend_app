@@ -1,4 +1,4 @@
-name: deploy to web-portfolio.tech
+name: deploy to cryptotrend.work
 
 on:
   push:
