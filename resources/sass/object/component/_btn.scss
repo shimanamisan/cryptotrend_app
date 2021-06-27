@@ -3,7 +3,7 @@
     cursor: pointer;
     outline: none;
     @include custumRadius(3px);
-    transition: all S0.3s;
+    transition: all 0.3s;
     padding: 15px 20px;
     &:hover {
         transition: all 0.3s;
