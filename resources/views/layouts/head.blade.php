@@ -1,11 +1,12 @@
 @section('head')
 <!-- Global site tag (gtag.js) - Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=UA-138230091-6"></script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-5S40QN9BHS"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
-  gtag('config', 'UA-138230091-6');
+
+  gtag('config', 'G-5S40QN9BHS');
 </script>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
